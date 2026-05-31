@@ -1,14 +1,14 @@
 {
-  "generatedAt": "2026-05-31T19:25:32.502Z",
+  "generatedAt": "2026-05-31T19:34:00.024Z",
   "user": "m1ng-wym",
   "summary": {
     "repositories": 18,
-    "commits": 375,
+    "commits": 377,
     "pullRequests": 14,
-    "additions": 159839,
-    "deletions": 9526,
-    "files": 1619,
-    "ownCommits": 281,
+    "additions": 160738,
+    "deletions": 9609,
+    "files": 1624,
+    "ownCommits": 283,
     "externalCommits": 94,
     "languages": [
       {
@@ -25,27 +25,27 @@
       },
       {
         "name": "JavaScript",
-        "additions": 7477,
-        "deletions": 269,
-        "files": 3
-      },
-      {
-        "name": "JSON",
-        "additions": 3283,
-        "deletions": 11,
+        "additions": 8004,
+        "deletions": 278,
         "files": 4
       },
       {
+        "name": "JSON",
+        "additions": 3538,
+        "deletions": 11,
+        "files": 5
+      },
+      {
         "name": "YAML",
-        "additions": 1270,
-        "deletions": 5,
+        "additions": 1304,
+        "deletions": 31,
         "files": 2
       },
       {
         "name": "Other",
-        "additions": 949,
-        "deletions": 31,
-        "files": 14
+        "additions": 1032,
+        "deletions": 79,
+        "files": 15
       },
       {
         "name": "CSS",
@@ -152,17 +152,35 @@
       "highlighted": false,
       "private": false,
       "own": true,
-      "commits": 8,
+      "commits": 10,
       "prs": 0,
-      "additions": 90,
-      "deletions": 18,
-      "files": 9,
+      "additions": 989,
+      "deletions": 101,
+      "files": 14,
       "languages": [
         {
+          "name": "JavaScript",
+          "additions": 527,
+          "deletions": 9,
+          "files": 2
+        },
+        {
+          "name": "JSON",
+          "additions": 255,
+          "deletions": 0,
+          "files": 1
+        },
+        {
           "name": "YAML",
-          "additions": 70,
-          "deletions": 5,
-          "files": 6
+          "additions": 104,
+          "deletions": 31,
+          "files": 7
+        },
+        {
+          "name": "Other",
+          "additions": 83,
+          "deletions": 48,
+          "files": 1
         }
       ]
     },
