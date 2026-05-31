@@ -262,15 +262,15 @@ async function fetchCommitDetail(repo, sha) {
 }
 
 async function fetchAuthoredPrCount(repo) {
-  let total = 0
-  for (const state of ["open", "closed"]) {
-    const url = new URL("https://api.github.com/search/issues")
-    url.searchParams.set("q", `repo:${repo.nameWithOwner} type:pr author:${user} state:${state}`)
-    url.searchParams.set("per_page", "1")
-    const data = await requestJson(url, { headers: apiHeaders })
-    total += data?.total_count || 0
-  }
-  return total
+  const data = await graphql(
+    `query($query: String!) {
+      search(query: $query, type: ISSUE, first: 1) {
+        issueCount
+      }
+    }`,
+    { query: `repo:${repo.nameWithOwner} type:pr author:${user}` },
+  )
+  return data.search.issueCount || 0
 }
 
 function languageFor(filename) {
