@@ -38,6 +38,8 @@ jobs:
 
       - name: Language activity from authored commits
         uses: lowlighter/metrics@latest
+        env:
+          GITHUB_ACTIONS: "true"
         with:
           user: m1ng-wym
           filename: metrics.languages.svg
