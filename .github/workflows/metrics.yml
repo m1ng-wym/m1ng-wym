@@ -9,6 +9,8 @@ on:
       - main
     paths:
       - ".github/workflows/metrics.yml"
+      - "scripts/generate-contribution-metrics.mjs"
+      - "README.md"
 
 permissions:
   contents: write
@@ -36,30 +38,36 @@ jobs:
           plugin_lines_history_limit: 3
           plugin_lines_delay: 30
 
-      - name: Language activity from authored commits
-        uses: lowlighter/metrics@latest
-        env:
-          GITHUB_ACTIONS: "true"
+  contribution-language-metrics:
+    runs-on: ubuntu-latest
+    needs: github-metrics
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
         with:
-          user: m1ng-wym
-          filename: metrics.languages.svg
-          token: ${{ secrets.METRICS_TOKEN || github.token }}
-          committer_token: ${{ github.token }}
-          base: ""
-          repositories: 200
-          repositories_batch: 50
-          repositories_affiliations: owner, collaborator, organization_member
-          repositories_forks: no
-          commits_authoring: ${{ secrets.COMMITS_AUTHORING || 'm1ng-wym, xiao weng, m1ng-wym@users.noreply.github.com' }}
-          plugin_languages: yes
-          plugin_languages_indepth: yes
-          plugin_languages_indepth_custom: kkk-an/AgentMe
-          plugin_languages_sections: most-used
-          plugin_languages_details: lines, bytes-size, percentage
-          plugin_languages_limit: 10
-          plugin_languages_threshold: 1%
-          plugin_languages_other: yes
-          plugin_languages_categories: programming, markup, data
-          plugin_languages_analysis_timeout: 60
-          plugin_languages_analysis_timeout_repositories: 15
-          debug: yes
+          ref: main
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Generate authored contribution language metrics
+        env:
+          GH_TOKEN: ${{ secrets.METRICS_TOKEN }}
+          METRICS_USER: m1ng-wym
+          METRICS_HIGHLIGHT_REPOS: kkk-an/AgentMe
+        run: node scripts/generate-contribution-metrics.mjs
+
+      - name: Commit generated contribution metrics
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add metrics.languages.svg metrics.contributions.json
+          if git diff --cached --quiet; then
+            echo "No contribution metrics changes"
+          else
+            git commit -m "Update contribution metrics - [Skip GitHub Action]"
+            git push origin main
+          fi
