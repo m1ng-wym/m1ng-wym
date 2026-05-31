@@ -51,7 +51,7 @@ jobs:
           commits_authoring: ${{ secrets.COMMITS_AUTHORING || 'm1ng-wym, xiao weng, m1ng-wym@users.noreply.github.com' }}
           plugin_languages: yes
           plugin_languages_indepth: yes
-          plugin_languages_indepth_custom: kkk-an/AgentMe@main
+          plugin_languages_indepth_custom: kkk-an/AgentMe
           plugin_languages_sections: most-used
           plugin_languages_details: lines, bytes-size, percentage
           plugin_languages_limit: 10
@@ -60,3 +60,4 @@ jobs:
           plugin_languages_categories: programming, markup, data
           plugin_languages_analysis_timeout: 60
           plugin_languages_analysis_timeout_repositories: 15
+          debug: yes
