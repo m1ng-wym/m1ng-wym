@@ -48,7 +48,7 @@ jobs:
           repositories_batch: 50
           repositories_affiliations: owner, collaborator, organization_member
           repositories_forks: no
-          commits_authoring: m1ng-wym, m1ng-wym@users.noreply.github.com
+          commits_authoring: m1ng-wym, xiao weng, m1ng-wym@users.noreply.github.com
           plugin_languages: yes
           plugin_languages_indepth: yes
           plugin_languages_sections: most-used
