@@ -47,6 +47,12 @@ jobs:
                 field.remove()
               }
             })
+            document.querySelectorAll("h2.field").forEach((heading) => {
+              const text = heading.textContent?.replace(/\s+/g, " ").trim() ?? ""
+              if (text === "Community stats") {
+                heading.closest("section")?.remove()
+              }
+            })
             document.querySelectorAll(".row section").forEach((section) => {
               if (!section.textContent?.trim() && !section.querySelector("img, svg, canvas")) {
                 section.remove()
