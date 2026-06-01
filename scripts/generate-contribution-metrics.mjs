@@ -490,18 +490,30 @@ async function readOverviewActivityCommits() {
 }
 
 async function readTitleFontFace() {
+  const fontFaces = []
+  try {
+    const font = await readFile(new URL("../assets/nabla.ttf", import.meta.url))
+    fontFaces.push(`    @font-face {
+      font-family: "Nabla";
+      src: url("data:font/truetype;base64,${font.toString("base64")}") format("truetype");
+      font-weight: 400;
+      font-style: normal;
+    }
+`)
+  } catch {
+  }
   try {
     const font = await readFile(new URL("../assets/young-serif-regular.woff2", import.meta.url))
-    return `    @font-face {
+    fontFaces.push(`    @font-face {
       font-family: "young-serif";
       src: url("data:font/woff2;base64,${font.toString("base64")}") format("woff2");
       font-weight: 400;
       font-style: normal;
     }
-`
+`)
   } catch {
-    return ""
   }
+  return fontFaces.join("")
 }
 
 function renderSvg({ repos, totals, own, external, generatedAt, displayCommits, titleFontFace }) {
@@ -560,7 +572,7 @@ function renderSvg({ repos, totals, own, external, generatedAt, displayCommits, 
   <style>
 ${titleFontFace}
     text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; fill: #24292f; }
-    .title { font-family: "young-serif", Georgia, serif; font-size: 25px; font-weight: 400; }
+    .title { font-family: "Nabla", "young-serif", Georgia, serif; font-size: 28px; font-weight: 400; font-variation-settings: "EDPT" 120, "EHLT" 12; }
     .section { font-size: 15px; font-weight: 700; fill: #0969da; }
     .metric { font-size: 14px; font-weight: 600; }
     .label { font-size: 13px; font-weight: 600; }
