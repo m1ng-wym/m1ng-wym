@@ -491,7 +491,7 @@ async function readOverviewActivityCommits() {
 
 async function readTitleArtwork() {
   try {
-    return await readFile(new URL("../assets/nabla-title-where-my-code-goes.svg", import.meta.url), "utf8")
+    return await readFile(new URL("../assets/mplus-mtype-1-title-where-my-code-goes.svg", import.meta.url), "utf8")
   } catch {
     return ""
   }
