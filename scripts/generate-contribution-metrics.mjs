@@ -481,7 +481,8 @@ function publicRepoName(repo, index) {
 async function readOverviewActivityCommits() {
   try {
     const overviewSvg = await readFile("metrics.overview.svg", "utf8")
-    const match = overviewSvg.match(/>\s*([0-9][0-9,]*) Commits\s*</)
+    const match = overviewSvg.match(/id="overview-activity-commits-source"[^>]*>\s*([0-9][0-9,]*) Commits\s*</)
+      || overviewSvg.match(/>\s*([0-9][0-9,]*) Commits\s*</)
     return match ? Number.parseInt(match[1].replaceAll(",", ""), 10) : null
   } catch {
     return null
