@@ -497,7 +497,7 @@ async function readTitleArtwork() {
   }
 }
 
-function renderSvg({ repos, totals, own, external, generatedAt, displayCommits, titleArtwork }) {
+function renderSvg({ repos, totals, own, external, displayCommits, titleArtwork }) {
   const topLanguages = languageEntries(totals).slice(0, 8)
   const privateAggregate = { ...emptyStats(), nameWithOwner: "Other private repositories", isPrivate: true, isOwn: false, aggregate: true }
   for (const repo of repos) {
@@ -516,13 +516,13 @@ function renderSvg({ repos, totals, own, external, generatedAt, displayCommits, 
       return b.additions - a.additions
     })
     .slice(0, 8)
-  const languageStartY = 185
+  const cardY = 70
+  const languageStartY = 173
   const repoStartY = languageStartY + 38 + topLanguages.length * 28
-  const height = repoStartY + 64 + topRepos.length * 26
+  const height = repoStartY + 44 + topRepos.length * 26
   const width = 760
   const maxLanguage = Math.max(1, ...topLanguages.map(item => item.additions))
   const totalLanguageLines = Math.max(1, topLanguages.reduce((sum, item) => sum + item.additions, 0))
-  const now = generatedAt.replace("T", " ").replace(/\.\d+Z$/, " UTC")
   const shownCommits = displayCommits ?? totals.commits
 
   const languageRows = topLanguages.map((item, index) => {
@@ -538,15 +538,13 @@ function renderSvg({ repos, totals, own, external, generatedAt, displayCommits, 
   }).join("")
 
   const repoRows = topRepos.map((repo, index) => {
-    const y = repoStartY + 42 + index * 26
+    const y = repoStartY + 30 + index * 26
     const name = publicRepoName(repo, index)
-    const type = repo.aggregate ? "private aggregate" : repo.isOwn ? "own" : highlightRepos.has(repo.nameWithOwner) ? "external highlight" : "external"
     return `
       <text x="28" y="${y}" class="repo">${escapeXml(name)}</text>
-      <text x="310" y="${y}" class="small">${type}</text>
-      <text x="460" y="${y}" class="small">${formatNumber(repo.commits)} commits</text>
-      <text x="555" y="${y}" class="small">${formatNumber(repo.prs)} PRs</text>
-      <text x="620" y="${y}" class="small">+${formatNumber(repo.additions)} / -${formatNumber(repo.deletions)}</text>`
+      <text x="390" y="${y}" class="small">${formatNumber(repo.commits)} commits</text>
+      <text x="500" y="${y}" class="small">${formatNumber(repo.prs)} PRs</text>
+      <text x="575" y="${y}" class="small">+${formatNumber(repo.additions)} / -${formatNumber(repo.deletions)}</text>`
   }).join("")
 
   return `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" role="img" aria-label="Authored GitHub contribution metrics">
@@ -558,32 +556,27 @@ function renderSvg({ repos, totals, own, external, generatedAt, displayCommits, 
     .label { font-size: 13px; font-weight: 600; }
     .repo { font-size: 12px; font-weight: 600; }
     .small { font-size: 12px; fill: #57606a; }
-    .note { font-size: 11px; fill: #6e7781; }
   </style>
   <rect x="0.5" y="0.5" width="${width - 1}" height="${height - 1}" rx="8" fill="#ffffff" stroke="#d0d7de"/>
   ${titleArtwork || `<text x="24" y="36" class="title">Where my code goes</text>`}
-  <text x="24" y="60" class="small">Accessible own repositories and external repositories contributed to by @${escapeXml(user)}</text>
 
-  <rect x="24" y="82" width="220" height="58" rx="6" fill="#f6f8fa"/>
-  <text x="40" y="108" class="metric">${formatNumber(repos.length)} repositories scanned</text>
-  <text x="40" y="130" class="small">${formatNumber(own.commits)} own commits / ${formatNumber(external.commits)} external commits</text>
+  <rect x="24" y="${cardY}" width="220" height="58" rx="6" fill="#f6f8fa"/>
+  <text x="40" y="${cardY + 26}" class="metric">${formatNumber(repos.length)} repositories scanned</text>
+  <text x="40" y="${cardY + 48}" class="small">${formatNumber(own.commits)} own commits / ${formatNumber(external.commits)} external commits</text>
 
-  <rect x="270" y="82" width="220" height="58" rx="6" fill="#f6f8fa"/>
-  <text x="286" y="108" class="metric">${formatNumber(shownCommits)} commits / ${formatNumber(totals.prs)} PRs</text>
-  <text x="286" y="130" class="small">Authored by ${escapeXml(user)}</text>
+  <rect x="270" y="${cardY}" width="220" height="58" rx="6" fill="#f6f8fa"/>
+  <text x="286" y="${cardY + 26}" class="metric">${formatNumber(shownCommits)} commits / ${formatNumber(totals.prs)} PRs</text>
+  <text x="286" y="${cardY + 48}" class="small">Authored by ${escapeXml(user)}</text>
 
-  <rect x="516" y="82" width="220" height="58" rx="6" fill="#f6f8fa"/>
-  <text x="532" y="108" class="metric">+${formatNumber(totals.additions)} / -${formatNumber(totals.deletions)} lines</text>
-  <text x="532" y="130" class="small">${formatNumber(totals.files)} changed files</text>
+  <rect x="516" y="${cardY}" width="220" height="58" rx="6" fill="#f6f8fa"/>
+  <text x="532" y="${cardY + 26}" class="metric">+${formatNumber(totals.additions)} / -${formatNumber(totals.deletions)} lines</text>
+  <text x="532" y="${cardY + 48}" class="small">${formatNumber(totals.files)} changed files</text>
 
   <text x="24" y="${languageStartY}" class="section">Code language split by added lines</text>
   ${languageRows || `<text x="28" y="${languageStartY + 34}" class="small">No language data found</text>`}
 
   <text x="24" y="${repoStartY}" class="section">Repository coverage</text>
-  <text x="28" y="${repoStartY + 22}" class="note">Private repository names are redacted unless explicitly highlighted.</text>
-  ${repoRows || `<text x="28" y="${repoStartY + 42}" class="small">No repository data found</text>`}
-
-  <text x="24" y="${height - 24}" class="note">Language split uses commit file stats and extension mapping; docs, lock files, and binary assets are ignored. Generated ${escapeXml(now)}.</text>
+  ${repoRows || `<text x="28" y="${repoStartY + 30}" class="small">No repository data found</text>`}
 </svg>
 `
 }
@@ -637,7 +630,7 @@ async function main() {
   const generatedAt = new Date().toISOString()
   const overviewActivityCommits = await readOverviewActivityCommits()
   const titleArtwork = await readTitleArtwork()
-  const svg = renderSvg({ repos: analyzed, totals, own, external, generatedAt, displayCommits: overviewActivityCommits, titleArtwork })
+  const svg = renderSvg({ repos: analyzed, totals, own, external, displayCommits: overviewActivityCommits, titleArtwork })
   await writeFile("metrics.languages.svg", svg)
   await writeFile("metrics.contributions.json", `${JSON.stringify({
     generatedAt,

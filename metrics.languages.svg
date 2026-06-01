@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="760" height="615" viewBox="0 0 760 615" role="img" aria-label="Authored GitHub contribution metrics">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="760" height="583" viewBox="0 0 760 583" role="img" aria-label="Authored GitHub contribution metrics">
   <style>
     text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; fill: #24292f; }
     .title { font-size: 22px; font-weight: 700; }
@@ -7,9 +7,8 @@
     .label { font-size: 13px; font-weight: 600; }
     .repo { font-size: 12px; font-weight: 600; }
     .small { font-size: 12px; fill: #57606a; }
-    .note { font-size: 11px; fill: #6e7781; }
   </style>
-  <rect x="0.5" y="0.5" width="759" height="614" rx="8" fill="#ffffff" stroke="#d0d7de"/>
+  <rect x="0.5" y="0.5" width="759" height="582" rx="8" fill="#ffffff" stroke="#d0d7de"/>
   <g id="mplus-title-artwork" aria-label="Where my code goes">
   <path d="M153 120H155L209 630H299L353 120H355L400 730H475L415 0H306L251 520H249L194 0H85L25 730H108Z" transform="translate(24.000 42) scale(0.03 -0.03)" fill="#24292f"/>
   <path d="M440 330V0H363V312Q363 400 343.0 429.5Q323 459 270 459Q220 459 184.5 403.0Q149 347 149 252V0H70V750H149V445H151Q170 484 207.5 507.0Q245 530 290 530Q369 530 404.5 484.5Q440 439 440 330Z" transform="translate(39.000 42) scale(0.03 -0.03)" fill="#24292f"/>
@@ -28,78 +27,70 @@
   <path d="M255 463Q159 463 159 390Q159 356 180.0 335.5Q201 315 255 300Q360 271 395.0 237.5Q430 204 430.0 135.0Q430 66 383.0 28.0Q336 -10 250.0 -10.0Q164 -10 85 30V110Q163 57 240 57Q351 57 351 135Q351 172 329.5 192.0Q308 212 245 230Q153 256 116.5 292.0Q80 328 80 390Q80 456 123.5 493.0Q167 530 250 530Q334 530 410 495V420Q331 463 255 463Z" transform="translate(279.000 42) scale(0.03 -0.03)" fill="#24292f"/>
 </g>
 
-  <text x="24" y="60" class="small">Accessible own repositories and external repositories contributed to by @m1ng-wym</text>
 
-  <rect x="24" y="82" width="220" height="58" rx="6" fill="#f6f8fa"/>
-  <text x="40" y="108" class="metric">20 repositories scanned</text>
-  <text x="40" y="130" class="small">297 own commits / 97 external commits</text>
+  <rect x="24" y="70" width="220" height="58" rx="6" fill="#f6f8fa"/>
+  <text x="40" y="96" class="metric">20 repositories scanned</text>
+  <text x="40" y="118" class="small">297 own commits / 97 external commits</text>
 
-  <rect x="270" y="82" width="220" height="58" rx="6" fill="#f6f8fa"/>
-  <text x="286" y="108" class="metric">429 commits / 14 PRs</text>
-  <text x="286" y="130" class="small">Authored by m1ng-wym</text>
+  <rect x="270" y="70" width="220" height="58" rx="6" fill="#f6f8fa"/>
+  <text x="286" y="96" class="metric">429 commits / 14 PRs</text>
+  <text x="286" y="118" class="small">Authored by m1ng-wym</text>
 
-  <rect x="516" y="82" width="220" height="58" rx="6" fill="#f6f8fa"/>
-  <text x="532" y="108" class="metric">+204,631 / -17,034 lines</text>
-  <text x="532" y="130" class="small">2,490 changed files</text>
+  <rect x="516" y="70" width="220" height="58" rx="6" fill="#f6f8fa"/>
+  <text x="532" y="96" class="metric">+204,631 / -17,034 lines</text>
+  <text x="532" y="118" class="small">2,490 changed files</text>
 
-  <text x="24" y="185" class="section">Code language split by added lines</text>
+  <text x="24" y="173" class="section">Code language split by added lines</text>
   
-      <text x="28" y="219" class="label">Python</text>
-      <rect x="160" y="207" width="300" height="10" rx="5" fill="#eaeef2"/>
-      <rect x="160" y="207" width="300" height="10" rx="5" fill="#3572A5"/>
-      <text x="480" y="219" class="small">+46,132 / -3,554 lines (52%)</text>
-      <text x="28" y="247" class="label">TypeScript</text>
-      <rect x="160" y="235" width="300" height="10" rx="5" fill="#eaeef2"/>
-      <rect x="160" y="235" width="145" height="10" rx="5" fill="#3178c6"/>
-      <text x="480" y="247" class="small">+22,236 / -4,835 lines (25%)</text>
-      <text x="28" y="275" class="label">JavaScript</text>
-      <rect x="160" y="263" width="300" height="10" rx="5" fill="#eaeef2"/>
-      <rect x="160" y="263" width="78" height="10" rx="5" fill="#f1e05a"/>
-      <text x="480" y="275" class="small">+12,004 / -2,604 lines (13%)</text>
-      <text x="28" y="303" class="label">JSON</text>
-      <rect x="160" y="291" width="300" height="10" rx="5" fill="#eaeef2"/>
-      <rect x="160" y="291" width="27" height="10" rx="5" fill="#292929"/>
-      <text x="480" y="303" class="small">+4,188 / -491 lines (5%)</text>
-      <text x="28" y="331" class="label">Other</text>
-      <rect x="160" y="319" width="300" height="10" rx="5" fill="#eaeef2"/>
-      <rect x="160" y="319" width="15" height="10" rx="5" fill="#8c959f"/>
-      <text x="480" y="331" class="small">+2,378 / -278 lines (3%)</text>
-      <text x="28" y="359" class="label">YAML</text>
-      <rect x="160" y="347" width="300" height="10" rx="5" fill="#eaeef2"/>
-      <rect x="160" y="347" width="9" height="10" rx="5" fill="#cb171e"/>
-      <text x="480" y="359" class="small">+1,355 / -45 lines (2%)</text>
-      <text x="28" y="387" class="label">HTML</text>
-      <rect x="160" y="375" width="300" height="10" rx="5" fill="#eaeef2"/>
-      <rect x="160" y="375" width="4" height="10" rx="5" fill="#e34c26"/>
-      <text x="480" y="387" class="small">+588 / -392 lines (1%)</text>
-      <text x="28" y="415" class="label">CSS</text>
-      <rect x="160" y="403" width="300" height="10" rx="5" fill="#eaeef2"/>
-      <rect x="160" y="403" width="3" height="10" rx="5" fill="#663399"/>
-      <text x="480" y="415" class="small">+412 / -10 lines (0%)</text>
+      <text x="28" y="207" class="label">Python</text>
+      <rect x="160" y="195" width="300" height="10" rx="5" fill="#eaeef2"/>
+      <rect x="160" y="195" width="300" height="10" rx="5" fill="#3572A5"/>
+      <text x="480" y="207" class="small">+46,132 / -3,554 lines (52%)</text>
+      <text x="28" y="235" class="label">TypeScript</text>
+      <rect x="160" y="223" width="300" height="10" rx="5" fill="#eaeef2"/>
+      <rect x="160" y="223" width="145" height="10" rx="5" fill="#3178c6"/>
+      <text x="480" y="235" class="small">+22,236 / -4,835 lines (25%)</text>
+      <text x="28" y="263" class="label">JavaScript</text>
+      <rect x="160" y="251" width="300" height="10" rx="5" fill="#eaeef2"/>
+      <rect x="160" y="251" width="78" height="10" rx="5" fill="#f1e05a"/>
+      <text x="480" y="263" class="small">+12,004 / -2,604 lines (13%)</text>
+      <text x="28" y="291" class="label">JSON</text>
+      <rect x="160" y="279" width="300" height="10" rx="5" fill="#eaeef2"/>
+      <rect x="160" y="279" width="27" height="10" rx="5" fill="#292929"/>
+      <text x="480" y="291" class="small">+4,188 / -491 lines (5%)</text>
+      <text x="28" y="319" class="label">Other</text>
+      <rect x="160" y="307" width="300" height="10" rx="5" fill="#eaeef2"/>
+      <rect x="160" y="307" width="15" height="10" rx="5" fill="#8c959f"/>
+      <text x="480" y="319" class="small">+2,378 / -278 lines (3%)</text>
+      <text x="28" y="347" class="label">YAML</text>
+      <rect x="160" y="335" width="300" height="10" rx="5" fill="#eaeef2"/>
+      <rect x="160" y="335" width="9" height="10" rx="5" fill="#cb171e"/>
+      <text x="480" y="347" class="small">+1,355 / -45 lines (2%)</text>
+      <text x="28" y="375" class="label">HTML</text>
+      <rect x="160" y="363" width="300" height="10" rx="5" fill="#eaeef2"/>
+      <rect x="160" y="363" width="4" height="10" rx="5" fill="#e34c26"/>
+      <text x="480" y="375" class="small">+588 / -392 lines (1%)</text>
+      <text x="28" y="403" class="label">CSS</text>
+      <rect x="160" y="391" width="300" height="10" rx="5" fill="#eaeef2"/>
+      <rect x="160" y="391" width="3" height="10" rx="5" fill="#663399"/>
+      <text x="480" y="403" class="small">+412 / -10 lines (0%)</text>
 
-  <text x="24" y="447" class="section">Repository coverage</text>
-  <text x="28" y="469" class="note">Private repository names are redacted unless explicitly highlighted.</text>
+  <text x="24" y="435" class="section">Repository coverage</text>
   
-      <text x="28" y="489" class="repo">kkk-an/AgentMe</text>
-      <text x="310" y="489" class="small">external highlight</text>
-      <text x="460" y="489" class="small">93 commits</text>
-      <text x="555" y="489" class="small">14 PRs</text>
-      <text x="620" y="489" class="small">+146,948 / -13,138</text>
-      <text x="28" y="515" class="repo">Other private repositories</text>
-      <text x="310" y="515" class="small">private aggregate</text>
-      <text x="460" y="515" class="small">277 commits</text>
-      <text x="555" y="515" class="small">0 PRs</text>
-      <text x="620" y="515" class="small">+55,233 / -3,536</text>
-      <text x="28" y="541" class="repo">m1ng-wym/m1ng-wym</text>
-      <text x="310" y="541" class="small">own</text>
-      <text x="460" y="541" class="small">23 commits</text>
-      <text x="555" y="541" class="small">0 PRs</text>
-      <text x="620" y="541" class="small">+1,814 / -360</text>
-      <text x="28" y="567" class="repo">m1ng-wym/collection-ai</text>
-      <text x="310" y="567" class="small">own</text>
-      <text x="460" y="567" class="small">1 commits</text>
-      <text x="555" y="567" class="small">0 PRs</text>
-      <text x="620" y="567" class="small">+636 / -0</text>
-
-  <text x="24" y="591" class="note">Language split uses commit file stats and extension mapping; docs, lock files, and binary assets are ignored. Generated 2026-06-01 18:16:02 UTC.</text>
+      <text x="28" y="465" class="repo">kkk-an/AgentMe</text>
+      <text x="390" y="465" class="small">93 commits</text>
+      <text x="500" y="465" class="small">14 PRs</text>
+      <text x="575" y="465" class="small">+146,948 / -13,138</text>
+      <text x="28" y="491" class="repo">Other private repositories</text>
+      <text x="390" y="491" class="small">277 commits</text>
+      <text x="500" y="491" class="small">0 PRs</text>
+      <text x="575" y="491" class="small">+55,233 / -3,536</text>
+      <text x="28" y="517" class="repo">m1ng-wym/m1ng-wym</text>
+      <text x="390" y="517" class="small">23 commits</text>
+      <text x="500" y="517" class="small">0 PRs</text>
+      <text x="575" y="517" class="small">+1,814 / -360</text>
+      <text x="28" y="543" class="repo">m1ng-wym/collection-ai</text>
+      <text x="390" y="543" class="small">1 commits</text>
+      <text x="500" y="543" class="small">0 PRs</text>
+      <text x="575" y="543" class="small">+636 / -0</text>
 </svg>
