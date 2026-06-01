@@ -15,15 +15,15 @@
 
   <rect x="24" y="82" width="220" height="58" rx="6" fill="#f6f8fa"/>
   <text x="40" y="108" class="metric">20 repositories scanned</text>
-  <text x="40" y="130" class="small">284 own commits / 97 external commits</text>
+  <text x="40" y="130" class="small">285 own commits / 97 external commits</text>
 
   <rect x="270" y="82" width="220" height="58" rx="6" fill="#f6f8fa"/>
-  <text x="286" y="108" class="metric">381 commits / 14 PRs</text>
+  <text x="286" y="108" class="metric">382 commits / 14 PRs</text>
   <text x="286" y="130" class="small">Authored by m1ng-wym</text>
 
   <rect x="516" y="82" width="220" height="58" rx="6" fill="#f6f8fa"/>
-  <text x="532" y="108" class="metric">+203,806 / -16,775 lines</text>
-  <text x="532" y="130" class="small">2,459 changed files</text>
+  <text x="532" y="108" class="metric">+204,125 / -16,926 lines</text>
+  <text x="532" y="130" class="small">2,463 changed files</text>
 
   <text x="24" y="185" class="section">Code language split by added lines</text>
   
@@ -37,20 +37,20 @@
       <text x="480" y="247" class="small">+22,236 / -4,835 lines (25%)</text>
       <text x="28" y="275" class="label">JavaScript</text>
       <rect x="160" y="263" width="300" height="10" rx="5" fill="#eaeef2"/>
-      <rect x="160" y="263" width="77" height="10" rx="5" fill="#f1e05a"/>
-      <text x="480" y="275" class="small">+11,777 / -2,523 lines (13%)</text>
+      <rect x="160" y="263" width="78" height="10" rx="5" fill="#f1e05a"/>
+      <text x="480" y="275" class="small">+11,938 / -2,560 lines (13%)</text>
       <text x="28" y="303" class="label">JSON</text>
       <rect x="160" y="291" width="300" height="10" rx="5" fill="#eaeef2"/>
-      <rect x="160" y="291" width="26" height="10" rx="5" fill="#292929"/>
-      <text x="480" y="303" class="small">+4,068 / -408 lines (5%)</text>
+      <rect x="160" y="291" width="27" height="10" rx="5" fill="#292929"/>
+      <text x="480" y="303" class="small">+4,187 / -490 lines (5%)</text>
       <text x="28" y="331" class="label">Other</text>
       <rect x="160" y="319" width="300" height="10" rx="5" fill="#eaeef2"/>
       <rect x="160" y="319" width="13" height="10" rx="5" fill="#8c959f"/>
-      <text x="480" y="331" class="small">+1,951 / -197 lines (2%)</text>
+      <text x="480" y="331" class="small">+1,986 / -227 lines (2%)</text>
       <text x="28" y="359" class="label">YAML</text>
       <rect x="160" y="347" width="300" height="10" rx="5" fill="#eaeef2"/>
-      <rect x="160" y="347" width="8" height="10" rx="5" fill="#cb171e"/>
-      <text x="480" y="359" class="small">+1,304 / -31 lines (1%)</text>
+      <rect x="160" y="347" width="9" height="10" rx="5" fill="#cb171e"/>
+      <text x="480" y="359" class="small">+1,308 / -33 lines (1%)</text>
       <text x="28" y="387" class="label">HTML</text>
       <rect x="160" y="375" width="300" height="10" rx="5" fill="#eaeef2"/>
       <rect x="160" y="375" width="4" height="10" rx="5" fill="#e34c26"/>
@@ -75,14 +75,14 @@
       <text x="620" y="515" class="small">+55,233 / -3,536</text>
       <text x="28" y="541" class="repo">m1ng-wym/m1ng-wym</text>
       <text x="310" y="541" class="small">own</text>
-      <text x="460" y="541" class="small">10 commits</text>
+      <text x="460" y="541" class="small">11 commits</text>
       <text x="555" y="541" class="small">0 PRs</text>
-      <text x="620" y="541" class="small">+989 / -101</text>
+      <text x="620" y="541" class="small">+1,308 / -252</text>
       <text x="28" y="567" class="repo">m1ng-wym/collection-ai</text>
       <text x="310" y="567" class="small">own</text>
       <text x="460" y="567" class="small">1 commits</text>
       <text x="555" y="567" class="small">0 PRs</text>
       <text x="620" y="567" class="small">+636 / -0</text>
 
-  <text x="24" y="591" class="note">Language split uses commit file stats and extension mapping; docs, lock files, and binary assets are ignored. Generated 2026-06-01 09:21:36 UTC.</text>
+  <text x="24" y="591" class="note">Language split uses commit file stats and extension mapping; docs, lock files, and binary assets are ignored. Generated 2026-06-01 09:25:02 UTC.</text>
 </svg>
