@@ -37,6 +37,20 @@ jobs:
           plugin_lines_repositories_limit: 8
           plugin_lines_history_limit: 3
           plugin_lines_delay: 30
+          extras_js: |
+            const hiddenHeaderFields = [/^Followed by\b/, /^Contributed to .* repositories$/]
+            document.querySelector(".field.calendar")?.remove()
+            document.querySelectorAll(".field").forEach((field) => {
+              const text = field.textContent?.replace(/\s+/g, " ").trim() ?? ""
+              if (hiddenHeaderFields.some((pattern) => pattern.test(text))) {
+                field.remove()
+              }
+            })
+            document.querySelectorAll(".row section").forEach((section) => {
+              if (!section.textContent?.trim() && !section.querySelector("img, svg, canvas")) {
+                section.remove()
+              }
+            })
 
   contribution-language-metrics:
     runs-on: ubuntu-latest
