@@ -489,34 +489,15 @@ async function readOverviewActivityCommits() {
   }
 }
 
-async function readTitleFontFace() {
-  const fontFaces = []
+async function readTitleArtwork() {
   try {
-    const font = await readFile(new URL("../assets/nabla.ttf", import.meta.url))
-    fontFaces.push(`    @font-face {
-      font-family: "Nabla";
-      src: url("data:font/truetype;base64,${font.toString("base64")}") format("truetype");
-      font-weight: 400;
-      font-style: normal;
-    }
-`)
+    return await readFile(new URL("../assets/nabla-title-where-my-code-goes.svg", import.meta.url), "utf8")
   } catch {
+    return ""
   }
-  try {
-    const font = await readFile(new URL("../assets/young-serif-regular.woff2", import.meta.url))
-    fontFaces.push(`    @font-face {
-      font-family: "young-serif";
-      src: url("data:font/woff2;base64,${font.toString("base64")}") format("woff2");
-      font-weight: 400;
-      font-style: normal;
-    }
-`)
-  } catch {
-  }
-  return fontFaces.join("")
 }
 
-function renderSvg({ repos, totals, own, external, generatedAt, displayCommits, titleFontFace }) {
+function renderSvg({ repos, totals, own, external, generatedAt, displayCommits, titleArtwork }) {
   const topLanguages = languageEntries(totals).slice(0, 8)
   const privateAggregate = { ...emptyStats(), nameWithOwner: "Other private repositories", isPrivate: true, isOwn: false, aggregate: true }
   for (const repo of repos) {
@@ -568,11 +549,10 @@ function renderSvg({ repos, totals, own, external, generatedAt, displayCommits, 
       <text x="620" y="${y}" class="small">+${formatNumber(repo.additions)} / -${formatNumber(repo.deletions)}</text>`
   }).join("")
 
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" role="img" aria-label="Authored GitHub contribution metrics">
+  return `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" role="img" aria-label="Authored GitHub contribution metrics">
   <style>
-${titleFontFace}
     text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; fill: #24292f; }
-    .title { font-family: "Nabla", "young-serif", Georgia, serif; font-size: 28px; font-weight: 400; font-variation-settings: "EDPT" 120, "EHLT" 12; }
+    .title { font-size: 22px; font-weight: 700; }
     .section { font-size: 15px; font-weight: 700; fill: #0969da; }
     .metric { font-size: 14px; font-weight: 600; }
     .label { font-size: 13px; font-weight: 600; }
@@ -581,7 +561,7 @@ ${titleFontFace}
     .note { font-size: 11px; fill: #6e7781; }
   </style>
   <rect x="0.5" y="0.5" width="${width - 1}" height="${height - 1}" rx="8" fill="#ffffff" stroke="#d0d7de"/>
-  <text x="24" y="36" class="title">Where my code goes</text>
+  ${titleArtwork || `<text x="24" y="36" class="title">Where my code goes</text>`}
   <text x="24" y="60" class="small">Accessible own repositories and external repositories contributed to by @${escapeXml(user)}</text>
 
   <rect x="24" y="82" width="220" height="58" rx="6" fill="#f6f8fa"/>
@@ -656,8 +636,8 @@ async function main() {
 
   const generatedAt = new Date().toISOString()
   const overviewActivityCommits = await readOverviewActivityCommits()
-  const titleFontFace = await readTitleFontFace()
-  const svg = renderSvg({ repos: analyzed, totals, own, external, generatedAt, displayCommits: overviewActivityCommits, titleFontFace })
+  const titleArtwork = await readTitleArtwork()
+  const svg = renderSvg({ repos: analyzed, totals, own, external, generatedAt, displayCommits: overviewActivityCommits, titleArtwork })
   await writeFile("metrics.languages.svg", svg)
   await writeFile("metrics.contributions.json", `${JSON.stringify({
     generatedAt,
