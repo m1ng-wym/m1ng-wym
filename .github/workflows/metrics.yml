@@ -26,7 +26,7 @@ jobs:
           filename: metrics.overview.svg
           token: ${{ secrets.METRICS_TOKEN || github.token }}
           committer_token: ${{ github.token }}
-          base: header, activity, community, repositories, metadata
+          base: header, activity, metadata
           base_indepth: yes
           repositories: 300
           repositories_batch: 50
@@ -49,7 +49,9 @@ jobs:
             })
             document.querySelectorAll("h2.field").forEach((heading) => {
               const text = heading.textContent?.replace(/\s+/g, " ").trim() ?? ""
-              if (text === "Community stats") {
+              const isCommunityStats = text === "Community stats"
+              const isRepositoryStats = text.includes("Repositories (including")
+              if (isCommunityStats || isRepositoryStats) {
                 heading.closest("section")?.remove()
               }
             })
