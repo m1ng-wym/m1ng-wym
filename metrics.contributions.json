@@ -1,14 +1,14 @@
 {
-  "generatedAt": "2026-06-01T13:33:47.555Z",
+  "generatedAt": "2026-06-01T17:33:50.643Z",
   "user": "m1ng-wym",
   "summary": {
     "repositories": 20,
-    "commits": 389,
+    "commits": 390,
     "pullRequests": 14,
-    "additions": 204194,
-    "deletions": 16947,
-    "files": 2473,
-    "ownCommits": 292,
+    "additions": 204314,
+    "deletions": 16951,
+    "files": 2477,
+    "ownCommits": 293,
     "externalCommits": 97,
     "languages": [
       {
@@ -25,9 +25,9 @@
       },
       {
         "name": "JavaScript",
-        "additions": 11957,
-        "deletions": 2566,
-        "files": 461
+        "additions": 11977,
+        "deletions": 2569,
+        "files": 462
       },
       {
         "name": "JSON",
@@ -37,9 +37,9 @@
       },
       {
         "name": "Other",
-        "additions": 1988,
-        "deletions": 229,
-        "files": 137
+        "additions": 2088,
+        "deletions": 230,
+        "files": 139
       },
       {
         "name": "YAML",
@@ -170,17 +170,17 @@
       "highlighted": false,
       "private": false,
       "own": true,
-      "commits": 18,
+      "commits": 19,
       "prs": 0,
-      "additions": 1377,
-      "deletions": 273,
-      "files": 28,
+      "additions": 1497,
+      "deletions": 277,
+      "files": 32,
       "languages": [
         {
           "name": "JavaScript",
-          "additions": 707,
-          "deletions": 52,
-          "files": 5
+          "additions": 727,
+          "deletions": 55,
+          "files": 6
         },
         {
           "name": "JSON",
@@ -189,16 +189,16 @@
           "files": 3
         },
         {
+          "name": "Other",
+          "additions": 220,
+          "deletions": 81,
+          "files": 5
+        },
+        {
           "name": "YAML",
           "additions": 155,
           "deletions": 45,
           "files": 14
-        },
-        {
-          "name": "Other",
-          "additions": 120,
-          "deletions": 80,
-          "files": 3
         }
       ]
     },
