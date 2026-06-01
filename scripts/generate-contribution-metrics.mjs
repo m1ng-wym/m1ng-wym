@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { writeFile } from "node:fs/promises"
+import { readFile, writeFile } from "node:fs/promises"
 
 const token = process.env.GH_TOKEN || process.env.GITHUB_TOKEN || process.env.METRICS_TOKEN
 const user = process.env.METRICS_USER || "m1ng-wym"
@@ -478,7 +478,17 @@ function publicRepoName(repo, index) {
   return `Private repo ${index + 1}`
 }
 
-function renderSvg({ repos, totals, own, external, generatedAt }) {
+async function readOverviewActivityCommits() {
+  try {
+    const overviewSvg = await readFile("metrics.overview.svg", "utf8")
+    const match = overviewSvg.match(/>\s*([0-9][0-9,]*) Commits\s*</)
+    return match ? Number.parseInt(match[1].replaceAll(",", ""), 10) : null
+  } catch {
+    return null
+  }
+}
+
+function renderSvg({ repos, totals, own, external, generatedAt, displayCommits }) {
   const topLanguages = languageEntries(totals).slice(0, 8)
   const privateAggregate = { ...emptyStats(), nameWithOwner: "Other private repositories", isPrivate: true, isOwn: false, aggregate: true }
   for (const repo of repos) {
@@ -504,6 +514,7 @@ function renderSvg({ repos, totals, own, external, generatedAt }) {
   const maxLanguage = Math.max(1, ...topLanguages.map(item => item.additions))
   const totalLanguageLines = Math.max(1, topLanguages.reduce((sum, item) => sum + item.additions, 0))
   const now = generatedAt.replace("T", " ").replace(/\.\d+Z$/, " UTC")
+  const shownCommits = displayCommits ?? totals.commits
 
   const languageRows = topLanguages.map((item, index) => {
     const y = languageStartY + 34 + index * 28
@@ -549,7 +560,7 @@ function renderSvg({ repos, totals, own, external, generatedAt }) {
   <text x="40" y="130" class="small">${formatNumber(own.commits)} own commits / ${formatNumber(external.commits)} external commits</text>
 
   <rect x="270" y="82" width="220" height="58" rx="6" fill="#f6f8fa"/>
-  <text x="286" y="108" class="metric">${formatNumber(totals.commits)} commits / ${formatNumber(totals.prs)} PRs</text>
+  <text x="286" y="108" class="metric">${formatNumber(shownCommits)} commits / ${formatNumber(totals.prs)} PRs</text>
   <text x="286" y="130" class="small">Authored by ${escapeXml(user)}</text>
 
   <rect x="516" y="82" width="220" height="58" rx="6" fill="#f6f8fa"/>
@@ -615,7 +626,8 @@ async function main() {
   }
 
   const generatedAt = new Date().toISOString()
-  const svg = renderSvg({ repos: analyzed, totals, own, external, generatedAt })
+  const overviewActivityCommits = await readOverviewActivityCommits()
+  const svg = renderSvg({ repos: analyzed, totals, own, external, generatedAt, displayCommits: overviewActivityCommits })
   await writeFile("metrics.languages.svg", svg)
   await writeFile("metrics.contributions.json", `${JSON.stringify({
     generatedAt,
@@ -633,7 +645,7 @@ async function main() {
     },
     repositories: serializableRepositories(analyzed),
   }, null, 2)}\n`)
-  console.log(`Generated metrics.languages.svg for ${analyzed.length} repositories, ${totals.commits} commits, ${totals.prs} PRs`)
+  console.log(`Generated metrics.languages.svg for ${analyzed.length} repositories, ${overviewActivityCommits ?? totals.commits} displayed commits, ${totals.commits} audited commits, ${totals.prs} PRs`)
 }
 
 main().catch(error => {
