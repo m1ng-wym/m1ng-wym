@@ -569,7 +569,7 @@ ${titleFontFace}
     .note { font-size: 11px; fill: #6e7781; }
   </style>
   <rect x="0.5" y="0.5" width="${width - 1}" height="${height - 1}" rx="8" fill="#ffffff" stroke="#d0d7de"/>
-  <text x="24" y="36" class="title">Authored contribution metrics</text>
+  <text x="24" y="36" class="title">Where my code goes</text>
   <text x="24" y="60" class="small">Accessible own repositories and external repositories contributed to by @${escapeXml(user)}</text>
 
   <rect x="24" y="82" width="220" height="58" rx="6" fill="#f6f8fa"/>
