@@ -26,19 +26,15 @@ jobs:
           filename: metrics.overview.svg
           token: ${{ secrets.METRICS_TOKEN || github.token }}
           committer_token: ${{ github.token }}
-          base: header, activity, metadata
+          base: header, activity
           base_indepth: yes
           repositories: 300
           repositories_batch: 50
           repositories_affiliations: owner, collaborator, organization_member
           repositories_forks: yes
-          plugin_lines: yes
-          plugin_lines_sections: repositories, history
-          plugin_lines_repositories_limit: 8
-          plugin_lines_history_limit: 3
-          plugin_lines_delay: 30
           extras_js: |
             document.querySelector(".field.calendar")?.remove()
+            document.querySelector("footer")?.remove()
             document.querySelectorAll(".field").forEach((field) => {
               const text = field.textContent?.replace(/\s+/g, " ").trim() ?? ""
               const isFollowerCount = text.startsWith("Followed by ")
@@ -51,7 +47,8 @@ jobs:
               const text = heading.textContent?.replace(/\s+/g, " ").trim() ?? ""
               const isCommunityStats = text === "Community stats"
               const isRepositoryStats = text.includes("Repositories (including")
-              if (isCommunityStats || isRepositoryStats) {
+              const isLinesOfCode = text === "Lines of code pushed"
+              if (isCommunityStats || isRepositoryStats || isLinesOfCode) {
                 heading.closest("section")?.remove()
               }
             })
