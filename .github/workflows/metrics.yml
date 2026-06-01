@@ -38,11 +38,12 @@ jobs:
           plugin_lines_history_limit: 3
           plugin_lines_delay: 30
           extras_js: |
-            const hiddenHeaderFields = [/^Followed by\b/, /^Contributed to .* repositories$/]
             document.querySelector(".field.calendar")?.remove()
             document.querySelectorAll(".field").forEach((field) => {
               const text = field.textContent?.replace(/\s+/g, " ").trim() ?? ""
-              if (hiddenHeaderFields.some((pattern) => pattern.test(text))) {
+              const isFollowerCount = text.startsWith("Followed by ")
+              const isContributedRepositoryCount = text.startsWith("Contributed to ") && text.endsWith(" repositories")
+              if (isFollowerCount || isContributedRepositoryCount) {
                 field.remove()
               }
             })
