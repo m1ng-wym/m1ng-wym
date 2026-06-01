@@ -1,69 +1,75 @@
 {
-  "generatedAt": "2026-06-01T07:26:29.908Z",
+  "generatedAt": "2026-06-01T09:21:36.238Z",
   "user": "m1ng-wym",
   "summary": {
-    "repositories": 18,
-    "commits": 377,
+    "repositories": 20,
+    "commits": 381,
     "pullRequests": 14,
-    "additions": 160738,
-    "deletions": 9609,
-    "files": 1624,
-    "ownCommits": 283,
-    "externalCommits": 94,
+    "additions": 203806,
+    "deletions": 16775,
+    "files": 2459,
+    "ownCommits": 284,
+    "externalCommits": 97,
     "languages": [
       {
         "name": "Python",
-        "additions": 30717,
-        "deletions": 2012,
-        "files": 6
+        "additions": 46132,
+        "deletions": 3554,
+        "files": 376
       },
       {
         "name": "TypeScript",
-        "additions": 11589,
-        "deletions": 2393,
-        "files": 3
+        "additions": 22236,
+        "deletions": 4835,
+        "files": 335
       },
       {
         "name": "JavaScript",
-        "additions": 8004,
-        "deletions": 278,
-        "files": 4
+        "additions": 11777,
+        "deletions": 2523,
+        "files": 458
       },
       {
         "name": "JSON",
-        "additions": 3538,
-        "deletions": 11,
-        "files": 5
+        "additions": 4068,
+        "deletions": 408,
+        "files": 67
+      },
+      {
+        "name": "Other",
+        "additions": 1951,
+        "deletions": 197,
+        "files": 135
       },
       {
         "name": "YAML",
         "additions": 1304,
         "deletions": 31,
-        "files": 2
+        "files": 9
       },
       {
-        "name": "Other",
-        "additions": 1032,
-        "deletions": 79,
-        "files": 15
+        "name": "HTML",
+        "additions": 588,
+        "deletions": 392,
+        "files": 13
       },
       {
         "name": "CSS",
-        "additions": 389,
-        "deletions": 1,
-        "files": 3
+        "additions": 412,
+        "deletions": 10,
+        "files": 27
       },
       {
         "name": "Go",
         "additions": 249,
         "deletions": 81,
-        "files": 2
+        "files": 50
       },
       {
         "name": "XML",
-        "additions": 173,
+        "additions": 212,
         "deletions": 145,
-        "files": 3
+        "files": 15
       },
       {
         "name": "SQL",
@@ -72,21 +78,21 @@
         "files": 1
       },
       {
+        "name": "Swift",
+        "additions": 75,
+        "deletions": 0,
+        "files": 3
+      },
+      {
         "name": "Java",
         "additions": 27,
         "deletions": 14,
-        "files": 1
+        "files": 3
       },
       {
         "name": "TOML",
         "additions": 13,
         "deletions": 0,
-        "files": 1
-      },
-      {
-        "name": "HTML",
-        "additions": 2,
-        "deletions": 2,
         "files": 1
       }
     ]
@@ -99,51 +105,63 @@
       "own": false,
       "commits": 93,
       "prs": 14,
-      "additions": 106278,
-      "deletions": 7296,
-      "files": 824,
+      "additions": 146948,
+      "deletions": 13138,
+      "files": 1614,
       "languages": [
         {
           "name": "Python",
-          "additions": 29422,
-          "deletions": 2004,
-          "files": 233
-        },
-        {
-          "name": "JavaScript",
-          "additions": 7065,
-          "deletions": 267,
-          "files": 80
+          "additions": 44248,
+          "deletions": 3546,
+          "files": 346
         },
         {
           "name": "TypeScript",
-          "additions": 3790,
-          "deletions": 2253,
-          "files": 65
+          "additions": 13125,
+          "deletions": 3764,
+          "files": 171
+        },
+        {
+          "name": "JavaScript",
+          "additions": 10838,
+          "deletions": 2512,
+          "files": 445
         },
         {
           "name": "JSON",
-          "additions": 2708,
-          "deletions": 6,
-          "files": 40
+          "additions": 2789,
+          "deletions": 10,
+          "files": 49
         },
         {
           "name": "Other",
-          "additions": 429,
-          "deletions": 2,
-          "files": 41
-        },
-        {
-          "name": "CSS",
-          "additions": 83,
-          "deletions": 1,
-          "files": 3
+          "additions": 1348,
+          "deletions": 120,
+          "files": 69
         },
         {
           "name": "HTML",
-          "additions": 2,
-          "deletions": 2,
-          "files": 1
+          "additions": 588,
+          "deletions": 392,
+          "files": 13
+        },
+        {
+          "name": "CSS",
+          "additions": 106,
+          "deletions": 10,
+          "files": 24
+        },
+        {
+          "name": "Swift",
+          "additions": 75,
+          "deletions": 0,
+          "files": 3
+        },
+        {
+          "name": "XML",
+          "additions": 39,
+          "deletions": 0,
+          "files": 3
         }
       ]
     },
@@ -185,69 +203,88 @@
       ]
     },
     {
+      "nameWithOwner": "m1ng-wym/collection-ai",
+      "highlighted": false,
+      "private": false,
+      "own": true,
+      "commits": 1,
+      "prs": 0,
+      "additions": 636,
+      "deletions": 0,
+      "files": 2,
+      "languages": [
+        {
+          "name": "Python",
+          "additions": 589,
+          "deletions": 0,
+          "files": 1
+        }
+      ]
+    },
+    {
       "nameWithOwner": "Other private repositories",
       "highlighted": false,
       "private": true,
       "own": false,
-      "commits": 274,
+      "commits": 277,
       "prs": 0,
-      "additions": 53471,
-      "deletions": 2212,
-      "files": 786,
+      "additions": 55233,
+      "deletions": 3536,
+      "files": 829,
       "languages": [
         {
           "name": "TypeScript",
-          "additions": 7799,
-          "deletions": 140,
-          "files": 2
+          "additions": 9111,
+          "deletions": 1071,
+          "files": 164
         },
         {
           "name": "Python",
           "additions": 1295,
           "deletions": 8,
-          "files": 5
+          "files": 29
         },
         {
           "name": "YAML",
           "additions": 1200,
           "deletions": 0,
-          "files": 1
+          "files": 2
         },
         {
           "name": "JSON",
-          "additions": 575,
-          "deletions": 5,
-          "files": 3
+          "additions": 1024,
+          "deletions": 398,
+          "files": 17
         },
         {
           "name": "Other",
           "additions": 520,
           "deletions": 29,
-          "files": 13
+          "files": 65
         },
         {
           "name": "JavaScript",
           "additions": 412,
           "deletions": 2,
-          "files": 2
+          "files": 11
         },
         {
           "name": "CSS",
           "additions": 306,
           "deletions": 0,
-          "files": 2
+          "files": 3
         },
         {
           "name": "Go",
           "additions": 249,
           "deletions": 81,
-          "files": 2
+          "files": 50
         },
         {
           "name": "XML",
           "additions": 173,
           "deletions": 145,
-          "files": 3
+          "files": 12
         },
         {
           "name": "SQL",
@@ -259,7 +296,7 @@
           "name": "Java",
           "additions": 27,
           "deletions": 14,
-          "files": 1
+          "files": 3
         },
         {
           "name": "TOML",

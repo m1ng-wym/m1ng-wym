@@ -4,9 +4,12 @@ import { writeFile } from "node:fs/promises"
 
 const token = process.env.GH_TOKEN || process.env.GITHUB_TOKEN || process.env.METRICS_TOKEN
 const user = process.env.METRICS_USER || "m1ng-wym"
+const userLower = user.toLowerCase()
 const highlightRepos = new Set((process.env.METRICS_HIGHLIGHT_REPOS || "kkk-an/AgentMe").split(",").map(value => value.trim()).filter(Boolean))
-const maxRepos = Number.parseInt(process.env.METRICS_REPOSITORY_LIMIT || "80", 10)
-const maxCommitsPerRepo = Number.parseInt(process.env.METRICS_COMMIT_LIMIT_PER_REPO || "500", 10)
+const maxRepos = Number.parseInt(process.env.METRICS_REPOSITORY_LIMIT || "300", 10)
+const maxCommitsPerRepo = Number.parseInt(process.env.METRICS_COMMIT_LIMIT_PER_REPO || "2000", 10)
+const requestTimeout = Number.parseInt(process.env.METRICS_REQUEST_TIMEOUT || "30000", 10)
+const requestConcurrency = Number.parseInt(process.env.METRICS_REQUEST_CONCURRENCY || "6", 10)
 
 if (!token) {
   throw new Error("Missing GH_TOKEN, GITHUB_TOKEN, or METRICS_TOKEN")
@@ -129,26 +132,52 @@ function sleep(ms) {
 }
 
 async function requestJson(url, options = {}) {
-  for (let attempt = 1; attempt <= 3; attempt++) {
-    const response = await fetch(url, options)
-    if (response.status === 403 && response.headers.get("retry-after")) {
-      await sleep(Number.parseInt(response.headers.get("retry-after"), 10) * 1000)
-      continue
+  for (let attempt = 1; attempt <= 5; attempt++) {
+    const controller = new AbortController()
+    const timeout = setTimeout(() => controller.abort(), requestTimeout)
+    try {
+      const response = await fetch(url, { ...options, signal: controller.signal })
+      clearTimeout(timeout)
+      if (response.status === 403 && response.headers.get("retry-after")) {
+        await sleep(Number.parseInt(response.headers.get("retry-after"), 10) * 1000)
+        continue
+      }
+      if (response.status === 404 || response.status === 409) {
+        return null
+      }
+      if (!response.ok) {
+        const body = await response.text()
+        if (attempt < 5 && response.status >= 500) {
+          await sleep(1000 * attempt)
+          continue
+        }
+        throw new Error(`${response.status} ${response.statusText} for ${url}: ${body.slice(0, 300)}`)
+      }
+      return response.json()
     }
-    if (response.status === 404 || response.status === 409) {
-      return null
-    }
-    if (!response.ok) {
-      const body = await response.text()
-      if (attempt < 3 && response.status >= 500) {
+    catch (error) {
+      clearTimeout(timeout)
+      if (attempt < 5) {
         await sleep(1000 * attempt)
         continue
       }
-      throw new Error(`${response.status} ${response.statusText} for ${url}: ${body.slice(0, 300)}`)
+      throw error
     }
-    return response.json()
   }
   return null
+}
+
+async function mapLimit(items, limit, fn) {
+  const results = new Array(items.length)
+  let index = 0
+  async function worker() {
+    while (index < items.length) {
+      const current = index++
+      results[current] = await fn(items[current], current)
+    }
+  }
+  await Promise.all(Array.from({ length: Math.min(limit, items.length) }, worker))
+  return results
 }
 
 async function graphql(query, variables) {
@@ -208,9 +237,9 @@ async function fetchRepo(handle) {
 
 async function discoverRepos() {
   const [owned, commitRepos, prRepos] = await Promise.all([
-    fetchRepoConnection("repositories", "affiliations: [OWNER, COLLABORATOR, ORGANIZATION_MEMBER], isFork: false, orderBy: {field: UPDATED_AT, direction: DESC}"),
-    fetchRepoConnection("repositoriesContributedTo", "contributionTypes: [COMMIT], includeUserRepositories: false, orderBy: {field: UPDATED_AT, direction: DESC}"),
-    fetchRepoConnection("repositoriesContributedTo", "contributionTypes: [PULL_REQUEST], includeUserRepositories: false, orderBy: {field: UPDATED_AT, direction: DESC}"),
+    fetchRepoConnection("repositories", "affiliations: [OWNER, COLLABORATOR, ORGANIZATION_MEMBER], orderBy: {field: UPDATED_AT, direction: DESC}"),
+    fetchRepoConnection("repositoriesContributedTo", "contributionTypes: [COMMIT], includeUserRepositories: true, orderBy: {field: UPDATED_AT, direction: DESC}"),
+    fetchRepoConnection("repositoriesContributedTo", "contributionTypes: [PULL_REQUEST], includeUserRepositories: true, orderBy: {field: UPDATED_AT, direction: DESC}"),
   ])
 
   const map = new Map()
@@ -261,16 +290,82 @@ async function fetchCommitDetail(repo, sha) {
   return requestJson(`https://api.github.com/repos/${repo.nameWithOwner}/commits/${sha}`, { headers: apiHeaders })
 }
 
-async function fetchAuthoredPrCount(repo) {
-  const data = await graphql(
-    `query($query: String!) {
-      search(query: $query, type: ISSUE, first: 1) {
-        issueCount
-      }
-    }`,
-    { query: `repo:${repo.nameWithOwner} type:pr author:${user}` },
-  )
-  return data.search.issueCount || 0
+async function fetchAuthoredPullRequests(repo) {
+  const pullRequests = []
+  let total = 0
+  let cursor = null
+  do {
+    const data = await graphql(
+      `query($query: String!, $cursor: String) {
+        search(query: $query, type: ISSUE, first: 100, after: $cursor) {
+          issueCount
+          nodes {
+            ... on PullRequest {
+              number
+              additions
+              deletions
+              changedFiles
+              commits(first: 100) {
+                totalCount
+                nodes {
+                  commit { oid }
+                }
+              }
+              mergeCommit { oid }
+            }
+          }
+          pageInfo { hasNextPage endCursor }
+        }
+      }`,
+      { query: `repo:${repo.nameWithOwner} type:pr author:${user}`, cursor },
+    )
+    const search = data.search
+    total = search.issueCount || 0
+    pullRequests.push(...search.nodes.filter(Boolean).map(pr => ({
+      number: pr.number,
+      additions: pr.additions || 0,
+      deletions: pr.deletions || 0,
+      changedFiles: pr.changedFiles || 0,
+      commitsTotal: pr.commits?.totalCount || 0,
+      commitShas: (pr.commits?.nodes || []).map(node => node?.commit?.oid).filter(Boolean),
+      mergeCommitSha: pr.mergeCommit?.oid || null,
+    })))
+    cursor = search.pageInfo.hasNextPage ? search.pageInfo.endCursor : null
+  } while (cursor)
+  return { total, pullRequests }
+}
+
+async function fetchPullRequestCommits(repo, number) {
+  const commits = []
+  for (let page = 1; ; page++) {
+    const url = new URL(`https://api.github.com/repos/${repo.nameWithOwner}/pulls/${number}/commits`)
+    url.searchParams.set("per_page", "100")
+    url.searchParams.set("page", String(page))
+    const pageCommits = await requestJson(url, { headers: apiHeaders })
+    if (!Array.isArray(pageCommits) || pageCommits.length === 0) break
+    commits.push(...pageCommits)
+    if (pageCommits.length < 100) break
+  }
+  return commits
+}
+
+async function fetchPullRequestFiles(repo, number) {
+  const files = []
+  for (let page = 1; ; page++) {
+    const url = new URL(`https://api.github.com/repos/${repo.nameWithOwner}/pulls/${number}/files`)
+    url.searchParams.set("per_page", "100")
+    url.searchParams.set("page", String(page))
+    const pageFiles = await requestJson(url, { headers: apiHeaders })
+    if (!Array.isArray(pageFiles) || pageFiles.length === 0) break
+    files.push(...pageFiles)
+    if (pageFiles.length < 100) break
+  }
+  return files
+}
+
+function pullRequestAlreadyRepresented(pr, commitShas, extraCommitShas = []) {
+  if (pr.mergeCommitSha && commitShas.has(pr.mergeCommitSha)) return true
+  return [...pr.commitShas, ...extraCommitShas].some(sha => commitShas.has(sha))
 }
 
 function languageFor(filename) {
@@ -289,30 +384,59 @@ function emptyStats() {
   return { commits: 0, prs: 0, additions: 0, deletions: 0, files: 0, languages: new Map() }
 }
 
-function addLanguage(stats, language, additions, deletions) {
+function addLanguage(stats, language, additions, deletions, files = 1) {
   if (!language) return
   const current = stats.languages.get(language) || { additions: 0, deletions: 0, files: 0 }
   current.additions += additions
   current.deletions += deletions
-  current.files += 1
+  current.files += files
   stats.languages.set(language, current)
 }
 
 async function analyzeRepo(repo) {
-  const stats = { ...emptyStats(), nameWithOwner: repo.nameWithOwner, isPrivate: repo.isPrivate, isOwn: repo.nameWithOwner.toLowerCase().startsWith(`${user.toLowerCase()}/`) }
-  const [commits, prs] = await Promise.all([fetchAuthoredCommits(repo), fetchAuthoredPrCount(repo)])
+  const stats = { ...emptyStats(), nameWithOwner: repo.nameWithOwner, isPrivate: repo.isPrivate, isOwn: repo.nameWithOwner.toLowerCase().startsWith(`${userLower}/`) }
+  const [commits, prData] = await Promise.all([fetchAuthoredCommits(repo), fetchAuthoredPullRequests(repo)])
+  const commitShas = new Set(commits.map(commit => commit.sha))
   stats.commits = commits.length
-  stats.prs = prs
+  stats.prs = prData.total
 
-  for (const commit of commits) {
-    if ((commit.parents || []).length > 1) continue
-    const detail = await fetchCommitDetail(repo, commit.sha)
+  const commitDetails = await mapLimit(commits, requestConcurrency, commit => fetchCommitDetail(repo, commit.sha))
+  for (const detail of commitDetails) {
     if (!detail) continue
     stats.additions += detail.stats?.additions || 0
     stats.deletions += detail.stats?.deletions || 0
     for (const file of detail.files || []) {
       stats.files += 1
       addLanguage(stats, languageFor(file.filename), file.additions || 0, file.deletions || 0)
+    }
+  }
+
+  for (const pr of prData.pullRequests) {
+    let prCommits = null
+    let represented = pullRequestAlreadyRepresented(pr, commitShas)
+    if (!represented && pr.commitsTotal > pr.commitShas.length) {
+      prCommits = await fetchPullRequestCommits(repo, pr.number)
+      represented = pullRequestAlreadyRepresented(pr, commitShas, prCommits.map(commit => commit.sha).filter(Boolean))
+    }
+    if (represented) continue
+    const [fallbackCommits, prFiles] = await Promise.all([
+      prCommits ? Promise.resolve(prCommits) : fetchPullRequestCommits(repo, pr.number),
+      fetchPullRequestFiles(repo, pr.number),
+    ])
+    stats.commits += Math.max(fallbackCommits.length, pr.commitsTotal)
+    if (prFiles.length === 0) {
+      stats.additions += pr.additions
+      stats.deletions += pr.deletions
+      stats.files += pr.changedFiles
+      continue
+    }
+    for (const file of prFiles) {
+      const additions = file.additions || 0
+      const deletions = file.deletions || 0
+      stats.additions += additions
+      stats.deletions += deletions
+      stats.files += 1
+      addLanguage(stats, languageFor(file.filename), additions, deletions)
     }
   }
   return stats
@@ -325,7 +449,7 @@ function mergeStats(target, source) {
   target.deletions += source.deletions
   target.files += source.files
   for (const [language, stats] of source.languages) {
-    addLanguage(target, language, stats.additions, stats.deletions)
+    addLanguage(target, language, stats.additions, stats.deletions, stats.files)
   }
 }
 

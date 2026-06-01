@@ -28,10 +28,10 @@ jobs:
           committer_token: ${{ github.token }}
           base: header, activity, community, repositories, metadata
           base_indepth: yes
-          repositories: 200
+          repositories: 300
           repositories_batch: 50
           repositories_affiliations: owner, collaborator, organization_member
-          repositories_forks: no
+          repositories_forks: yes
           plugin_lines: yes
           plugin_lines_sections: repositories, history
           plugin_lines_repositories_limit: 8
@@ -58,6 +58,8 @@ jobs:
           GH_TOKEN: ${{ secrets.METRICS_TOKEN }}
           METRICS_USER: m1ng-wym
           METRICS_HIGHLIGHT_REPOS: kkk-an/AgentMe
+          METRICS_REPOSITORY_LIMIT: 300
+          METRICS_COMMIT_LIMIT_PER_REPO: 2000
         run: node scripts/generate-contribution-metrics.mjs
 
       - name: Commit generated contribution metrics
