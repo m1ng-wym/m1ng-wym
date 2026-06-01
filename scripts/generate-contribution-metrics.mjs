@@ -489,7 +489,22 @@ async function readOverviewActivityCommits() {
   }
 }
 
-function renderSvg({ repos, totals, own, external, generatedAt, displayCommits }) {
+async function readTitleFontFace() {
+  try {
+    const font = await readFile(new URL("../assets/young-serif-regular.woff2", import.meta.url))
+    return `    @font-face {
+      font-family: "young-serif";
+      src: url("data:font/woff2;base64,${font.toString("base64")}") format("woff2");
+      font-weight: 400;
+      font-style: normal;
+    }
+`
+  } catch {
+    return ""
+  }
+}
+
+function renderSvg({ repos, totals, own, external, generatedAt, displayCommits, titleFontFace }) {
   const topLanguages = languageEntries(totals).slice(0, 8)
   const privateAggregate = { ...emptyStats(), nameWithOwner: "Other private repositories", isPrivate: true, isOwn: false, aggregate: true }
   for (const repo of repos) {
@@ -543,8 +558,9 @@ function renderSvg({ repos, totals, own, external, generatedAt, displayCommits }
 
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" role="img" aria-label="Authored GitHub contribution metrics">
   <style>
+${titleFontFace}
     text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; fill: #24292f; }
-    .title { font-size: 22px; font-weight: 700; }
+    .title { font-family: "young-serif", Georgia, serif; font-size: 25px; font-weight: 400; }
     .section { font-size: 15px; font-weight: 700; fill: #0969da; }
     .metric { font-size: 14px; font-weight: 600; }
     .label { font-size: 13px; font-weight: 600; }
@@ -628,7 +644,8 @@ async function main() {
 
   const generatedAt = new Date().toISOString()
   const overviewActivityCommits = await readOverviewActivityCommits()
-  const svg = renderSvg({ repos: analyzed, totals, own, external, generatedAt, displayCommits: overviewActivityCommits })
+  const titleFontFace = await readTitleFontFace()
+  const svg = renderSvg({ repos: analyzed, totals, own, external, generatedAt, displayCommits: overviewActivityCommits, titleFontFace })
   await writeFile("metrics.languages.svg", svg)
   await writeFile("metrics.contributions.json", `${JSON.stringify({
     generatedAt,
