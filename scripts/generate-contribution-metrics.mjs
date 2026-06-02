@@ -516,25 +516,34 @@ function renderSvg({ repos, totals, own, external, displayCommits, titleArtwork 
       return b.additions - a.additions
     })
     .slice(0, 8)
+  const width = 920
+  const paddingX = 24
+  const cardGap = 24
+  const cardWidth = Math.floor((width - paddingX * 2 - cardGap * 2) / 3)
   const cardY = 70
   const languageStartY = 173
   const repoStartY = languageStartY + 38 + topLanguages.length * 28
   const height = repoStartY + 44 + topRepos.length * 26
-  const width = 760
+  const barX = 185
+  const barWidthMax = 400
+  const languageValueX = 615
+  const repoCommitsX = 500
+  const repoPrsX = 635
+  const repoLinesX = 720
   const maxLanguage = Math.max(1, ...topLanguages.map(item => item.additions))
   const totalLanguageLines = Math.max(1, topLanguages.reduce((sum, item) => sum + item.additions, 0))
   const shownCommits = displayCommits ?? totals.commits
 
   const languageRows = topLanguages.map((item, index) => {
     const y = languageStartY + 34 + index * 28
-    const barWidth = Math.max(3, Math.round((item.additions / maxLanguage) * 300))
+    const barWidth = Math.max(3, Math.round((item.additions / maxLanguage) * barWidthMax))
     const percent = Math.round((item.additions / totalLanguageLines) * 100)
     const color = languageColors.get(item.name) || languageColors.get("Other")
     return `
       <text x="28" y="${y}" class="label">${escapeXml(item.name)}</text>
-      <rect x="160" y="${y - 12}" width="300" height="10" rx="5" fill="#eaeef2"/>
-      <rect x="160" y="${y - 12}" width="${barWidth}" height="10" rx="5" fill="${color}"/>
-      <text x="480" y="${y}" class="small">+${formatNumber(item.additions)} / -${formatNumber(item.deletions)} lines (${percent}%)</text>`
+      <rect x="${barX}" y="${y - 12}" width="${barWidthMax}" height="10" rx="5" fill="#eaeef2"/>
+      <rect x="${barX}" y="${y - 12}" width="${barWidth}" height="10" rx="5" fill="${color}"/>
+      <text x="${languageValueX}" y="${y}" class="small">+${formatNumber(item.additions)} / -${formatNumber(item.deletions)} lines (${percent}%)</text>`
   }).join("")
 
   const repoRows = topRepos.map((repo, index) => {
@@ -542,9 +551,9 @@ function renderSvg({ repos, totals, own, external, displayCommits, titleArtwork 
     const name = publicRepoName(repo, index)
     return `
       <text x="28" y="${y}" class="repo">${escapeXml(name)}</text>
-      <text x="390" y="${y}" class="small">${formatNumber(repo.commits)} commits</text>
-      <text x="500" y="${y}" class="small">${formatNumber(repo.prs)} PRs</text>
-      <text x="575" y="${y}" class="small">+${formatNumber(repo.additions)} / -${formatNumber(repo.deletions)}</text>`
+      <text x="${repoCommitsX}" y="${y}" class="small">${formatNumber(repo.commits)} commits</text>
+      <text x="${repoPrsX}" y="${y}" class="small">${formatNumber(repo.prs)} PRs</text>
+      <text x="${repoLinesX}" y="${y}" class="small">+${formatNumber(repo.additions)} / -${formatNumber(repo.deletions)}</text>`
   }).join("")
 
   return `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" role="img" aria-label="Authored GitHub contribution metrics">
@@ -560,17 +569,17 @@ function renderSvg({ repos, totals, own, external, displayCommits, titleArtwork 
   <rect x="0.5" y="0.5" width="${width - 1}" height="${height - 1}" rx="8" fill="#ffffff" stroke="#d0d7de"/>
   ${titleArtwork || `<text x="24" y="36" class="title">Where my code goes</text>`}
 
-  <rect x="24" y="${cardY}" width="220" height="58" rx="6" fill="#f6f8fa"/>
-  <text x="40" y="${cardY + 26}" class="metric">${formatNumber(repos.length)} repositories scanned</text>
-  <text x="40" y="${cardY + 48}" class="small">${formatNumber(own.commits)} own commits / ${formatNumber(external.commits)} external commits</text>
+  <rect x="${paddingX}" y="${cardY}" width="${cardWidth}" height="58" rx="6" fill="#f6f8fa"/>
+  <text x="${paddingX + 16}" y="${cardY + 26}" class="metric">${formatNumber(repos.length)} repositories scanned</text>
+  <text x="${paddingX + 16}" y="${cardY + 48}" class="small">${formatNumber(own.commits)} own commits / ${formatNumber(external.commits)} external commits</text>
 
-  <rect x="270" y="${cardY}" width="220" height="58" rx="6" fill="#f6f8fa"/>
-  <text x="286" y="${cardY + 26}" class="metric">${formatNumber(shownCommits)} commits / ${formatNumber(totals.prs)} PRs</text>
-  <text x="286" y="${cardY + 48}" class="small">Authored by ${escapeXml(user)}</text>
+  <rect x="${paddingX + cardWidth + cardGap}" y="${cardY}" width="${cardWidth}" height="58" rx="6" fill="#f6f8fa"/>
+  <text x="${paddingX + cardWidth + cardGap + 16}" y="${cardY + 26}" class="metric">${formatNumber(shownCommits)} commits / ${formatNumber(totals.prs)} PRs</text>
+  <text x="${paddingX + cardWidth + cardGap + 16}" y="${cardY + 48}" class="small">Authored by ${escapeXml(user)}</text>
 
-  <rect x="516" y="${cardY}" width="220" height="58" rx="6" fill="#f6f8fa"/>
-  <text x="532" y="${cardY + 26}" class="metric">+${formatNumber(totals.additions)} / -${formatNumber(totals.deletions)} lines</text>
-  <text x="532" y="${cardY + 48}" class="small">${formatNumber(totals.files)} changed files</text>
+  <rect x="${paddingX + (cardWidth + cardGap) * 2}" y="${cardY}" width="${cardWidth}" height="58" rx="6" fill="#f6f8fa"/>
+  <text x="${paddingX + (cardWidth + cardGap) * 2 + 16}" y="${cardY + 26}" class="metric">+${formatNumber(totals.additions)} / -${formatNumber(totals.deletions)} lines</text>
+  <text x="${paddingX + (cardWidth + cardGap) * 2 + 16}" y="${cardY + 48}" class="small">${formatNumber(totals.files)} changed files</text>
 
   <text x="24" y="${languageStartY}" class="section">Code language split by added lines</text>
   ${languageRows || `<text x="28" y="${languageStartY + 34}" class="small">No language data found</text>`}
