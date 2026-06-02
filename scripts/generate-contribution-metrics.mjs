@@ -28,24 +28,6 @@ const graphqlHeaders = {
   "content-type": "application/json",
 }
 
-const languageColors = new Map([
-  ["TypeScript", "#3178c6"],
-  ["JavaScript", "#f1e05a"],
-  ["Python", "#3572A5"],
-  ["Go", "#00ADD8"],
-  ["Swift", "#F05138"],
-  ["Java", "#b07219"],
-  ["CSS", "#663399"],
-  ["HTML", "#e34c26"],
-  ["JSON", "#292929"],
-  ["YAML", "#cb171e"],
-  ["Markdown", "#083fa1"],
-  ["Shell", "#89e051"],
-  ["SQL", "#e38c00"],
-  ["Dockerfile", "#384d54"],
-  ["Other", "#8c959f"],
-])
-
 const extensionLanguages = new Map([
   [".ts", "TypeScript"],
   [".tsx", "TypeScript"],
@@ -533,16 +515,17 @@ function renderSvg({ repos, totals, own, external, displayCommits, titleArtwork 
   const maxLanguage = Math.max(1, ...topLanguages.map(item => item.additions))
   const totalLanguageLines = Math.max(1, topLanguages.reduce((sum, item) => sum + item.additions, 0))
   const shownCommits = displayCommits ?? totals.commits
+  const sectionColor = "#2C365D"
+  const languageBarColor = "#8FABD4"
 
   const languageRows = topLanguages.map((item, index) => {
     const y = languageStartY + 34 + index * 28
     const barWidth = Math.max(3, Math.round((item.additions / maxLanguage) * barWidthMax))
     const percent = Math.round((item.additions / totalLanguageLines) * 100)
-    const color = languageColors.get(item.name) || languageColors.get("Other")
     return `
       <text x="28" y="${y}" class="label">${escapeXml(item.name)}</text>
       <rect x="${barX}" y="${y - 12}" width="${barWidthMax}" height="10" rx="5" fill="#eaeef2"/>
-      <rect x="${barX}" y="${y - 12}" width="${barWidth}" height="10" rx="5" fill="${color}"/>
+      <rect x="${barX}" y="${y - 12}" width="${barWidth}" height="10" rx="5" fill="${languageBarColor}"/>
       <text x="${languageValueX}" y="${y}" class="small">+${formatNumber(item.additions)} / -${formatNumber(item.deletions)} lines (${percent}%)</text>`
   }).join("")
 
@@ -560,7 +543,7 @@ function renderSvg({ repos, totals, own, external, displayCommits, titleArtwork 
   <style>
     text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; fill: #24292f; }
     .title { font-size: 22px; font-weight: 700; }
-    .section { font-size: 15px; font-weight: 700; fill: #0969da; }
+    .section { font-size: 15px; font-weight: 700; fill: ${sectionColor}; }
     .metric { font-size: 14px; font-weight: 600; }
     .label { font-size: 13px; font-weight: 600; }
     .repo { font-size: 12px; font-weight: 600; }
@@ -581,10 +564,10 @@ function renderSvg({ repos, totals, own, external, displayCommits, titleArtwork 
   <text x="${paddingX + (cardWidth + cardGap) * 2 + 16}" y="${cardY + 26}" class="metric">+${formatNumber(totals.additions)} / -${formatNumber(totals.deletions)} lines</text>
   <text x="${paddingX + (cardWidth + cardGap) * 2 + 16}" y="${cardY + 48}" class="small">${formatNumber(totals.files)} changed files</text>
 
-  <text x="24" y="${languageStartY}" class="section">Code language split by added lines</text>
+  <text x="24" y="${languageStartY}" class="section">Language activity</text>
   ${languageRows || `<text x="28" y="${languageStartY + 34}" class="small">No language data found</text>`}
 
-  <text x="24" y="${repoStartY}" class="section">Repository coverage</text>
+  <text x="24" y="${repoStartY}" class="section">Repo activity</text>
   ${repoRows || `<text x="28" y="${repoStartY + 30}" class="small">No repository data found</text>`}
 </svg>
 `

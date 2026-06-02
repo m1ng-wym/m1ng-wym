@@ -2,7 +2,7 @@
   <style>
     text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; fill: #24292f; }
     .title { font-size: 22px; font-weight: 700; }
-    .section { font-size: 15px; font-weight: 700; fill: #0969da; }
+    .section { font-size: 15px; font-weight: 700; fill: #2C365D; }
     .metric { font-size: 14px; font-weight: 600; }
     .label { font-size: 13px; font-weight: 600; }
     .repo { font-size: 12px; font-weight: 600; }
@@ -30,57 +30,57 @@
 
   <rect x="24" y="70" width="274" height="58" rx="6" fill="#f6f8fa"/>
   <text x="40" y="96" class="metric">20 repositories scanned</text>
-  <text x="40" y="118" class="small">299 own commits / 97 external commits</text>
+  <text x="40" y="118" class="small">299 own commits / 95 external commits</text>
 
   <rect x="322" y="70" width="274" height="58" rx="6" fill="#f6f8fa"/>
   <text x="338" y="96" class="metric">432 commits / 14 PRs</text>
   <text x="338" y="118" class="small">Authored by m1ng-wym</text>
 
   <rect x="620" y="70" width="274" height="58" rx="6" fill="#f6f8fa"/>
-  <text x="636" y="96" class="metric">+204,784 / -17,194 lines</text>
-  <text x="636" y="118" class="small">2,496 changed files</text>
+  <text x="636" y="96" class="metric">+197,849 / -16,698 lines</text>
+  <text x="636" y="118" class="small">2,458 changed files</text>
 
-  <text x="24" y="173" class="section">Code language split by added lines</text>
+  <text x="24" y="173" class="section">Language activity</text>
   
       <text x="28" y="207" class="label">Python</text>
       <rect x="185" y="195" width="400" height="10" rx="5" fill="#eaeef2"/>
-      <rect x="185" y="195" width="400" height="10" rx="5" fill="#3572A5"/>
-      <text x="615" y="207" class="small">+46,132 / -3,554 lines (52%)</text>
+      <rect x="185" y="195" width="400" height="10" rx="5" fill="#8FABD4"/>
+      <text x="615" y="207" class="small">+44,768 / -3,379 lines (51%)</text>
       <text x="28" y="235" class="label">TypeScript</text>
       <rect x="185" y="223" width="400" height="10" rx="5" fill="#eaeef2"/>
-      <rect x="185" y="223" width="193" height="10" rx="5" fill="#3178c6"/>
-      <text x="615" y="235" class="small">+22,236 / -4,835 lines (25%)</text>
+      <rect x="185" y="223" width="199" height="10" rx="5" fill="#8FABD4"/>
+      <text x="615" y="235" class="small">+22,233 / -4,834 lines (25%)</text>
       <text x="28" y="263" class="label">JavaScript</text>
       <rect x="185" y="251" width="400" height="10" rx="5" fill="#eaeef2"/>
-      <rect x="185" y="251" width="104" height="10" rx="5" fill="#f1e05a"/>
-      <text x="615" y="263" class="small">+12,049 / -2,647 lines (13%)</text>
+      <rect x="185" y="251" width="108" height="10" rx="5" fill="#8FABD4"/>
+      <text x="615" y="263" class="small">+12,049 / -2,647 lines (14%)</text>
       <text x="28" y="291" class="label">JSON</text>
       <rect x="185" y="279" width="400" height="10" rx="5" fill="#eaeef2"/>
-      <rect x="185" y="279" width="36" height="10" rx="5" fill="#292929"/>
+      <rect x="185" y="279" width="37" height="10" rx="5" fill="#8FABD4"/>
       <text x="615" y="291" class="small">+4,190 / -493 lines (5%)</text>
       <text x="28" y="319" class="label">Other</text>
       <rect x="185" y="307" width="400" height="10" rx="5" fill="#eaeef2"/>
-      <rect x="185" y="307" width="22" height="10" rx="5" fill="#8c959f"/>
-      <text x="615" y="319" class="small">+2,484 / -393 lines (3%)</text>
+      <rect x="185" y="307" width="22" height="10" rx="5" fill="#8FABD4"/>
+      <text x="615" y="319" class="small">+2,481 / -393 lines (3%)</text>
       <text x="28" y="347" class="label">YAML</text>
       <rect x="185" y="335" width="400" height="10" rx="5" fill="#eaeef2"/>
-      <rect x="185" y="335" width="12" height="10" rx="5" fill="#cb171e"/>
+      <rect x="185" y="335" width="12" height="10" rx="5" fill="#8FABD4"/>
       <text x="615" y="347" class="small">+1,355 / -45 lines (2%)</text>
       <text x="28" y="375" class="label">HTML</text>
       <rect x="185" y="363" width="400" height="10" rx="5" fill="#eaeef2"/>
-      <rect x="185" y="363" width="5" height="10" rx="5" fill="#e34c26"/>
+      <rect x="185" y="363" width="5" height="10" rx="5" fill="#8FABD4"/>
       <text x="615" y="375" class="small">+588 / -392 lines (1%)</text>
       <text x="28" y="403" class="label">CSS</text>
       <rect x="185" y="391" width="400" height="10" rx="5" fill="#eaeef2"/>
-      <rect x="185" y="391" width="4" height="10" rx="5" fill="#663399"/>
+      <rect x="185" y="391" width="4" height="10" rx="5" fill="#8FABD4"/>
       <text x="615" y="403" class="small">+412 / -10 lines (0%)</text>
 
-  <text x="24" y="435" class="section">Repository coverage</text>
+  <text x="24" y="435" class="section">Repo activity</text>
   
       <text x="28" y="465" class="repo">kkk-an/AgentMe</text>
-      <text x="500" y="465" class="small">93 commits</text>
+      <text x="500" y="465" class="small">91 commits</text>
       <text x="635" y="465" class="small">14 PRs</text>
-      <text x="720" y="465" class="small">+146,948 / -13,138</text>
+      <text x="720" y="465" class="small">+140,013 / -12,642</text>
       <text x="28" y="491" class="repo">Other private repositories</text>
       <text x="500" y="491" class="small">277 commits</text>
       <text x="635" y="491" class="small">0 PRs</text>
