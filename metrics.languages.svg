@@ -30,15 +30,15 @@
 
   <rect x="24" y="70" width="274" height="58" rx="6" fill="#f6f8fa"/>
   <text x="40" y="96" class="metric">20 repositories scanned</text>
-  <text x="40" y="118" class="small">303 own commits / 104 external commits</text>
+  <text x="40" y="118" class="small">304 own commits / 104 external commits</text>
 
   <rect x="322" y="70" width="274" height="58" rx="6" fill="#f6f8fa"/>
   <text x="338" y="96" class="metric">438 commits / 16 PRs</text>
   <text x="338" y="118" class="small">Authored by m1ng-wym</text>
 
   <rect x="620" y="70" width="274" height="58" rx="6" fill="#f6f8fa"/>
-  <text x="636" y="96" class="metric">+246,578 / -26,597 lines</text>
-  <text x="636" y="118" class="small">2,855 changed files</text>
+  <text x="636" y="96" class="metric">+246,578 / -26,599 lines</text>
+  <text x="636" y="118" class="small">2,856 changed files</text>
 
   <text x="24" y="173" class="section">Language activity</text>
   
@@ -86,9 +86,9 @@
       <text x="635" y="491" class="small">0 PRs</text>
       <text x="720" y="491" class="small">+55,233 / -3,536</text>
       <text x="28" y="517" class="repo">m1ng-wym/m1ng-wym</text>
-      <text x="500" y="517" class="small">29 commits</text>
+      <text x="500" y="517" class="small">30 commits</text>
       <text x="635" y="517" class="small">0 PRs</text>
-      <text x="720" y="517" class="small">+2,068 / -591</text>
+      <text x="720" y="517" class="small">+2,068 / -593</text>
       <text x="28" y="543" class="repo">m1ng-wym/collection-ai</text>
       <text x="500" y="543" class="small">1 commits</text>
       <text x="635" y="543" class="small">0 PRs</text>
