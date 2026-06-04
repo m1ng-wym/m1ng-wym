@@ -2,7 +2,10 @@ name: Profile metrics
 
 on:
   schedule:
-    - cron: "17 2 * * *"
+    # 02:00, 10:00, and 18:00 Asia/Shanghai.
+    - cron: "0 18 * * *"
+    - cron: "0 2 * * *"
+    - cron: "0 10 * * *"
   workflow_dispatch:
   push:
     branches:
