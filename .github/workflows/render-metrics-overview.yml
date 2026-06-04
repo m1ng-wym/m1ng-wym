@@ -1,0 +1,104 @@
+name: Render metrics overview
+
+on:
+  workflow_call:
+    inputs:
+      filename:
+        description: Output SVG path for lowlighter/metrics.
+        required: true
+        type: string
+      output_action:
+        description: lowlighter/metrics output action.
+        default: commit
+        type: string
+      check_contract:
+        description: Validate the generated overview SVG contract after rendering.
+        default: false
+        type: boolean
+      upload_artifact:
+        description: Upload the generated overview SVG as a workflow artifact.
+        default: false
+        type: boolean
+      artifact_name:
+        description: Artifact name for preview uploads.
+        default: metrics-overview-preview
+        type: string
+    secrets:
+      metrics_token:
+        description: Optional PAT for lowlighter/metrics. Falls back to github.token.
+        required: false
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Render contribution overview
+        uses: lowlighter/metrics@65836723097537a54cd8eb90f61839426b4266b6 # v3.34
+        with:
+          user: m1ng-wym
+          filename: ${{ inputs.filename }}
+          token: ${{ secrets.metrics_token || github.token }}
+          committer_token: ${{ github.token }}
+          output_action: ${{ inputs.output_action }}
+          base: header, activity
+          base_indepth: yes
+          repositories: 300
+          repositories_batch: 50
+          repositories_affiliations: owner, collaborator, organization_member
+          repositories_forks: yes
+          extras_js: |
+            document.querySelector(".field.calendar")?.remove()
+            document.querySelector("footer")?.remove()
+            document.querySelectorAll(".field").forEach((field) => {
+              const text = field.textContent?.replace(/\s+/g, " ").trim() ?? ""
+              const isFollowerCount = text.startsWith("Followed by ")
+              const isContributedRepositoryCount = text.startsWith("Contributed to ") && text.endsWith(" repositories")
+              if (isFollowerCount || isContributedRepositoryCount) {
+                field.remove()
+              }
+            })
+            const activityHeading = Array.from(document.querySelectorAll("h2.field")).find((heading) => {
+              return (heading.textContent?.replace(/\s+/g, " ").trim() ?? "") === "Activity"
+            })
+            const activitySection = activityHeading?.closest("section")
+            const activityCommitsText = Array.from(activitySection?.querySelectorAll(".field") ?? []).map((field) => {
+              return field.textContent?.replace(/\s+/g, " ").trim() ?? ""
+            }).find((text) => text.endsWith(" Commits") && Number.isFinite(Number.parseInt(text.replaceAll(",", ""), 10)))
+            if (activityCommitsText) {
+              const marker = document.createElement("span")
+              marker.id = "overview-activity-commits-source"
+              marker.style.display = "none"
+              marker.textContent = activityCommitsText
+              document.querySelector(".items-wrapper")?.prepend(marker)
+            }
+            document.querySelectorAll("h2.field").forEach((heading) => {
+              const text = heading.textContent?.replace(/\s+/g, " ").trim() ?? ""
+              const isActivityStats = text === "Activity"
+              const isCommunityStats = text === "Community stats"
+              const isRepositoryStats = text.includes("Repositories (including")
+              const isLinesOfCode = text === "Lines of code pushed"
+              if (isActivityStats || isCommunityStats || isRepositoryStats || isLinesOfCode) {
+                heading.closest("section")?.remove()
+              }
+            })
+            document.querySelectorAll(".row section").forEach((section) => {
+              if (!section.textContent?.trim() && !section.querySelector("img, svg, canvas")) {
+                section.remove()
+              }
+            })
+
+      - name: Checkout contract checker
+        if: ${{ inputs.check_contract }}
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+
+      - name: Check overview SVG contract
+        if: ${{ inputs.check_contract }}
+        run: node scripts/check-metrics-overview-contract.mjs "/metrics_renders/${{ inputs.filename }}"
+
+      - name: Upload overview preview
+        if: ${{ always() && inputs.upload_artifact }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: ${{ inputs.artifact_name }}
+          path: /metrics_renders/${{ inputs.filename }}
+          if-no-files-found: error

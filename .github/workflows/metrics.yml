@@ -18,63 +18,20 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: profile-metrics-main
+  cancel-in-progress: false
+
 jobs:
   github-metrics:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Contribution overview
-        uses: lowlighter/metrics@latest
-        with:
-          user: m1ng-wym
-          filename: metrics.overview.svg
-          token: ${{ secrets.METRICS_TOKEN || github.token }}
-          committer_token: ${{ github.token }}
-          base: header, activity
-          base_indepth: yes
-          repositories: 300
-          repositories_batch: 50
-          repositories_affiliations: owner, collaborator, organization_member
-          repositories_forks: yes
-          extras_js: |
-            document.querySelector(".field.calendar")?.remove()
-            document.querySelector("footer")?.remove()
-            document.querySelectorAll(".field").forEach((field) => {
-              const text = field.textContent?.replace(/\s+/g, " ").trim() ?? ""
-              const isFollowerCount = text.startsWith("Followed by ")
-              const isContributedRepositoryCount = text.startsWith("Contributed to ") && text.endsWith(" repositories")
-              if (isFollowerCount || isContributedRepositoryCount) {
-                field.remove()
-              }
-            })
-            const activityHeading = Array.from(document.querySelectorAll("h2.field")).find((heading) => {
-              return (heading.textContent?.replace(/\s+/g, " ").trim() ?? "") === "Activity"
-            })
-            const activitySection = activityHeading?.closest("section")
-            const activityCommitsText = Array.from(activitySection?.querySelectorAll(".field") ?? []).map((field) => {
-              return field.textContent?.replace(/\s+/g, " ").trim() ?? ""
-            }).find((text) => text.endsWith(" Commits") && Number.isFinite(Number.parseInt(text.replaceAll(",", ""), 10)))
-            if (activityCommitsText) {
-              const marker = document.createElement("span")
-              marker.id = "overview-activity-commits-source"
-              marker.style.display = "none"
-              marker.textContent = activityCommitsText
-              document.querySelector(".items-wrapper")?.prepend(marker)
-            }
-            document.querySelectorAll("h2.field").forEach((heading) => {
-              const text = heading.textContent?.replace(/\s+/g, " ").trim() ?? ""
-              const isActivityStats = text === "Activity"
-              const isCommunityStats = text === "Community stats"
-              const isRepositoryStats = text.includes("Repositories (including")
-              const isLinesOfCode = text === "Lines of code pushed"
-              if (isActivityStats || isCommunityStats || isRepositoryStats || isLinesOfCode) {
-                heading.closest("section")?.remove()
-              }
-            })
-            document.querySelectorAll(".row section").forEach((section) => {
-              if (!section.textContent?.trim() && !section.querySelector("img, svg, canvas")) {
-                section.remove()
-              }
-            })
+    permissions:
+      contents: write
+    uses: ./.github/workflows/render-metrics-overview.yml
+    with:
+      filename: metrics.overview.svg
+      output_action: commit
+    secrets:
+      metrics_token: ${{ secrets.METRICS_TOKEN }}
 
   contribution-language-metrics:
     runs-on: ubuntu-latest

@@ -1,0 +1,26 @@
+name: Metrics overview contract
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/metrics.yml"
+      - ".github/workflows/metrics-overview-contract.yml"
+      - ".github/workflows/render-metrics-overview.yml"
+      - "scripts/check-metrics-overview-contract.mjs"
+
+permissions:
+  contents: read
+
+jobs:
+  render-and-check:
+    permissions:
+      contents: read
+    uses: ./.github/workflows/render-metrics-overview.yml
+    with:
+      filename: metrics.overview.preview.svg
+      output_action: none
+      check_contract: true
+      upload_artifact: true
+      artifact_name: metrics-overview-preview
