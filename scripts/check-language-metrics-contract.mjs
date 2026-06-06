@@ -4,6 +4,8 @@ import { readFileSync } from "node:fs"
 
 const svgPath = process.argv[2] || "metrics.languages.svg"
 const svg = readFileSync(svgPath, "utf8")
+const expectedLanguageBarColor = "#4988C4"
+const previousLanguageBarColor = "#8FABD4"
 
 function fail(message) {
   console.error(`language metrics contract failed: ${message}`)
@@ -18,6 +20,14 @@ for (const removedText of ["repositories scanned", "own commits", "external comm
 
 if (svg.includes('<rect x="24" y="70" width="274" height="58" rx="6" fill="#f6f8fa"/>')) {
   fail("left summary card background is still present")
+}
+
+if (svg.includes(`fill="${previousLanguageBarColor}"`)) {
+  fail(`language activity bars still use previous fill color ${previousLanguageBarColor}`)
+}
+
+if (!svg.includes(`fill="${expectedLanguageBarColor}"`)) {
+  fail(`language activity bars do not use expected fill color ${expectedLanguageBarColor}`)
 }
 
 const requiredPatterns = [
@@ -37,4 +47,4 @@ for (const { label, pattern } of requiredPatterns) {
   }
 }
 
-console.log("language metrics contract ok: left summary card removed and the two right summary cards are unchanged")
+console.log("language metrics contract ok: left summary card removed, two right summary cards are unchanged, and language bars use the expected fill color")

@@ -516,7 +516,7 @@ function renderSvg({ repos, totals, displayCommits, titleArtwork }) {
   const totalLanguageLines = Math.max(1, topLanguages.reduce((sum, item) => sum + item.additions, 0))
   const shownCommits = displayCommits ?? totals.commits
   const sectionColor = "#2C365D"
-  const languageBarColor = "#8FABD4"
+  const languageBarColor = "#4988C4"
 
   const languageRows = topLanguages.map((item, index) => {
     const y = languageStartY + 34 + index * 28
