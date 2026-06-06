@@ -86,8 +86,8 @@ if (snakeIndex > metricsIndex) {
 }
 
 const contentBetweenSnakeAndMetrics = readme.slice(snakeIndex + snakeTag.length, metricsIndex)
-if (contentBetweenSnakeAndMetrics !== "<br>\n") {
-  fail("Contribution snake and language metrics image must be separated only by a single <br> line break")
+if (contentBetweenSnakeAndMetrics !== "\n\n") {
+  fail("Contribution snake and language metrics image must use standard Markdown block spacing")
 }
 
 if (/!\[[^\]]*\]\([^)]*\.svg[^)]*\)/.test(readme)) {
