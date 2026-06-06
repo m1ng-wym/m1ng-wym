@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="50" viewBox="0 0 720 50" role="img" aria-label="Full-Stack Developer; Open Source Contributor; AI Explorer &amp; Creator; Software Engineering Student">
+  <style>
+    .phrase {
+      fill: #2C365D;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, Liberation Mono, monospace;
+      font-size: 24px;
+      font-weight: 600;
+    }
+    .cursor {
+      fill: #2C365D;
+    }
+  </style>
+
+  <defs>
+    <clipPath id="clip-full-stack"><rect x="0" y="0" width="290" height="50"><animate attributeName="width" dur="14s" repeatCount="indefinite" values="290;0;290;290;0;0" keyTimes="0;0.02;0.18;0.23;0.25;1"/></rect></clipPath>
+    <clipPath id="clip-open-source"><rect x="0" y="0" width="0" height="50"><animate attributeName="width" dur="14s" repeatCount="indefinite" values="0;0;330;330;0;0" keyTimes="0;0.27;0.43;0.48;0.50;1"/></rect></clipPath>
+    <clipPath id="clip-ai-explorer"><rect x="0" y="0" width="0" height="50"><animate attributeName="width" dur="14s" repeatCount="indefinite" values="0;0;315;315;0;0" keyTimes="0;0.52;0.68;0.73;0.75;1"/></rect></clipPath>
+    <clipPath id="clip-student"><rect x="0" y="0" width="0" height="50"><animate attributeName="width" dur="14s" repeatCount="indefinite" values="0;0;420;420;0" keyTimes="0;0.77;0.93;0.98;1"/></rect></clipPath>
+  </defs>
+
+  <g opacity="1" clip-path="url(#clip-full-stack)">
+    <animate attributeName="opacity" dur="14s" repeatCount="indefinite" values="1;1;1;0;0" keyTimes="0;0.02;0.23;0.25;1"/>
+    <text class="phrase" x="0" y="34">Full-Stack Developer</text>
+  </g>
+
+  <g opacity="0" clip-path="url(#clip-open-source)">
+    <animate attributeName="opacity" dur="14s" repeatCount="indefinite" values="0;0;1;1;0;0" keyTimes="0;0.25;0.27;0.48;0.50;1"/>
+    <text class="phrase" x="0" y="34">Open Source Contributor</text>
+  </g>
+
+  <g opacity="0" clip-path="url(#clip-ai-explorer)">
+    <animate attributeName="opacity" dur="14s" repeatCount="indefinite" values="0;0;1;1;0;0" keyTimes="0;0.50;0.52;0.73;0.75;1"/>
+    <text class="phrase" x="0" y="34">AI Explorer &amp; Creator</text>
+  </g>
+
+  <g opacity="0" clip-path="url(#clip-student)">
+    <animate attributeName="opacity" dur="14s" repeatCount="indefinite" values="0;0;1;1;0" keyTimes="0;0.75;0.77;0.98;1"/>
+    <text class="phrase" x="0" y="34">Software Engineering Student</text>
+  </g>
+
+  <rect class="cursor" x="292" y="11" width="3" height="27" rx="1.5" opacity="1">
+    <animate attributeName="x" dur="14s" repeatCount="indefinite" values="292;0;292;292;0;0;332;332;0;0;317;317;0;0;422;422;0" keyTimes="0;0.02;0.18;0.23;0.25;0.27;0.43;0.48;0.50;0.52;0.68;0.73;0.75;0.77;0.93;0.98;1"/>
+    <animate attributeName="opacity" dur="14s" repeatCount="indefinite" values="1;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0" keyTimes="0;0.02;0.23;0.25;0.27;0.27;0.48;0.50;0.52;0.52;0.73;0.75;0.77;0.77;0.98;0.99;1"/>
+  </rect>
+</svg>
