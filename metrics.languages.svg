@@ -28,10 +28,6 @@
 </g>
 
 
-  <rect x="24" y="70" width="274" height="58" rx="6" fill="#f6f8fa"/>
-  <text x="40" y="96" class="metric">20 repositories scanned</text>
-  <text x="40" y="118" class="small">318 own commits / 122 external commits</text>
-
   <rect x="322" y="70" width="274" height="58" rx="6" fill="#f6f8fa"/>
   <text x="338" y="96" class="metric">466 commits / 18 PRs</text>
   <text x="338" y="118" class="small">Authored by m1ng-wym</text>

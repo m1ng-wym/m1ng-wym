@@ -13,6 +13,7 @@ on:
     paths:
       - ".github/workflows/metrics.yml"
       - "scripts/generate-contribution-metrics.mjs"
+      - "scripts/check-language-metrics-contract.mjs"
       - "README.md"
 
 permissions:
@@ -56,6 +57,9 @@ jobs:
           METRICS_REPOSITORY_LIMIT: 300
           METRICS_COMMIT_LIMIT_PER_REPO: 2000
         run: node scripts/generate-contribution-metrics.mjs
+
+      - name: Check language metrics contract
+        run: node scripts/check-language-metrics-contract.mjs
 
       - name: Commit generated contribution metrics
         run: |

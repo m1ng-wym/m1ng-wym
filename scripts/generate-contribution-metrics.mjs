@@ -479,7 +479,7 @@ async function readTitleArtwork() {
   }
 }
 
-function renderSvg({ repos, totals, own, external, displayCommits, titleArtwork }) {
+function renderSvg({ repos, totals, displayCommits, titleArtwork }) {
   const topLanguages = languageEntries(totals).slice(0, 8)
   const privateAggregate = { ...emptyStats(), nameWithOwner: "Other private repositories", isPrivate: true, isOwn: false, aggregate: true }
   for (const repo of repos) {
@@ -552,10 +552,6 @@ function renderSvg({ repos, totals, own, external, displayCommits, titleArtwork 
   <rect x="0.5" y="0.5" width="${width - 1}" height="${height - 1}" rx="8" fill="#ffffff" stroke="#d0d7de"/>
   ${titleArtwork || `<text x="24" y="36" class="title">Where my code goes</text>`}
 
-  <rect x="${paddingX}" y="${cardY}" width="${cardWidth}" height="58" rx="6" fill="#f6f8fa"/>
-  <text x="${paddingX + 16}" y="${cardY + 26}" class="metric">${formatNumber(repos.length)} repositories scanned</text>
-  <text x="${paddingX + 16}" y="${cardY + 48}" class="small">${formatNumber(own.commits)} own commits / ${formatNumber(external.commits)} external commits</text>
-
   <rect x="${paddingX + cardWidth + cardGap}" y="${cardY}" width="${cardWidth}" height="58" rx="6" fill="#f6f8fa"/>
   <text x="${paddingX + cardWidth + cardGap + 16}" y="${cardY + 26}" class="metric">${formatNumber(shownCommits)} commits / ${formatNumber(totals.prs)} PRs</text>
   <text x="${paddingX + cardWidth + cardGap + 16}" y="${cardY + 48}" class="small">Authored by ${escapeXml(user)}</text>
@@ -622,7 +618,7 @@ async function main() {
   const generatedAt = new Date().toISOString()
   const overviewActivityCommits = await readOverviewActivityCommits()
   const titleArtwork = await readTitleArtwork()
-  const svg = renderSvg({ repos: analyzed, totals, own, external, displayCommits: overviewActivityCommits, titleArtwork })
+  const svg = renderSvg({ repos: analyzed, totals, displayCommits: overviewActivityCommits, titleArtwork })
   await writeFile("metrics.languages.svg", svg)
   await writeFile("metrics.contributions.json", `${JSON.stringify({
     generatedAt,
