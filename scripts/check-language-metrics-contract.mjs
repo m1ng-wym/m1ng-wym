@@ -46,6 +46,28 @@ if (!/<animate attributeName="d"[^>]*dur="1s"[^>]*repeatCount="indefinite"[^>]*\
   fail("useAnimations GitHub icon does not keep the original hover animation looping")
 }
 
+if (svg.includes('transform="translate(318 17) scale(0.82)"')) {
+  fail("useAnimations GitHub icon is still using the old right-side placement")
+}
+
+if (!svg.includes('class="useanimations-github-icon" data-source="https://useanimations.com/animations/github.json" transform="translate(24 17) scale(1)"')) {
+  fail("useAnimations GitHub icon is not positioned on the left at title scale")
+}
+
+const iconIndex = svg.indexOf('class="useanimations-github-icon"')
+const titleArtworkIndex = svg.indexOf('class="metric-title-artwork"')
+if (titleArtworkIndex === -1) {
+  fail("title artwork is not wrapped for icon-left alignment")
+}
+
+if (!svg.includes('<g class="metric-title-artwork" transform="translate(28 0)">')) {
+  fail("title artwork is not shifted right to make room for the left icon")
+}
+
+if (iconIndex > titleArtworkIndex) {
+  fail("useAnimations GitHub icon should render before the title artwork")
+}
+
 if (svg.includes('height="10" rx="5" fill="#eaeef2"') || svg.includes(`height="10" rx="5" fill="${expectedLanguageBarColor}"`)) {
   fail("legacy rounded language activity bars are still present")
 }

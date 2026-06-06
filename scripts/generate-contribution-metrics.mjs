@@ -524,14 +524,25 @@ function renderUseAnimationsGithubIcon(animation) {
     })
     .join(";")
   const duration = `${formatPathNumber((animation.op - animation.ip) / animation.fr)}s`
-  const scale = 0.82
+  const scale = 1
 
-  return `<g class="useanimations-github-icon" data-source="https://useanimations.com/animations/github.json" transform="translate(318 17) scale(${scale})" fill="none" stroke="#24292f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  return `<g class="useanimations-github-icon" data-source="https://useanimations.com/animations/github.json" transform="translate(24 17) scale(${scale})" fill="none" stroke="#24292f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
     <path d="${bodyPath}"/>
     <path d="${tailPaths[0]}">
       <animate attributeName="d" dur="${duration}" repeatCount="indefinite" calcMode="spline" keyTimes="${keyTimes}" keySplines="${keySplines}" values="${tailPaths.join(";")}"/>
     </path>
   </g>`
+}
+
+function renderTitleHeader({ titleArtwork, githubIconArtwork }) {
+  const title = titleArtwork
+    ? `<g class="metric-title-artwork" transform="translate(28 0)">
+    ${titleArtwork}
+  </g>`
+    : `<text x="58" y="36" class="title">Where my code goes</text>`
+
+  return `${githubIconArtwork}
+  ${title}`
 }
 
 async function readOverviewActivityCommits() {
@@ -642,8 +653,7 @@ function renderSvg({ repos, totals, displayCommits, titleArtwork, githubIconArtw
     .small { font-size: 12px; fill: #57606a; }
   </style>
   <rect x="0.5" y="0.5" width="${width - 1}" height="${height - 1}" rx="8" fill="#ffffff" stroke="#d0d7de"/>
-  ${titleArtwork || `<text x="24" y="36" class="title">Where my code goes</text>`}
-  ${githubIconArtwork}
+  ${renderTitleHeader({ titleArtwork, githubIconArtwork })}
 
   <rect x="${paddingX + cardWidth + cardGap}" y="${cardY}" width="${cardWidth}" height="58" rx="6" fill="#f6f8fa"/>
   <text x="${paddingX + cardWidth + cardGap + 16}" y="${cardY + 26}" class="metric">${formatNumber(shownCommits)} commits / ${formatNumber(totals.prs)} PRs</text>
