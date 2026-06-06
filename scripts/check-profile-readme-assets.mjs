@@ -20,7 +20,7 @@ const expectedImages = [
   },
   {
     alt: "Contribution snake",
-    src: "https://raw.githubusercontent.com/m1ng-wym/m1ng-wym/output/github-contribution-grid-snake.svg",
+    src: "https://raw.githubusercontent.com/m1ng-wym/m1ng-wym/output/github-contribution-grid-snake.svg?v=dcd94df",
     width: "880",
     height: "192",
   },
