@@ -12,6 +12,7 @@ on:
       - main
     paths:
       - ".github/workflows/metrics.yml"
+      - "assets/useanimations-github.json"
       - "scripts/generate-contribution-metrics.mjs"
       - "scripts/check-language-metrics-contract.mjs"
       - "README.md"

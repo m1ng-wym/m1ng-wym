@@ -34,6 +34,18 @@ if (!svg.includes(`fill="${expectedLanguageBarColor}"`)) {
   fail(`language activity bars do not use expected fill color ${expectedLanguageBarColor}`)
 }
 
+if (!svg.includes('class="useanimations-github-icon"')) {
+  fail("useAnimations GitHub icon is missing from the title")
+}
+
+if (!svg.includes('data-source="https://useanimations.com/animations/github.json"')) {
+  fail("useAnimations GitHub icon source attribution is missing")
+}
+
+if (!/<animate attributeName="d"[^>]*dur="1s"[^>]*repeatCount="indefinite"[^>]*\/>/.test(svg)) {
+  fail("useAnimations GitHub icon does not keep the original hover animation looping")
+}
+
 if (svg.includes('height="10" rx="5" fill="#eaeef2"') || svg.includes(`height="10" rx="5" fill="${expectedLanguageBarColor}"`)) {
   fail("legacy rounded language activity bars are still present")
 }

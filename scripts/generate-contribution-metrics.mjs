@@ -460,6 +460,80 @@ function publicRepoName(repo, index) {
   return `Private repo ${index + 1}`
 }
 
+function formatPathNumber(value) {
+  const rounded = Math.round(value * 1000) / 1000
+  return Object.is(rounded, -0) ? "0" : String(rounded)
+}
+
+function shiftedPoint(point, offset) {
+  return [point[0] + offset[0], point[1] + offset[1]]
+}
+
+function pointString(point) {
+  return `${formatPathNumber(point[0])} ${formatPathNumber(point[1])}`
+}
+
+function lottieShapeToPath(shape, offset) {
+  const vertices = shape.v
+  const inTangents = shape.i
+  const outTangents = shape.o
+  let path = `M${pointString(shiftedPoint(vertices[0], offset))}`
+
+  for (let index = 1; index < vertices.length; index += 1) {
+    const previous = index - 1
+    path += `C${pointString(shiftedPoint([vertices[previous][0] + outTangents[previous][0], vertices[previous][1] + outTangents[previous][1]], offset))}`
+    path += ` ${pointString(shiftedPoint([vertices[index][0] + inTangents[index][0], vertices[index][1] + inTangents[index][1]], offset))}`
+    path += ` ${pointString(shiftedPoint(vertices[index], offset))}`
+  }
+
+  if (shape.c) {
+    const last = vertices.length - 1
+    path += `C${pointString(shiftedPoint([vertices[last][0] + outTangents[last][0], vertices[last][1] + outTangents[last][1]], offset))}`
+    path += ` ${pointString(shiftedPoint([vertices[0][0] + inTangents[0][0], vertices[0][1] + inTangents[0][1]], offset))}`
+    path += ` ${pointString(shiftedPoint(vertices[0], offset))}Z`
+  }
+
+  return path
+}
+
+function lottieGroupTransform(group) {
+  const transform = group.it.find(item => item.ty === "tr")
+  return transform?.p?.k || [0, 0]
+}
+
+function lottieShape(group) {
+  return group.it.find(item => item.ty === "sh")?.ks
+}
+
+function renderUseAnimationsGithubIcon(animation) {
+  const layer = animation.layers.find(item => item.nm === "github")
+  const bodyGroup = layer.shapes.find(item => item.nm === "body")
+  const tailGroup = layer.shapes.find(item => item.nm === "tail")
+  const bodyPath = lottieShapeToPath(lottieShape(bodyGroup).k, lottieGroupTransform(bodyGroup))
+  const tailKeyframes = lottieShape(tailGroup).k
+  const tailOffset = lottieGroupTransform(tailGroup)
+  const tailPaths = tailKeyframes.map(keyframe => lottieShapeToPath(keyframe.s[0], tailOffset))
+  const keyTimes = tailKeyframes
+    .map(keyframe => formatPathNumber((keyframe.t - animation.ip) / (animation.op - animation.ip)))
+    .join(";")
+  const keySplines = tailKeyframes
+    .slice(0, -1)
+    .map((keyframe, index) => {
+      const nextKeyframe = tailKeyframes[index + 1]
+      return `${keyframe.o?.x ?? 0.167} ${keyframe.o?.y ?? 0.167} ${nextKeyframe.i?.x ?? 0.833} ${nextKeyframe.i?.y ?? 0.833}`
+    })
+    .join(";")
+  const duration = `${formatPathNumber((animation.op - animation.ip) / animation.fr)}s`
+  const scale = 0.82
+
+  return `<g class="useanimations-github-icon" data-source="https://useanimations.com/animations/github.json" transform="translate(318 17) scale(${scale})" fill="none" stroke="#24292f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="${bodyPath}"/>
+    <path d="${tailPaths[0]}">
+      <animate attributeName="d" dur="${duration}" repeatCount="indefinite" calcMode="spline" keyTimes="${keyTimes}" keySplines="${keySplines}" values="${tailPaths.join(";")}"/>
+    </path>
+  </g>`
+}
+
 async function readOverviewActivityCommits() {
   try {
     const overviewSvg = await readFile("metrics.overview.svg", "utf8")
@@ -479,7 +553,12 @@ async function readTitleArtwork() {
   }
 }
 
-function renderSvg({ repos, totals, displayCommits, titleArtwork }) {
+async function readUseAnimationsGithubIcon() {
+  const raw = await readFile(new URL("../assets/useanimations-github.json", import.meta.url), "utf8")
+  return renderUseAnimationsGithubIcon(JSON.parse(raw))
+}
+
+function renderSvg({ repos, totals, displayCommits, titleArtwork, githubIconArtwork }) {
   const topLanguages = languageEntries(totals).slice(0, 8)
   const privateAggregate = { ...emptyStats(), nameWithOwner: "Other private repositories", isPrivate: true, isOwn: false, aggregate: true }
   for (const repo of repos) {
@@ -564,6 +643,7 @@ function renderSvg({ repos, totals, displayCommits, titleArtwork }) {
   </style>
   <rect x="0.5" y="0.5" width="${width - 1}" height="${height - 1}" rx="8" fill="#ffffff" stroke="#d0d7de"/>
   ${titleArtwork || `<text x="24" y="36" class="title">Where my code goes</text>`}
+  ${githubIconArtwork}
 
   <rect x="${paddingX + cardWidth + cardGap}" y="${cardY}" width="${cardWidth}" height="58" rx="6" fill="#f6f8fa"/>
   <text x="${paddingX + cardWidth + cardGap + 16}" y="${cardY + 26}" class="metric">${formatNumber(shownCommits)} commits / ${formatNumber(totals.prs)} PRs</text>
@@ -631,7 +711,8 @@ async function main() {
   const generatedAt = new Date().toISOString()
   const overviewActivityCommits = await readOverviewActivityCommits()
   const titleArtwork = await readTitleArtwork()
-  const svg = renderSvg({ repos: analyzed, totals, displayCommits: overviewActivityCommits, titleArtwork })
+  const githubIconArtwork = await readUseAnimationsGithubIcon()
+  const svg = renderSvg({ repos: analyzed, totals, displayCommits: overviewActivityCommits, titleArtwork, githubIconArtwork })
   await writeFile("metrics.languages.svg", svg)
   await writeFile("metrics.contributions.json", `${JSON.stringify({
     generatedAt,
