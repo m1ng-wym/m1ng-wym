@@ -5,7 +5,11 @@ import { readFileSync } from "node:fs"
 const svgPath = process.argv[2] || "metrics.languages.svg"
 const svg = readFileSync(svgPath, "utf8")
 const expectedLanguageBarColor = "#4988C4"
+const expectedLanguageEmptyColor = "#eaeef2"
 const previousLanguageBarColor = "#8FABD4"
+const expectedSquareSize = 12
+const expectedSquareRadius = 2
+const expectedSquareStep = 16
 
 function fail(message) {
   console.error(`language metrics contract failed: ${message}`)
@@ -30,6 +34,61 @@ if (!svg.includes(`fill="${expectedLanguageBarColor}"`)) {
   fail(`language activity bars do not use expected fill color ${expectedLanguageBarColor}`)
 }
 
+if (svg.includes('height="10" rx="5" fill="#eaeef2"') || svg.includes(`height="10" rx="5" fill="${expectedLanguageBarColor}"`)) {
+  fail("legacy rounded language activity bars are still present")
+}
+
+const squareGroups = Array.from(svg.matchAll(/<g class="language-square-bar" data-language="([^"]+)">([\s\S]*?)<\/g>/g))
+
+if (!squareGroups.length) {
+  fail("language activity square bars are missing")
+}
+
+const squareCounts = []
+for (const [, language, groupContent] of squareGroups) {
+  const squares = Array.from(groupContent.matchAll(/<rect x="([0-9]+)" y="([0-9]+)" width="([0-9]+)" height="([0-9]+)" rx="([0-9]+)" ry="([0-9]+)" fill="(#[0-9A-Fa-f]{6})" stroke="#ffffff" stroke-width="1"\/>/g))
+  if (!squares.length) {
+    fail(`${language} square bar has no squares`)
+  }
+
+  let filledCount = 0
+  let emptyCount = 0
+  let previousX = null
+  let rowY = null
+  for (const [, x, y, width, height, rx, ry, fill] of squares) {
+    if (Number(width) !== expectedSquareSize || Number(height) !== expectedSquareSize) {
+      fail(`${language} square size is ${width}x${height}, expected ${expectedSquareSize}x${expectedSquareSize}`)
+    }
+    if (Number(rx) !== expectedSquareRadius || Number(ry) !== expectedSquareRadius) {
+      fail(`${language} square radius is ${rx}/${ry}, expected ${expectedSquareRadius}/${expectedSquareRadius}`)
+    }
+    if (rowY === null) rowY = Number(y)
+    else if (Number(y) !== rowY) fail(`${language} square bar is not aligned to one row`)
+    if (previousX !== null && Number(x) - previousX !== expectedSquareStep) {
+      fail(`${language} square step is ${Number(x) - previousX}, expected ${expectedSquareStep}`)
+    }
+    previousX = Number(x)
+    if (fill === expectedLanguageBarColor) filledCount += 1
+    else if (fill === expectedLanguageEmptyColor) emptyCount += 1
+    else fail(`${language} square fill is ${fill}, expected ${expectedLanguageBarColor} or ${expectedLanguageEmptyColor}`)
+  }
+
+  if (!filledCount) {
+    fail(`${language} square bar has no filled squares`)
+  }
+
+  squareCounts.push(squares.length)
+}
+
+if (new Set(squareCounts).size !== 1) {
+  fail(`language square bars have inconsistent square counts: ${squareCounts.join(", ")}`)
+}
+
+const firstGroupSquares = Array.from(squareGroups[0][2].matchAll(/<rect\b[^>]*fill="(#[0-9A-Fa-f]{6})"[^>]*\/>/g))
+if (!firstGroupSquares.every(([, fill]) => fill === expectedLanguageBarColor)) {
+  fail("the highest-additions language row is not fully filled")
+}
+
 const requiredPatterns = [
   {
     label: "commits and PRs summary card remains in its original position",
@@ -47,4 +106,4 @@ for (const { label, pattern } of requiredPatterns) {
   }
 }
 
-console.log("language metrics contract ok: left summary card removed, two right summary cards are unchanged, and language bars use the expected fill color")
+console.log("language metrics contract ok: left summary card removed, two right summary cards are unchanged, and language activity uses snake-style square bars")

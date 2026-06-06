@@ -508,6 +508,11 @@ function renderSvg({ repos, totals, displayCommits, titleArtwork }) {
   const height = repoStartY + 44 + topRepos.length * 26
   const barX = 185
   const barWidthMax = 400
+  const languageSquareSize = 12
+  const languageSquareGap = 4
+  const languageSquareStep = languageSquareSize + languageSquareGap
+  const languageSquareRadius = 2
+  const languageSquareCount = Math.max(1, Math.floor((barWidthMax - languageSquareSize) / languageSquareStep) + 1)
   const languageValueX = 615
   const repoCommitsX = 500
   const repoPrsX = 635
@@ -517,15 +522,23 @@ function renderSvg({ repos, totals, displayCommits, titleArtwork }) {
   const shownCommits = displayCommits ?? totals.commits
   const sectionColor = "#2C365D"
   const languageBarColor = "#4988C4"
+  const languageBarEmptyColor = "#eaeef2"
 
   const languageRows = topLanguages.map((item, index) => {
     const y = languageStartY + 34 + index * 28
-    const barWidth = Math.max(3, Math.round((item.additions / maxLanguage) * barWidthMax))
+    const filledSquares = item.additions || item.deletions
+      ? Math.max(1, Math.round((item.additions / maxLanguage) * languageSquareCount))
+      : 0
     const percent = Math.round((item.additions / totalLanguageLines) * 100)
+    const squareY = y - 13
+    const squares = Array.from({ length: languageSquareCount }, (_, squareIndex) => {
+      const squareX = barX + squareIndex * languageSquareStep
+      const fill = squareIndex < filledSquares ? languageBarColor : languageBarEmptyColor
+      return `<rect x="${squareX}" y="${squareY}" width="${languageSquareSize}" height="${languageSquareSize}" rx="${languageSquareRadius}" ry="${languageSquareRadius}" fill="${fill}" stroke="#ffffff" stroke-width="1"/>`
+    }).join("")
     return `
       <text x="28" y="${y}" class="label">${escapeXml(item.name)}</text>
-      <rect x="${barX}" y="${y - 12}" width="${barWidthMax}" height="10" rx="5" fill="#eaeef2"/>
-      <rect x="${barX}" y="${y - 12}" width="${barWidth}" height="10" rx="5" fill="${languageBarColor}"/>
+      <g class="language-square-bar" data-language="${escapeXml(item.name)}">${squares}</g>
       <text x="${languageValueX}" y="${y}" class="small">+${formatNumber(item.additions)} / -${formatNumber(item.deletions)} lines (${percent}%)</text>`
   }).join("")
 
