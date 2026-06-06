@@ -509,7 +509,7 @@ function renderSvg({ repos, totals, displayCommits, titleArtwork }) {
   const barX = 185
   const barWidthMax = 400
   const languageSquareSize = 12
-  const languageSquareGap = 4
+  const languageSquareGap = 2
   const languageSquareStep = languageSquareSize + languageSquareGap
   const languageSquareRadius = 2
   const languageSquareCount = Math.max(1, Math.floor((barWidthMax - languageSquareSize) / languageSquareStep) + 1)

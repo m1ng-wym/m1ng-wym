@@ -9,7 +9,7 @@ const expectedLanguageEmptyColor = "#eaeef2"
 const previousLanguageBarColor = "#8FABD4"
 const expectedSquareSize = 12
 const expectedSquareRadius = 2
-const expectedSquareStep = 16
+const expectedSquareStep = 14
 
 function fail(message) {
   console.error(`language metrics contract failed: ${message}`)
