@@ -4,6 +4,26 @@ import { readFileSync } from "node:fs"
 
 const readmePath = "README.md"
 const typingSvgPath = "assets/profile-typing.svg"
+const expectedImages = [
+  {
+    alt: "Typing SVG",
+    src: `./${typingSvgPath}`,
+    width: "720",
+    height: "50",
+  },
+  {
+    alt: "Language activity from authored commits",
+    src: "./metrics.languages.svg",
+    width: "920",
+    height: "583",
+  },
+  {
+    alt: "Contribution snake",
+    src: "https://raw.githubusercontent.com/m1ng-wym/m1ng-wym/output/github-contribution-grid-snake.svg",
+    width: "880",
+    height: "192",
+  },
+]
 
 function fail(message) {
   console.error(`profile README asset check failed: ${message}`)
@@ -20,8 +40,36 @@ if (readme.includes("git.io/typing-svg")) {
   fail("README still links to the external Typing SVG landing page")
 }
 
-if (!readme.includes(`![Typing SVG](./${typingSvgPath})`)) {
-  fail(`README does not reference ./${typingSvgPath}`)
+const imageTags = Array.from(readme.matchAll(/<img\b[^>]*>/g), match => match[0])
+
+function getAttributes(tag) {
+  const attributes = new Map()
+  for (const match of tag.matchAll(/([A-Za-z_:][-A-Za-z0-9_:.]*)="([^"]*)"/g)) {
+    attributes.set(match[1], match[2])
+  }
+  return attributes
+}
+
+for (const expected of expectedImages) {
+  const tag = imageTags.find(candidate => {
+    const attributes = getAttributes(candidate)
+    return attributes.get("src") === expected.src && attributes.get("alt") === expected.alt
+  })
+
+  if (!tag) {
+    fail(`README does not contain expected HTML img for ${expected.alt}`)
+  }
+
+  const attributes = getAttributes(tag)
+  for (const key of ["width", "height"]) {
+    if (attributes.get(key) !== expected[key]) {
+      fail(`${expected.alt} img ${key} is ${attributes.get(key) || "missing"}, expected ${expected[key]}`)
+    }
+  }
+}
+
+if (/!\[[^\]]*\]\([^)]*\.svg[^)]*\)/.test(readme)) {
+  fail("README still contains Markdown SVG image syntax instead of sized HTML img tags")
 }
 
 let typingSvg
@@ -66,4 +114,4 @@ if (Buffer.byteLength(typingSvg, "utf8") > 6_000) {
   fail(`${typingSvgPath} is larger than 6000 bytes`)
 }
 
-console.log(`profile README asset check ok: ${typingSvgPath} is self-hosted`)
+console.log(`profile README asset check ok: ${typingSvgPath} is self-hosted and README images have explicit dimensions`)
