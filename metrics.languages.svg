@@ -33,7 +33,7 @@
   <text x="40" y="118" class="small">309 own commits / 107 external commits</text>
 
   <rect x="322" y="70" width="274" height="58" rx="6" fill="#f6f8fa"/>
-  <text x="338" y="96" class="metric">453 commits / 17 PRs</text>
+  <text x="338" y="96" class="metric">459 commits / 17 PRs</text>
   <text x="338" y="118" class="small">Authored by m1ng-wym</text>
 
   <rect x="620" y="70" width="274" height="58" rx="6" fill="#f6f8fa"/>
