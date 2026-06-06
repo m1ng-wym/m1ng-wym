@@ -69,8 +69,29 @@ for (const expected of expectedImages) {
   }
 }
 
+const snakeTag = imageTags.find(candidate => {
+  const attributes = getAttributes(candidate)
+  return attributes.get("alt") === "Contribution snake"
+})
+const metricsTag = imageTags.find(candidate => {
+  const attributes = getAttributes(candidate)
+  return attributes.get("alt") === "Language activity from authored commits"
+})
+
+const snakeIndex = readme.indexOf(snakeTag)
+const metricsIndex = readme.indexOf(metricsTag)
+
+if (snakeIndex > metricsIndex) {
+  fail("Contribution snake must be placed directly above the language metrics image")
+}
+
+const contentBetweenSnakeAndMetrics = readme.slice(snakeIndex + snakeTag.length, metricsIndex)
+if (contentBetweenSnakeAndMetrics !== "<br>\n") {
+  fail("Contribution snake and language metrics image must be separated only by a single <br> line break")
+}
+
 if (/!\[[^\]]*\]\([^)]*\.svg[^)]*\)/.test(readme)) {
   fail("README still contains Markdown SVG image syntax instead of sized HTML img tags")
 }
 
-console.log("profile README asset check ok: dynamic Typing SVG and README images have explicit dimensions")
+console.log("profile README asset check ok: dynamic Typing SVG, explicit dimensions, and snake placement are valid")
