@@ -4,7 +4,7 @@ import { readFileSync } from "node:fs"
 
 const readmePath = "README.md"
 const typingSvgUrl =
-  "https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=24&duration=2600&pause=900&color=2C365D&width=720&lines=Full-Stack+Developer;Open+Source+Contributor;AI+Explorer+%26+Creator;Software+Engineering+Student"
+  "https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=24&duration=2600&pause=900&color=2C365D&background=FFFFFF&width=720&lines=Full-Stack+Developer;Open+Source+Contributor;AI+Explorer+%26+Creator;Software+Engineering+Student"
 const expectedImages = [
   {
     alt: "Typing SVG",
@@ -94,4 +94,4 @@ if (/!\[[^\]]*\]\([^)]*\.svg[^)]*\)/.test(readme)) {
   fail("README still contains Markdown SVG image syntax instead of sized HTML img tags")
 }
 
-console.log("profile README asset check ok: dynamic Typing SVG, explicit dimensions, and snake placement are valid")
+console.log("profile README asset check ok: dynamic Typing SVG white background, explicit dimensions, and snake placement are valid")
