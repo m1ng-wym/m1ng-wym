@@ -526,7 +526,7 @@ function renderUseAnimationsGithubIcon(animation) {
   const duration = `${formatPathNumber((animation.op - animation.ip) / animation.fr)}s`
   const scale = 1
 
-  return `<g class="useanimations-github-icon" data-source="https://useanimations.com/animations/github.json" transform="translate(24 17) scale(${scale})" fill="none" stroke="#24292f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  return `<g class="useanimations-github-icon" data-source="https://useanimations.com/animations/github.json" transform="translate(24 19) scale(${scale})" fill="none" stroke="#24292f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
     <path d="${bodyPath}"/>
     <path d="${tailPaths[0]}">
       <animate attributeName="d" dur="${duration}" repeatCount="indefinite" calcMode="spline" keyTimes="${keyTimes}" keySplines="${keySplines}" values="${tailPaths.join(";")}"/>
@@ -536,10 +536,10 @@ function renderUseAnimationsGithubIcon(animation) {
 
 function renderTitleHeader({ titleArtwork, githubIconArtwork }) {
   const title = titleArtwork
-    ? `<g class="metric-title-artwork" transform="translate(28 0)">
+    ? `<g class="metric-title-artwork" transform="translate(33 0)">
     ${titleArtwork}
   </g>`
-    : `<text x="58" y="36" class="title">Where my code goes</text>`
+    : `<text x="63" y="36" class="title">Where my code goes</text>`
 
   return `${githubIconArtwork}
   ${title}`
@@ -594,19 +594,21 @@ function renderSvg({ repos, totals, displayCommits, titleArtwork, githubIconArtw
   const cardWidth = Math.floor((width - paddingX * 2 - cardGap * 2) / 3)
   const cardY = 70
   const languageStartY = 173
-  const repoStartY = languageStartY + 38 + topLanguages.length * 28
-  const height = repoStartY + 44 + topRepos.length * 26
   const barX = 185
   const barWidthMax = 400
   const languageSquareSize = 12
   const languageSquareGap = 2
+  const languageRowGap = 2
   const languageSquareStep = languageSquareSize + languageSquareGap
+  const languageRowStep = languageSquareSize + languageRowGap
   const languageSquareRadius = 2
   const languageSquareCount = Math.max(1, Math.floor((barWidthMax - languageSquareSize) / languageSquareStep) + 1)
   const languageValueX = 615
   const repoCommitsX = 500
   const repoPrsX = 635
   const repoLinesX = 720
+  const repoStartY = languageStartY + 38 + topLanguages.length * languageRowStep
+  const height = repoStartY + 44 + topRepos.length * 26
   const maxLanguage = Math.max(1, ...topLanguages.map(item => item.additions))
   const totalLanguageLines = Math.max(1, topLanguages.reduce((sum, item) => sum + item.additions, 0))
   const shownCommits = displayCommits ?? totals.commits
@@ -615,7 +617,7 @@ function renderSvg({ repos, totals, displayCommits, titleArtwork, githubIconArtw
   const languageBarEmptyColor = "#eaeef2"
 
   const languageRows = topLanguages.map((item, index) => {
-    const y = languageStartY + 34 + index * 28
+    const y = languageStartY + 34 + index * languageRowStep
     const filledSquares = item.additions || item.deletions
       ? Math.max(1, Math.round((item.additions / maxLanguage) * languageSquareCount))
       : 0
@@ -655,13 +657,13 @@ function renderSvg({ repos, totals, displayCommits, titleArtwork, githubIconArtw
   <rect x="0.5" y="0.5" width="${width - 1}" height="${height - 1}" rx="8" fill="#ffffff" stroke="#d0d7de"/>
   ${renderTitleHeader({ titleArtwork, githubIconArtwork })}
 
-  <rect x="${paddingX + cardWidth + cardGap}" y="${cardY}" width="${cardWidth}" height="58" rx="6" fill="#f6f8fa"/>
-  <text x="${paddingX + cardWidth + cardGap + 16}" y="${cardY + 26}" class="metric">${formatNumber(shownCommits)} commits / ${formatNumber(totals.prs)} PRs</text>
-  <text x="${paddingX + cardWidth + cardGap + 16}" y="${cardY + 48}" class="small">Authored by ${escapeXml(user)}</text>
+  <rect x="${paddingX}" y="${cardY}" width="${cardWidth}" height="58" rx="6" fill="#f6f8fa"/>
+  <text x="${paddingX + 16}" y="${cardY + 26}" class="metric">${formatNumber(shownCommits)} commits / ${formatNumber(totals.prs)} PRs</text>
+  <text x="${paddingX + 16}" y="${cardY + 48}" class="small">Authored by ${escapeXml(user)}</text>
 
-  <rect x="${paddingX + (cardWidth + cardGap) * 2}" y="${cardY}" width="${cardWidth}" height="58" rx="6" fill="#f6f8fa"/>
-  <text x="${paddingX + (cardWidth + cardGap) * 2 + 16}" y="${cardY + 26}" class="metric">+${formatNumber(totals.additions)} / -${formatNumber(totals.deletions)} lines</text>
-  <text x="${paddingX + (cardWidth + cardGap) * 2 + 16}" y="${cardY + 48}" class="small">${formatNumber(totals.files)} changed files</text>
+  <rect x="${paddingX + cardWidth + cardGap}" y="${cardY}" width="${cardWidth}" height="58" rx="6" fill="#f6f8fa"/>
+  <text x="${paddingX + cardWidth + cardGap + 16}" y="${cardY + 26}" class="metric">+${formatNumber(totals.additions)} / -${formatNumber(totals.deletions)} lines</text>
+  <text x="${paddingX + cardWidth + cardGap + 16}" y="${cardY + 48}" class="small">${formatNumber(totals.files)} changed files</text>
 
   <text x="24" y="${languageStartY}" class="section">Language activity</text>
   ${languageRows || `<text x="28" y="${languageStartY + 34}" class="small">No language data found</text>`}
