@@ -4,7 +4,7 @@ import { readFileSync } from "node:fs"
 
 const workflowPath = ".github/workflows/snake.yml"
 const expectedSnakeColor = "#FF5E3A"
-const expectedDotColors = ["#FFFFFF", "#BDE8F5", "#86CCDD", "#153580", "#0F2854"]
+const expectedDotColors = ["#FFFFFF", "#BDE8F5", "#4988C4", "#153580", "#0F2854"]
 
 function fail(message) {
   console.error(`snake workflow check failed: ${message}`)
