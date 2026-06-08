@@ -37,7 +37,7 @@
   </g>
 
   <rect x="24" y="70" width="274" height="58" rx="6" fill="#f6f8fa"/>
-  <text x="40" y="96" class="metric">490 commits / 20 PRs</text>
+  <text x="40" y="96" class="metric">500 commits / 20 PRs</text>
   <text x="40" y="118" class="small">Authored by m1ng-wym</text>
 
   <rect x="322" y="70" width="274" height="58" rx="6" fill="#f6f8fa"/>
