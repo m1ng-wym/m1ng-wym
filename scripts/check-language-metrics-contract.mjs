@@ -11,6 +11,10 @@ const expectedSquareSize = 12
 const expectedSquareRadius = 2
 const expectedSquareStep = 14
 const expectedLanguageRowStep = expectedSquareSize + 2
+const expectedLanguageTextYOffset = 10
+const expectedLanguageLabelX = 150
+const expectedLanguageValueX = 640
+const expectedLanguagePercentX = 805
 
 function fail(message) {
   console.error(`language metrics contract failed: ${message}`)
@@ -69,6 +73,14 @@ if (svg.includes('height="10" rx="5" fill="#eaeef2"') || svg.includes(`height="1
   fail("legacy rounded language activity bars are still present")
 }
 
+if (svg.includes('class="label"')) {
+  fail("legacy crowded language labels are still present")
+}
+
+if (/<text x="615" y="[0-9.]+" class="small">\+[0-9,]+ \/ -[0-9,]+ lines \([0-9]+%\)<\/text>/.test(svg)) {
+  fail("language values still use the old combined crowded text layout")
+}
+
 const squareGroups = Array.from(svg.matchAll(/<g class="language-square-bar" data-language="([^"]+)">([\s\S]*?)<\/g>/g))
 
 if (!squareGroups.length) {
@@ -118,10 +130,44 @@ if (new Set(squareCounts).size !== 1) {
   fail(`language square bars have inconsistent square counts: ${squareCounts.join(", ")}`)
 }
 
+const languageLabelMatches = Array.from(svg.matchAll(new RegExp(`<text x="${expectedLanguageLabelX}" y="([0-9.]+)" class="language-label" text-anchor="end">([^<]+)<\\/text>`, "g")))
+const languageValueMatches = Array.from(svg.matchAll(new RegExp(`<text x="${expectedLanguageValueX}" y="([0-9.]+)" class="language-value">\\+[0-9,]+ \\/ -[0-9,]+ lines<\\/text>`, "g")))
+const languagePercentMatches = Array.from(svg.matchAll(new RegExp(`<text x="${expectedLanguagePercentX}" y="([0-9.]+)" class="language-percent">\\([0-9]+%\\)<\\/text>`, "g")))
+
+if (languageLabelMatches.length !== squareGroups.length) {
+  fail(`language label count is ${languageLabelMatches.length}, expected ${squareGroups.length}`)
+}
+
+if (languageValueMatches.length !== squareGroups.length) {
+  fail(`language value count is ${languageValueMatches.length}, expected ${squareGroups.length}`)
+}
+
+if (languagePercentMatches.length !== squareGroups.length) {
+  fail(`language percent count is ${languagePercentMatches.length}, expected ${squareGroups.length}`)
+}
+
 for (let index = 1; index < squareRowYs.length; index += 1) {
   const rowStep = squareRowYs[index] - squareRowYs[index - 1]
   if (rowStep !== expectedLanguageRowStep) {
     fail(`language square row step is ${rowStep}, expected ${expectedLanguageRowStep} for a 2px row gap`)
+  }
+}
+
+for (let index = 0; index < squareGroups.length; index += 1) {
+  const expectedLanguage = squareGroups[index][1]
+  const expectedTextY = squareRowYs[index] + expectedLanguageTextYOffset
+  const [, labelY, labelText] = languageLabelMatches[index]
+  const [, valueY] = languageValueMatches[index]
+  const [, percentY] = languagePercentMatches[index]
+
+  if (labelText !== expectedLanguage) {
+    fail(`language label ${labelText} is not aligned with square row ${expectedLanguage}`)
+  }
+
+  for (const [kind, actualY] of [["label", labelY], ["value", valueY], ["percent", percentY]]) {
+    if (Number(actualY) !== expectedTextY) {
+      fail(`${expectedLanguage} ${kind} baseline is ${actualY}, expected ${expectedTextY} to align with the square row`)
+    }
   }
 }
 
@@ -151,4 +197,4 @@ if (svg.includes('<rect x="620" y="70" width="274" height="58" rx="6" fill="#f6f
   fail("summary card layout still leaves the first card slot empty")
 }
 
-console.log("language metrics contract ok: title icon alignment, summary card alignment, and language row spacing are valid")
+console.log("language metrics contract ok: title icon alignment, summary card alignment, language text layout, and language row spacing are valid")

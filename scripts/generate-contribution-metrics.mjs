@@ -603,7 +603,10 @@ function renderSvg({ repos, totals, displayCommits, titleArtwork, githubIconArtw
   const languageRowStep = languageSquareSize + languageRowGap
   const languageSquareRadius = 2
   const languageSquareCount = Math.max(1, Math.floor((barWidthMax - languageSquareSize) / languageSquareStep) + 1)
-  const languageValueX = 615
+  const languageLabelX = 150
+  const languageTextYOffset = 10
+  const languageValueX = 640
+  const languagePercentX = 805
   const repoCommitsX = 500
   const repoPrsX = 635
   const repoLinesX = 720
@@ -623,15 +626,17 @@ function renderSvg({ repos, totals, displayCommits, titleArtwork, githubIconArtw
       : 0
     const percent = Math.round((item.additions / totalLanguageLines) * 100)
     const squareY = y - 13
+    const textY = squareY + languageTextYOffset
     const squares = Array.from({ length: languageSquareCount }, (_, squareIndex) => {
       const squareX = barX + squareIndex * languageSquareStep
       const fill = squareIndex < filledSquares ? languageBarColor : languageBarEmptyColor
       return `<rect x="${squareX}" y="${squareY}" width="${languageSquareSize}" height="${languageSquareSize}" rx="${languageSquareRadius}" ry="${languageSquareRadius}" fill="${fill}" stroke="#ffffff" stroke-width="1"/>`
     }).join("")
     return `
-      <text x="28" y="${y}" class="label">${escapeXml(item.name)}</text>
+      <text x="${languageLabelX}" y="${textY}" class="language-label" text-anchor="end">${escapeXml(item.name)}</text>
       <g class="language-square-bar" data-language="${escapeXml(item.name)}">${squares}</g>
-      <text x="${languageValueX}" y="${y}" class="small">+${formatNumber(item.additions)} / -${formatNumber(item.deletions)} lines (${percent}%)</text>`
+      <text x="${languageValueX}" y="${textY}" class="language-value">+${formatNumber(item.additions)} / -${formatNumber(item.deletions)} lines</text>
+      <text x="${languagePercentX}" y="${textY}" class="language-percent">(${percent}%)</text>`
   }).join("")
 
   const repoRows = topRepos.map((repo, index) => {
@@ -650,7 +655,9 @@ function renderSvg({ repos, totals, displayCommits, titleArtwork, githubIconArtw
     .title { font-size: 22px; font-weight: 700; }
     .section { font-size: 15px; font-weight: 700; fill: ${sectionColor}; }
     .metric { font-size: 14px; font-weight: 600; }
-    .label { font-size: 13px; font-weight: 600; }
+    .language-label { font-size: 11px; font-weight: 700; }
+    .language-value { font-size: 10.5px; font-weight: 500; fill: #57606a; font-variant-numeric: tabular-nums; }
+    .language-percent { font-size: 10.5px; font-weight: 600; fill: #6e7781; font-variant-numeric: tabular-nums; }
     .repo { font-size: 12px; font-weight: 600; }
     .small { font-size: 12px; fill: #57606a; }
   </style>
