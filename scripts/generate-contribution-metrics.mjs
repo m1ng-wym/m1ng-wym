@@ -666,7 +666,6 @@ function renderSvg({ repos, totals, displayCommits, titleArtwork, githubIconArtw
 
   <rect x="${paddingX}" y="${cardY}" width="${cardWidth}" height="58" rx="6" fill="#f6f8fa"/>
   <text x="${paddingX + 16}" y="${cardY + 26}" class="metric">${formatNumber(shownCommits)} commits / ${formatNumber(totals.prs)} PRs</text>
-  <text x="${paddingX + 16}" y="${cardY + 48}" class="small">Authored by ${escapeXml(user)}</text>
 
   <rect x="${paddingX + cardWidth + cardGap}" y="${cardY}" width="${cardWidth}" height="58" rx="6" fill="#f6f8fa"/>
   <text x="${paddingX + cardWidth + cardGap + 16}" y="${cardY + 26}" class="metric">+${formatNumber(totals.additions)} / -${formatNumber(totals.deletions)} lines</text>

@@ -179,7 +179,7 @@ if (!firstGroupSquares.every(([, fill]) => fill === expectedLanguageBarColor)) {
 const requiredPatterns = [
   {
     label: "commits and PRs summary card is left-aligned into the first card slot",
-    pattern: /<rect x="24" y="70" width="274" height="58" rx="6" fill="#f6f8fa"\/>\s*<text x="40" y="96" class="metric">[0-9,]+ commits \/ [0-9,]+ PRs<\/text>\s*<text x="40" y="118" class="small">Authored by m1ng-wym<\/text>/,
+    pattern: /<rect x="24" y="70" width="274" height="58" rx="6" fill="#f6f8fa"\/>\s*<text x="40" y="96" class="metric">[0-9,]+ commits \/ [0-9,]+ PRs<\/text>/,
   },
   {
     label: "lines and changed files summary card follows the first card slot",
