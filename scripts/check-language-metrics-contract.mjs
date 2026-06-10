@@ -12,9 +12,10 @@ const expectedSquareRadius = 2
 const expectedSquareStep = 14
 const expectedLanguageRowStep = expectedSquareSize + 2
 const expectedLanguageTextYOffset = 10
-const expectedLanguageLabelX = 150
-const expectedLanguageValueX = 640
-const expectedLanguagePercentX = 805
+const expectedLanguageLabelX = 230
+const expectedLanguageValueX = 690
+const expectedLanguagePercentX = 845
+const expectedLanguageBarX = 265
 
 function fail(message) {
   console.error(`language metrics contract failed: ${message}`)
@@ -128,6 +129,11 @@ for (const [, language, groupContent] of squareGroups) {
 
 if (new Set(squareCounts).size !== 1) {
   fail(`language square bars have inconsistent square counts: ${squareCounts.join(", ")}`)
+}
+
+const firstLanguageSquares = Array.from(squareGroups[0][2].matchAll(/<rect x="([0-9]+)" y="[0-9]+" width="[0-9]+" height="[0-9]+" rx="[0-9]+" ry="[0-9]+" fill="(#[0-9A-Fa-f]{6})" stroke="#ffffff" stroke-width="1"\/>/g))
+if (Number(firstLanguageSquares[0]?.[1]) !== expectedLanguageBarX) {
+  fail(`language square bar starts at x=${firstLanguageSquares[0]?.[1]}, expected ${expectedLanguageBarX} for centered placement`)
 }
 
 const languageLabelMatches = Array.from(svg.matchAll(new RegExp(`<text x="${expectedLanguageLabelX}" y="([0-9.]+)" class="language-label" text-anchor="end">([^<]+)<\\/text>`, "g")))

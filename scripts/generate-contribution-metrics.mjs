@@ -594,7 +594,6 @@ function renderSvg({ repos, totals, displayCommits, titleArtwork, githubIconArtw
   const cardWidth = Math.floor((width - paddingX * 2 - cardGap * 2) / 3)
   const cardY = 70
   const languageStartY = 173
-  const barX = 185
   const barWidthMax = 400
   const languageSquareSize = 12
   const languageSquareGap = 2
@@ -603,10 +602,12 @@ function renderSvg({ repos, totals, displayCommits, titleArtwork, githubIconArtw
   const languageRowStep = languageSquareSize + languageRowGap
   const languageSquareRadius = 2
   const languageSquareCount = Math.max(1, Math.floor((barWidthMax - languageSquareSize) / languageSquareStep) + 1)
-  const languageLabelX = 150
+  const languageGridWidth = languageSquareSize + (languageSquareCount - 1) * languageSquareStep
+  const barX = Math.round((width - languageGridWidth) / 2)
+  const languageLabelX = barX - 35
   const languageTextYOffset = 10
-  const languageValueX = 640
-  const languagePercentX = 805
+  const languageValueX = barX + languageGridWidth + 35
+  const languagePercentX = languageValueX + 155
   const repoCommitsX = 500
   const repoPrsX = 635
   const repoLinesX = 720
