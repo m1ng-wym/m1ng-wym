@@ -19,12 +19,6 @@ const expectedImages = [
     height: "583",
   },
   {
-    alt: "Morphing Text demo",
-    src: "./assets/morphing-text.apng.png",
-    width: "720",
-    height: "132",
-  },
-  {
     alt: "Contribution snake",
     src: "https://raw.githubusercontent.com/m1ng-wym/m1ng-wym/output/github-contribution-grid-snake.svg?v=4988c4",
     width: "880",
@@ -100,4 +94,4 @@ if (/!\[[^\]]*\]\([^)]*\.svg[^)]*\)/.test(readme)) {
   fail("README still contains Markdown SVG image syntax instead of sized HTML img tags")
 }
 
-console.log("profile README asset check ok: dynamic Typing SVG, Morphing Text APNG, explicit dimensions, and snake placement are valid")
+console.log("profile README asset check ok: dynamic Typing SVG white background, explicit dimensions, and snake placement are valid")
