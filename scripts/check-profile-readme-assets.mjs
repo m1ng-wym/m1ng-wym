@@ -125,6 +125,10 @@ if (!terminalIcon.includes('<polyline points="4 17 10 11 4 5"/>')) {
   fail("animated terminal icon is missing the prompt polyline")
 }
 
+if (!terminalIcon.includes('transform="translate(6 3) scale(1.15)"')) {
+  fail("animated terminal icon is not vertically aligned with the Typing SVG baseline")
+}
+
 if (!terminalIcon.includes('<line x1="12" y1="19" x2="20" y2="19">')) {
   fail("animated terminal icon is missing the cursor line")
 }
@@ -133,4 +137,4 @@ if (!terminalIcon.includes('<animate attributeName="opacity" values="1;0;1" dur=
   fail("animated terminal icon cursor is not configured to loop")
 }
 
-console.log("profile README asset check ok: terminal icon loop, dynamic Typing SVG white background, explicit dimensions, and snake placement are valid")
+console.log("profile README asset check ok: terminal icon baseline and loop, dynamic Typing SVG white background, explicit dimensions, and snake placement are valid")
