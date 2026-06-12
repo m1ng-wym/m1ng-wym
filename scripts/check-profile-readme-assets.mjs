@@ -133,8 +133,8 @@ if (!terminalIcon.includes('<line x1="12" y1="19" x2="20" y2="19">')) {
   fail("animated terminal icon is missing the cursor line")
 }
 
-if (!terminalIcon.includes('<animate attributeName="opacity" values="1;0;1" dur="0.8s" repeatCount="indefinite"/>')) {
-  fail("animated terminal icon cursor is not configured to loop")
+if (!terminalIcon.includes('<animate attributeName="opacity" values="1;0;1" dur="1.333s" repeatCount="indefinite"/>')) {
+  fail("animated terminal icon cursor is not configured to loop at 0.6x speed")
 }
 
 console.log("profile README asset check ok: terminal icon baseline and loop, dynamic Typing SVG white background, explicit dimensions, and snake placement are valid")
