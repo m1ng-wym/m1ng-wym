@@ -188,8 +188,8 @@ const requiredPatterns = [
     pattern: /<rect x="24" y="70" width="274" height="58" rx="6" fill="#f6f8fa"\/>\s*<text x="40" y="96" class="metric">[0-9,]+ commits \/ [0-9,]+ PRs<\/text>/,
   },
   {
-    label: "lines and changed files summary card follows the first card slot",
-    pattern: /<rect x="322" y="70" width="274" height="58" rx="6" fill="#f6f8fa"\/>\s*<text x="338" y="96" class="metric">\+[0-9,]+ \/ -[0-9,]+ lines<\/text>\s*<text x="338" y="118" class="small">[0-9,]+ changed files<\/text>/,
+    label: "lines summary card follows the first card slot",
+    pattern: /<rect x="322" y="70" width="274" height="58" rx="6" fill="#f6f8fa"\/>\s*<text x="338" y="96" class="metric">\+[0-9,]+ \/ -[0-9,]+ lines<\/text>/,
   },
 ]
 
@@ -201,6 +201,10 @@ for (const { label, pattern } of requiredPatterns) {
 
 if (svg.includes('<rect x="620" y="70" width="274" height="58" rx="6" fill="#f6f8fa"/>')) {
   fail("summary card layout still leaves the first card slot empty")
+}
+
+if (svg.includes("changed files")) {
+  fail("changed files subtitle is still present")
 }
 
 console.log("language metrics contract ok: title icon alignment, summary card alignment, language text layout, and language row spacing are valid")

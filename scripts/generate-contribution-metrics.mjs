@@ -670,7 +670,6 @@ function renderSvg({ repos, totals, displayCommits, titleArtwork, githubIconArtw
 
   <rect x="${paddingX + cardWidth + cardGap}" y="${cardY}" width="${cardWidth}" height="58" rx="6" fill="#f6f8fa"/>
   <text x="${paddingX + cardWidth + cardGap + 16}" y="${cardY + 26}" class="metric">+${formatNumber(totals.additions)} / -${formatNumber(totals.deletions)} lines</text>
-  <text x="${paddingX + cardWidth + cardGap + 16}" y="${cardY + 48}" class="small">${formatNumber(totals.files)} changed files</text>
 
   <text x="24" y="${languageStartY}" class="section">Language activity</text>
   ${languageRows || `<text x="28" y="${languageStartY + 34}" class="small">No language data found</text>`}

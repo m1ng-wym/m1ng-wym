@@ -43,7 +43,6 @@
 
   <rect x="322" y="70" width="274" height="58" rx="6" fill="#f6f8fa"/>
   <text x="338" y="96" class="metric">+285,419 / -32,011 lines</text>
-  <text x="338" y="118" class="small">4,289 changed files</text>
 
   <text x="24" y="173" class="section">Language activity</text>
   
