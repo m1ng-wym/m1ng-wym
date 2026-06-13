@@ -4,7 +4,7 @@
 
 ## About me
 
-SE Student · Full-Stack Intern · Occasional Overthinker<br>
+Software Engineering Student · Full-Stack Intern · Occasional Overthinker<br>
 Here to learn from the GitHub community and contribute where I can.
 
 <img src="https://raw.githubusercontent.com/m1ng-wym/m1ng-wym/output/github-contribution-grid-snake.svg?v=4988c4" alt="Contribution snake" width="880" height="192">
