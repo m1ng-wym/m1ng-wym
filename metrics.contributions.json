@@ -1,14 +1,14 @@
 {
-  "generatedAt": "2026-06-14T12:03:29.187Z",
+  "generatedAt": "2026-06-14T19:17:12.610Z",
   "user": "m1ng-wym",
   "summary": {
-    "repositories": 20,
-    "commits": 490,
+    "repositories": 21,
+    "commits": 493,
     "pullRequests": 21,
-    "additions": 285486,
-    "deletions": 32023,
-    "files": 4300,
-    "ownCommits": 335,
+    "additions": 289391,
+    "deletions": 32552,
+    "files": 4325,
+    "ownCommits": 338,
     "externalCommits": 155,
     "languages": [
       {
@@ -31,9 +31,9 @@
       },
       {
         "name": "HTML",
-        "additions": 9397,
-        "deletions": 1413,
-        "files": 45
+        "additions": 9440,
+        "deletions": 1456,
+        "files": 51
       },
       {
         "name": "JSON",
@@ -43,9 +43,9 @@
       },
       {
         "name": "Other",
-        "additions": 3437,
-        "deletions": 611,
-        "files": 182
+        "additions": 3448,
+        "deletions": 613,
+        "files": 188
       },
       {
         "name": "YAML",
@@ -205,6 +205,31 @@
           "additions": 375,
           "deletions": 106,
           "files": 27
+        }
+      ]
+    },
+    {
+      "nameWithOwner": "m1ng-wym/walkflow-mac",
+      "highlighted": false,
+      "private": false,
+      "own": true,
+      "commits": 3,
+      "prs": 0,
+      "additions": 3905,
+      "deletions": 529,
+      "files": 25,
+      "languages": [
+        {
+          "name": "HTML",
+          "additions": 43,
+          "deletions": 43,
+          "files": 6
+        },
+        {
+          "name": "Other",
+          "additions": 11,
+          "deletions": 2,
+          "files": 6
         }
       ]
     },
