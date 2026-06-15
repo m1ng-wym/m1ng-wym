@@ -62,6 +62,14 @@ if (titleArtworkIndex === -1) {
   fail("title artwork is not wrapped for icon-left alignment")
 }
 
+if (!svg.includes('id="tiny5-title-artwork" aria-label="Where my code goes" data-font="Tiny5"')) {
+  fail("title artwork is not using the Tiny5 font")
+}
+
+if (svg.includes('id="mplus-title-artwork"')) {
+  fail("title artwork is still using the M PLUS font")
+}
+
 if (!svg.includes('<g class="metric-title-artwork" transform="translate(33 0)">')) {
   fail("title artwork is not shifted right to keep the requested icon-title spacing")
 }
