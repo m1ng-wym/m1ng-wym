@@ -4,20 +4,27 @@ import { readFileSync } from "node:fs"
 
 const readmePath = "README.md"
 const terminalIconPath = "./assets/lucide-terminal-animated.svg"
+const profileIntroPath = "./assets/tiny5-profile-intro.svg"
 const typingSvgUrl =
-  "https://readme-typing-svg.demolab.com?font=Tiny5&weight=400&size=24&duration=2600&pause=900&color=2C365D&background=FFFFFF&width=720&lines=Software+Engineering+Student;Full-Stack+Developer+Intern;AI+Explorer+%26+Creator;Open+Source+Contributor;Occasional+Overthinker"
+  "https://readme-typing-svg.demolab.com?font=Tiny5&weight=400&size=18&height=42&duration=2600&pause=900&color=2C365D&background=FFFFFF&width=280&lines=a+Software+Engineering+Student;a+Full-Stack+Developer+Intern;an+AI+Explorer+%26+Creator;an+Open+Source+Contributor;an+Occasional+Overthinker"
 const expectedImages = [
   {
     alt: "Animated terminal icon",
     src: terminalIconPath,
-    width: "40",
-    height: "50",
+    width: "34",
+    height: "42",
+  },
+  {
+    alt: "Hi, I'm @m1ng-wym,",
+    src: profileIntroPath,
+    width: "259",
+    height: "42",
   },
   {
     alt: "Typing SVG",
     src: typingSvgUrl,
-    width: "720",
-    height: "50",
+    width: "280",
+    height: "42",
   },
   {
     alt: "Language activity from authored commits",
@@ -40,6 +47,11 @@ function fail(message) {
 
 const readme = readFileSync(readmePath, "utf8")
 const terminalIcon = readFileSync(terminalIconPath, "utf8")
+const profileIntro = readFileSync(profileIntroPath, "utf8")
+
+if (readme.startsWith("# Hi, I'm @m1ng-wym")) {
+  fail("README still uses the Markdown H1 profile intro")
+}
 
 if (readme.includes("./assets/profile-typing.svg")) {
   fail("README still references the self-hosted profile typing SVG")
@@ -93,6 +105,10 @@ const terminalTag = imageTags.find(candidate => {
   const attributes = getAttributes(candidate)
   return attributes.get("alt") === "Animated terminal icon"
 })
+const profileIntroTag = imageTags.find(candidate => {
+  const attributes = getAttributes(candidate)
+  return attributes.get("alt") === "Hi, I'm @m1ng-wym,"
+})
 const typingTag = imageTags.find(candidate => {
   const attributes = getAttributes(candidate)
   return attributes.get("alt") === "Typing SVG"
@@ -104,16 +120,22 @@ const metricsTag = imageTags.find(candidate => {
 
 const snakeIndex = readme.indexOf(snakeTag)
 const terminalIndex = readme.indexOf(terminalTag)
+const profileIntroIndex = readme.indexOf(profileIntroTag)
 const typingIndex = readme.indexOf(typingTag)
 const metricsIndex = readme.indexOf(metricsTag)
 
-if (terminalIndex > typingIndex) {
-  fail("Animated terminal icon must appear before the Typing SVG")
+if (!(terminalIndex < profileIntroIndex && profileIntroIndex < typingIndex)) {
+  fail("profile sentence images must render as terminal icon, static intro, then Typing SVG")
 }
 
-const contentBetweenTerminalAndTyping = readme.slice(terminalIndex + terminalTag.length, typingIndex)
-if (contentBetweenTerminalAndTyping !== "&nbsp;&nbsp;") {
-  fail("Animated terminal icon and Typing SVG must use the approved inline spacing")
+const contentBetweenTerminalAndIntro = readme.slice(terminalIndex + terminalTag.length, profileIntroIndex)
+if (contentBetweenTerminalAndIntro !== "&nbsp;") {
+  fail("Animated terminal icon and static intro must use the approved inline spacing")
+}
+
+const contentBetweenIntroAndTyping = readme.slice(profileIntroIndex + profileIntroTag.length, typingIndex)
+if (contentBetweenIntroAndTyping !== "") {
+  fail("static intro and Typing SVG must be directly joined into one sentence")
 }
 
 if (snakeIndex > metricsIndex) {
@@ -145,4 +167,12 @@ if (!terminalIcon.includes('<animate attributeName="opacity" values="1;0;1" dur=
   fail("animated terminal icon cursor is not configured to loop at 0.6x speed")
 }
 
-console.log("profile README asset check ok: terminal icon baseline and loop, dynamic Typing SVG white background, explicit dimensions, and snake placement are valid")
+if (!profileIntro.includes("id=\"tiny5-profile-intro\" aria-label=\"Hi, I'm @m1ng-wym,\" data-font=\"Tiny5\"")) {
+  fail("static profile intro is not using the Tiny5 artwork")
+}
+
+if (!profileIntro.includes('width="259" height="42"')) {
+  fail("static profile intro does not use the approved compact dimensions")
+}
+
+console.log("profile README asset check ok: inline Tiny5 sentence, terminal icon baseline and loop, dynamic Typing SVG white background, explicit dimensions, and snake placement are valid")
