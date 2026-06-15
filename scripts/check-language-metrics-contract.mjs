@@ -66,6 +66,28 @@ if (!svg.includes('id="tiny5-title-artwork" aria-label="Where my code goes" data
   fail("title artwork is not using the Tiny5 font")
 }
 
+const titleArtworkMatch = svg.match(/<g id="tiny5-title-artwork"[\s\S]*?<\/g>/)
+if (!titleArtworkMatch) {
+  fail("Tiny5 title artwork group is missing")
+}
+
+const titleArtwork = titleArtworkMatch[0]
+if (!titleArtwork.includes('data-font-size="24"')) {
+  fail("Tiny5 title artwork is not marked as matching the 24px profile intro/typing size")
+}
+
+if (!titleArtwork.includes('class="tiny5-title-glyphs" transform="translate(4.8 4.4) scale(0.8)"')) {
+  fail("Tiny5 title glyphs are not scaled down to the 24px profile intro/typing size")
+}
+
+if (!titleArtwork.includes("<path")) {
+  fail("Tiny5 title artwork must remain path-rendered so it cannot fall back to a system font")
+}
+
+if (titleArtwork.includes('id="tiny5-title-text"')) {
+  fail("Tiny5 title artwork is using SVG text, which can fall back to a system font in the embedded metrics SVG")
+}
+
 if (svg.includes('id="mplus-title-artwork"')) {
   fail("title artwork is still using the M PLUS font")
 }
