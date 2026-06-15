@@ -6,24 +6,24 @@ const readmePath = "README.md"
 const terminalIconPath = "./assets/lucide-terminal-animated.svg"
 const profileIntroPath = "./assets/tiny5-profile-intro.svg"
 const typingSvgUrl =
-  "https://readme-typing-svg.demolab.com?font=Tiny5&weight=400&size=18&height=42&duration=2600&pause=900&color=2C365D&background=FFFFFF&width=280&lines=a+Software+Engineering+Student;a+Full-Stack+Developer+Intern;an+AI+Explorer+%26+Creator;an+Open+Source+Contributor;an+Occasional+Overthinker"
+  "https://readme-typing-svg.demolab.com?font=Tiny5&weight=400&size=24&height=42&vCenter=true&duration=2600&pause=900&color=2C365D&background=FFFFFF&width=360&lines=a+Software+Engineering+Student;a+Full-Stack+Developer+Intern;an+AI+Explorer+%26+Creator;an+Open+Source+Contributor;an+Occasional+Overthinker"
 const expectedImages = [
   {
     alt: "Animated terminal icon",
     src: terminalIconPath,
-    width: "34",
+    width: "30",
     height: "42",
   },
   {
     alt: "Hi, I'm @m1ng-wym,",
     src: profileIntroPath,
-    width: "259",
+    width: "216",
     height: "42",
   },
   {
     alt: "Typing SVG",
     src: typingSvgUrl,
-    width: "280",
+    width: "360",
     height: "42",
   },
   {
@@ -155,7 +155,11 @@ if (!terminalIcon.includes('<polyline points="4 17 10 11 4 5"/>')) {
   fail("animated terminal icon is missing the prompt polyline")
 }
 
-if (!terminalIcon.includes('transform="translate(6 3) scale(1.15)"')) {
+if (!terminalIcon.includes('width="30" height="42" viewBox="0 0 30 42"')) {
+  fail("animated terminal icon is not using the approved profile-line viewport")
+}
+
+if (!terminalIcon.includes('transform="translate(2 7.2) scale(1.15)"')) {
   fail("animated terminal icon is not vertically aligned with the Typing SVG baseline")
 }
 
@@ -171,8 +175,24 @@ if (!profileIntro.includes("id=\"tiny5-profile-intro\" aria-label=\"Hi, I'm @m1n
   fail("static profile intro is not using the Tiny5 artwork")
 }
 
-if (!profileIntro.includes('width="259" height="42"')) {
+if (!profileIntro.includes('width="216" height="42"')) {
   fail("static profile intro does not use the approved compact dimensions")
+}
+
+if (!profileIntro.includes("data-renderer=\"svg-text\"")) {
+  fail("static profile intro must use SVG text rendering instead of converted glyph paths")
+}
+
+if (profileIntro.includes("<path")) {
+  fail("static profile intro must not use converted glyph paths")
+}
+
+if (!profileIntro.includes(">Hi, I'm @m1ng-wym,<")) {
+  fail("static profile intro text is missing the lowercase i in Hi")
+}
+
+if (!profileIntro.includes('font-size="24"') || !profileIntro.includes('dominant-baseline="middle"')) {
+  fail("static profile intro text must use the approved centered Tiny5 text baseline")
 }
 
 console.log("profile README asset check ok: inline Tiny5 sentence, terminal icon baseline and loop, dynamic Typing SVG white background, explicit dimensions, and snake placement are valid")
