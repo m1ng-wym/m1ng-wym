@@ -1,12 +1,14 @@
 #!/usr/bin/env node
 
-import { readFileSync } from "node:fs"
+import { existsSync, readFileSync } from "node:fs"
 
 const readmePath = "README.md"
 const terminalIconPath = "./assets/lucide-terminal-animated.svg"
 const profileIntroPath = "./assets/tiny5-profile-intro.svg"
+const profileTaglinePath = "./assets/tiny5-profile-tagline.svg"
+const profileTaglineText = "Here to learn from the GitHub community and contribute where I can."
 const typingSvgUrl =
-  "https://readme-typing-svg.demolab.com?font=Tiny5&weight=400&size=24&height=42&vCenter=true&duration=2600&pause=900&color=2C365D&background=FFFFFF&width=360&lines=a+Software+Engineering+Student;a+Full-Stack+Developer+Intern;an+AI+Explorer+%26+Creator;an+Open+Source+Contributor;an+Occasional+Overthinker"
+  "https://readme-typing-svg.demolab.com?font=Tiny5&weight=400&size=24&height=42&vCenter=true&duration=2600&pause=900&color=2C365D&background=FFFFFF&width=360&lines=a+Software+Engineering+Student.;a+Full-Stack+Developer+Intern.;an+AI+Explorer+%26+Creator.;an+Open+Source+Contributor.;an+Occasional+Overthinker."
 const expectedImages = [
   {
     alt: "Animated terminal icon",
@@ -24,6 +26,12 @@ const expectedImages = [
     alt: "Typing SVG",
     src: typingSvgUrl,
     width: "360",
+    height: "42",
+  },
+  {
+    alt: profileTaglineText,
+    src: profileTaglinePath,
+    width: "733",
     height: "42",
   },
   {
@@ -45,12 +53,33 @@ function fail(message) {
   process.exit(1)
 }
 
-const readme = readFileSync(readmePath, "utf8")
-const terminalIcon = readFileSync(terminalIconPath, "utf8")
-const profileIntro = readFileSync(profileIntroPath, "utf8")
+function readRequiredFile(filePath, label) {
+  if (!existsSync(filePath)) {
+    fail(`${label} file is missing at ${filePath}`)
+  }
+
+  return readFileSync(filePath, "utf8")
+}
+
+const readme = readRequiredFile(readmePath, "README")
+const terminalIcon = readRequiredFile(terminalIconPath, "animated terminal icon")
+const profileIntro = readRequiredFile(profileIntroPath, "static profile intro")
+const profileTagline = readRequiredFile(profileTaglinePath, "static profile tagline")
 
 if (readme.startsWith("# Hi, I'm @m1ng-wym")) {
   fail("README still uses the Markdown H1 profile intro")
+}
+
+if (readme.includes("## About me")) {
+  fail("README still contains the About me heading")
+}
+
+if (readme.includes("Software Engineering Student · Full-Stack Intern · Occasional Overthinker")) {
+  fail("README still contains the old About me role summary")
+}
+
+if (readme.includes(`\n${profileTaglineText}\n`)) {
+  fail("README still contains the tagline as plain Markdown text")
 }
 
 if (readme.includes("./assets/profile-typing.svg")) {
@@ -113,6 +142,10 @@ const typingTag = imageTags.find(candidate => {
   const attributes = getAttributes(candidate)
   return attributes.get("alt") === "Typing SVG"
 })
+const profileTaglineTag = imageTags.find(candidate => {
+  const attributes = getAttributes(candidate)
+  return attributes.get("alt") === profileTaglineText
+})
 const metricsTag = imageTags.find(candidate => {
   const attributes = getAttributes(candidate)
   return attributes.get("alt") === "Language activity from authored commits"
@@ -122,10 +155,11 @@ const snakeIndex = readme.indexOf(snakeTag)
 const terminalIndex = readme.indexOf(terminalTag)
 const profileIntroIndex = readme.indexOf(profileIntroTag)
 const typingIndex = readme.indexOf(typingTag)
+const profileTaglineIndex = readme.indexOf(profileTaglineTag)
 const metricsIndex = readme.indexOf(metricsTag)
 
-if (!(terminalIndex < profileIntroIndex && profileIntroIndex < typingIndex)) {
-  fail("profile sentence images must render as terminal icon, static intro, then Typing SVG")
+if (!(terminalIndex < profileIntroIndex && profileIntroIndex < typingIndex && typingIndex < profileTaglineIndex)) {
+  fail("profile sentence images must render as terminal icon, static intro, Typing SVG, then second-line tagline")
 }
 
 const contentBetweenTerminalAndIntro = readme.slice(terminalIndex + terminalTag.length, profileIntroIndex)
@@ -136,6 +170,11 @@ if (contentBetweenTerminalAndIntro !== "&nbsp;") {
 const contentBetweenIntroAndTyping = readme.slice(profileIntroIndex + profileIntroTag.length, typingIndex)
 if (contentBetweenIntroAndTyping !== "") {
   fail("static intro and Typing SVG must be directly joined into one sentence")
+}
+
+const contentBetweenTypingAndTagline = readme.slice(typingIndex + typingTag.length, profileTaglineIndex)
+if (contentBetweenTypingAndTagline !== "<br>") {
+  fail("Typing SVG and second-line tagline must be separated by exactly one HTML line break")
 }
 
 if (snakeIndex > metricsIndex) {
@@ -193,6 +232,18 @@ if (!profileIntro.includes(">Hi, I'm @m1ng-wym,<")) {
 
 if (!profileIntro.includes('font-size="24"') || !profileIntro.includes('dominant-baseline="middle"')) {
   fail("static profile intro text must use the approved centered Tiny5 text baseline")
+}
+
+if (!profileTagline.includes('width="733" height="42"')) {
+  fail("static profile tagline does not use the approved dimensions")
+}
+
+if (!profileTagline.includes(`>${profileTaglineText}<`)) {
+  fail("static profile tagline text does not match the approved second line")
+}
+
+if (!profileTagline.includes('x="34"') || !profileTagline.includes('font-size="24"') || !profileTagline.includes('dominant-baseline="middle"')) {
+  fail("static profile tagline must align under the first-line H with the same Tiny5 size")
 }
 
 console.log("profile README asset check ok: inline Tiny5 sentence, terminal icon baseline and loop, dynamic Typing SVG white background, explicit dimensions, and snake placement are valid")
