@@ -5,7 +5,7 @@ import { readFileSync } from "node:fs"
 const readmePath = "README.md"
 const terminalIconPath = "./assets/lucide-terminal-animated.svg"
 const typingSvgUrl =
-  "https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=24&duration=2600&pause=900&color=2C365D&background=FFFFFF&width=720&lines=Full-Stack+Developer;Open+Source+Contributor;AI+Explorer+%26+Creator;Software+Engineering+Student"
+  "https://readme-typing-svg.demolab.com?font=Bytesized&weight=400&size=24&duration=2600&pause=900&color=2C365D&background=FFFFFF&width=720&lines=Full-Stack+Developer;Open+Source+Contributor;AI+Explorer+%26+Creator;Software+Engineering+Student"
 const expectedImages = [
   {
     alt: "Animated terminal icon",
@@ -47,6 +47,10 @@ if (readme.includes("./assets/profile-typing.svg")) {
 
 if (readme.includes("git.io/typing-svg")) {
   fail("README still links to the external Typing SVG landing page")
+}
+
+if (readme.includes("font=Fira+Code")) {
+  fail("README still uses Fira Code for the Typing SVG font")
 }
 
 const imageTags = Array.from(readme.matchAll(/<img\b[^>]*>/g), match => match[0])
