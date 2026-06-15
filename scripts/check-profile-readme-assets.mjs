@@ -5,7 +5,7 @@ import { readFileSync } from "node:fs"
 const readmePath = "README.md"
 const terminalIconPath = "./assets/lucide-terminal-animated.svg"
 const typingSvgUrl =
-  "https://readme-typing-svg.demolab.com?font=Tiny5&weight=400&size=24&duration=2600&pause=900&color=2C365D&background=FFFFFF&width=720&lines=Full-Stack+Developer;Open+Source+Contributor;AI+Explorer+%26+Creator;Software+Engineering+Student"
+  "https://readme-typing-svg.demolab.com?font=Tiny5&weight=400&size=24&duration=2600&pause=900&color=2C365D&background=FFFFFF&width=720&lines=Software+Engineering+Student;Full-Stack+Developer+Intern;AI+Explorer+%26+Creator;Open+Source+Contributor;Occasional+Overthinker"
 const expectedImages = [
   {
     alt: "Animated terminal icon",
