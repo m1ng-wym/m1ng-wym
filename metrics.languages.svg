@@ -84,16 +84,7 @@
     <rect x="16" y="56" width="52" height="4" rx="2" fill="#4988C4"/>
   </g>
 
-  <g class="section-heading section-heading-language">
-    <g class="section-pixels section-pixels-language" transform="translate(24 147)">
-      <rect x="0" y="0" width="8" height="8" rx="1.5" fill="#2C365D"/>
-      <rect x="10" y="0" width="8" height="8" rx="1.5" fill="#4988C4"/>
-      <rect x="20" y="10" width="8" height="8" rx="1.5" fill="#BDE8F5"/>
-    </g>
-    <text x="24" y="173" class="section">Language activity</text>
-    <rect x="24" y="181" width="102" height="3" rx="1.5" fill="#BDE8F5" fill-opacity="0.75"/>
-    <rect x="24" y="181" width="48" height="3" rx="1.5" fill="#4988C4"/>
-  </g>
+  <text x="24" y="173" class="section">Language activity</text>
   <rect class="activity-panel language-panel" x="24" y="185" width="872" height="130" rx="7" fill="url(#activity-panel-fill)" stroke="#d0d7de"/>
   
       <g class="language-row" data-language="Python">
@@ -161,16 +152,7 @@
       <text x="845" y="302" class="language-percent">(1%)</text>
       </g>
 
-  <g class="section-heading section-heading-repo">
-    <g class="section-pixels section-pixels-repo" transform="translate(24 324)">
-      <rect x="0" y="0" width="8" height="8" rx="1.5" fill="#2C365D"/>
-      <rect x="10" y="10" width="8" height="8" rx="1.5" fill="#4988C4"/>
-      <rect x="20" y="0" width="8" height="8" rx="1.5" fill="#BDE8F5"/>
-    </g>
-    <text x="24" y="350" class="section">Repo activity</text>
-    <rect x="24" y="358" width="82" height="3" rx="1.5" fill="#BDE8F5" fill-opacity="0.75"/>
-    <rect x="24" y="358" width="42" height="3" rx="1.5" fill="#2C365D"/>
-  </g>
+  <text x="24" y="350" class="section">Repo activity</text>
   <rect class="activity-panel repo-panel" x="24" y="362" width="872" height="180" rx="7" fill="url(#activity-panel-fill)" stroke="#d0d7de"/>
   <g class="repo-column-labels">
     <text x="500" y="382" class="repo-column-label">COMMITS</text>

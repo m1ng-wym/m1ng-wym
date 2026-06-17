@@ -128,12 +128,12 @@ if (!svg.includes('class="activity-panel repo-panel"')) {
   fail("repo activity is missing the refreshed panel surface")
 }
 
-if (!svg.includes('class="section-pixels section-pixels-language"')) {
-  fail("language activity heading is missing the profile-style pixel accent")
+if (svg.includes("section-pixels")) {
+  fail("section heading pixel accents should be removed while keeping the section titles")
 }
 
-if (!svg.includes('class="section-pixels section-pixels-repo"')) {
-  fail("repo activity heading is missing the profile-style pixel accent")
+if (/<rect x="24" y="[0-9.]+" width="(?:102|82|48|42)" height="3" rx="1\.5"/.test(svg)) {
+  fail("section heading underline bars should be removed while keeping the section titles")
 }
 
 if (!svg.includes('class="repo-column-label"')) {

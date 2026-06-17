@@ -730,29 +730,11 @@ function renderSvg({ repos, totals, displayCommits, titleArtwork, githubIconArtw
     accentColor: languageBarColor,
   })}
 
-  <g class="section-heading section-heading-language">
-    <g class="section-pixels section-pixels-language" transform="translate(24 ${languageStartY - 26})">
-      <rect x="0" y="0" width="8" height="8" rx="1.5" fill="${sectionColor}"/>
-      <rect x="10" y="0" width="8" height="8" rx="1.5" fill="${languageBarColor}"/>
-      <rect x="20" y="10" width="8" height="8" rx="1.5" fill="#BDE8F5"/>
-    </g>
-    <text x="24" y="${languageStartY}" class="section">Language activity</text>
-    <rect x="24" y="${languageStartY + 8}" width="102" height="3" rx="1.5" fill="#BDE8F5" fill-opacity="0.75"/>
-    <rect x="24" y="${languageStartY + 8}" width="48" height="3" rx="1.5" fill="${languageBarColor}"/>
-  </g>
+  <text x="24" y="${languageStartY}" class="section">Language activity</text>
   <rect class="activity-panel language-panel" x="24" y="${languagePanelY}" width="${width - paddingX * 2}" height="${languagePanelHeight}" rx="7" fill="url(#activity-panel-fill)" stroke="#d0d7de"/>
   ${languageRows || `<text x="28" y="${languageStartY + 34}" class="small">No language data found</text>`}
 
-  <g class="section-heading section-heading-repo">
-    <g class="section-pixels section-pixels-repo" transform="translate(24 ${repoStartY - 26})">
-      <rect x="0" y="0" width="8" height="8" rx="1.5" fill="${sectionColor}"/>
-      <rect x="10" y="10" width="8" height="8" rx="1.5" fill="${languageBarColor}"/>
-      <rect x="20" y="0" width="8" height="8" rx="1.5" fill="#BDE8F5"/>
-    </g>
-    <text x="24" y="${repoStartY}" class="section">Repo activity</text>
-    <rect x="24" y="${repoStartY + 8}" width="82" height="3" rx="1.5" fill="#BDE8F5" fill-opacity="0.75"/>
-    <rect x="24" y="${repoStartY + 8}" width="42" height="3" rx="1.5" fill="${sectionColor}"/>
-  </g>
+  <text x="24" y="${repoStartY}" class="section">Repo activity</text>
   <rect class="activity-panel repo-panel" x="24" y="${repoPanelY}" width="${width - paddingX * 2}" height="${repoPanelHeight}" rx="7" fill="url(#activity-panel-fill)" stroke="#d0d7de"/>
   <g class="repo-column-labels">
     <text x="${repoCommitsX}" y="${repoHeaderY}" class="repo-column-label">COMMITS</text>
