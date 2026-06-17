@@ -56,8 +56,12 @@ if (svg.includes('transform="translate(24 19) scale(1)"')) {
   fail("useAnimations GitHub icon is still too small and visually offset from the 24px Tiny5 title")
 }
 
-if (!svg.includes('class="useanimations-github-icon" data-source="https://useanimations.com/animations/github.json" transform="translate(24 18) scale(1.08)"')) {
-  fail("useAnimations GitHub icon is not scaled and vertically aligned with the 24px Tiny5 title")
+if (svg.includes('transform="translate(24 18) scale(1.08)"')) {
+  fail("useAnimations GitHub icon is still visually too tall against the Where title glyphs")
+}
+
+if (!svg.includes('class="useanimations-github-icon" data-source="https://useanimations.com/animations/github.json" transform="translate(24 18) scale(0.95)"')) {
+  fail("useAnimations GitHub icon is not visually aligned with the Where title glyphs")
 }
 
 const iconIndex = svg.indexOf('class="useanimations-github-icon"')
