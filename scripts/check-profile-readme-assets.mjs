@@ -198,11 +198,11 @@ if (!terminalIcon.includes('width="30" height="42" viewBox="0 0 30 42"')) {
   fail("animated terminal icon is not using the approved profile-line viewport")
 }
 
-if (terminalIcon.includes('transform="translate(2 7.2) scale(1.15)"')) {
-  fail("animated terminal icon is still using the old high-floating vertical placement")
+if (terminalIcon.includes('transform="translate(2 8.8) scale(1.15)"')) {
+  fail("animated terminal icon is still using the old low-floating vertical placement")
 }
 
-if (!terminalIcon.includes('transform="translate(2 8.8) scale(1.15)"')) {
+if (!terminalIcon.includes('transform="translate(2 2.4) scale(1.15)"')) {
   fail("animated terminal icon is not vertically balanced against the Tiny5 intro glyphs")
 }
 
