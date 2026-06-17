@@ -604,10 +604,11 @@ function renderSvg({ repos, totals, displayCommits, titleArtwork, githubIconArtw
   const languageSquareCount = Math.max(1, Math.floor((barWidthMax - languageSquareSize) / languageSquareStep) + 1)
   const languageGridWidth = languageSquareSize + (languageSquareCount - 1) * languageSquareStep
   const barX = Math.round((width - languageGridWidth) / 2)
-  const languageLabelX = barX - 35
+  const languageLabelX = barX - 82
+  const languageMarkerX = barX - 58
   const languageTextYOffset = 10
   const languageValueX = barX + languageGridWidth + 35
-  const languagePercentX = languageValueX + 155
+  const languagePercentX = barX - 12
   const repoCommitsX = 500
   const repoPrsX = 635
   const repoLinesX = 720
@@ -663,11 +664,11 @@ function renderSvg({ repos, totals, displayCommits, titleArtwork, githubIconArtw
     return `
       <g class="language-row" data-language="${escapeXml(item.name)}">
       <rect x="40" y="${squareY - 3}" width="840" height="18" rx="4" fill="${rowFill}" opacity="0.72"/>
-      <rect x="${barX - 17}" y="${squareY + 3}" width="6" height="6" rx="1.5" fill="${index < 3 ? languageBarColor : "#BDE8F5"}"/>
+      <rect x="${languageMarkerX}" y="${squareY + 3}" width="6" height="6" rx="1.5" fill="${index < 3 ? languageBarColor : "#BDE8F5"}"/>
       <text x="${languageLabelX}" y="${textY}" class="language-label" text-anchor="end">${escapeXml(item.name)}</text>
+      <text x="${languagePercentX}" y="${textY}" class="language-percent" text-anchor="end">${percent}%</text>
       <g class="language-square-bar" data-language="${escapeXml(item.name)}">${squares}</g>
       <text x="${languageValueX}" y="${textY}" class="language-value">+${formatNumber(item.additions)} / -${formatNumber(item.deletions)} lines</text>
-      <text x="${languagePercentX}" y="${textY}" class="language-percent">(${percent}%)</text>
       </g>`
   }).join("")
 
