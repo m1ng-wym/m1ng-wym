@@ -38,7 +38,7 @@ const expectedImages = [
     alt: "Language activity from authored commits",
     src: "./metrics.languages.svg",
     width: "920",
-    height: "583",
+    height: "560",
   },
   {
     alt: "Contribution snake",
@@ -198,8 +198,12 @@ if (!terminalIcon.includes('width="30" height="42" viewBox="0 0 30 42"')) {
   fail("animated terminal icon is not using the approved profile-line viewport")
 }
 
-if (!terminalIcon.includes('transform="translate(2 7.2) scale(1.15)"')) {
-  fail("animated terminal icon is not vertically aligned with the Typing SVG baseline")
+if (terminalIcon.includes('transform="translate(2 7.2) scale(1.15)"')) {
+  fail("animated terminal icon is still using the old high-floating vertical placement")
+}
+
+if (!terminalIcon.includes('transform="translate(2 8.8) scale(1.15)"')) {
+  fail("animated terminal icon is not vertically balanced against the Tiny5 intro glyphs")
 }
 
 if (!terminalIcon.includes('<line x1="12" y1="19" x2="20" y2="19">')) {

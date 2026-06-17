@@ -120,6 +120,34 @@ if (/<text x="615" y="[0-9.]+" class="small">\+[0-9,]+ \/ -[0-9,]+ lines \([0-9]
   fail("language values still use the old combined crowded text layout")
 }
 
+if (!svg.includes('class="activity-panel language-panel"')) {
+  fail("language activity is missing the refreshed panel surface")
+}
+
+if (!svg.includes('class="activity-panel repo-panel"')) {
+  fail("repo activity is missing the refreshed panel surface")
+}
+
+if (!svg.includes('class="section-pixels section-pixels-language"')) {
+  fail("language activity heading is missing the profile-style pixel accent")
+}
+
+if (!svg.includes('class="section-pixels section-pixels-repo"')) {
+  fail("repo activity heading is missing the profile-style pixel accent")
+}
+
+if (!svg.includes('class="repo-column-label"')) {
+  fail("repo activity is missing compact column labels")
+}
+
+if (!/<g class="language-row" data-language="[^"]+">/.test(svg)) {
+  fail("language activity rows are not grouped for the refreshed layout")
+}
+
+if (!/<g class="repo-row" data-repo="[^"]+">/.test(svg)) {
+  fail("repo activity rows are not grouped for the refreshed layout")
+}
+
 const squareGroups = Array.from(svg.matchAll(/<g class="language-square-bar" data-language="([^"]+)">([\s\S]*?)<\/g>/g))
 
 if (!squareGroups.length) {

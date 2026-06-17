@@ -2,4 +2,4 @@
 
 <img src="https://raw.githubusercontent.com/m1ng-wym/m1ng-wym/output/github-contribution-grid-snake.svg?v=4988c4" alt="Contribution snake" width="880" height="192">
 
-<img src="./metrics.languages.svg" alt="Language activity from authored commits" width="920" height="583">
+<img src="./metrics.languages.svg" alt="Language activity from authored commits" width="920" height="560">

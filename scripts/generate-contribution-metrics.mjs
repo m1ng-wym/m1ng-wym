@@ -611,14 +611,22 @@ function renderSvg({ repos, totals, displayCommits, titleArtwork, githubIconArtw
   const repoCommitsX = 500
   const repoPrsX = 635
   const repoLinesX = 720
-  const repoStartY = languageStartY + 38 + topLanguages.length * languageRowStep
-  const height = repoStartY + 44 + topRepos.length * 26
+  const languagePanelY = languageStartY + 12
+  const languagePanelHeight = topLanguages.length * languageRowStep + 18
+  const repoStartY = languagePanelY + languagePanelHeight + 35
+  const repoPanelY = repoStartY + 12
+  const repoHeaderY = repoStartY + 32
+  const repoRowStartY = repoStartY + 52
+  const repoRowStep = 22
+  const repoPanelHeight = 48 + topRepos.length * repoRowStep
+  const height = repoPanelY + repoPanelHeight + 18
   const maxLanguage = Math.max(1, ...topLanguages.map(item => item.additions))
   const totalLanguageLines = Math.max(1, topLanguages.reduce((sum, item) => sum + item.additions, 0))
   const shownCommits = displayCommits ?? totals.commits
   const sectionColor = "#2C365D"
   const languageBarColor = "#4988C4"
   const languageBarEmptyColor = "#eaeef2"
+  const rowStripeColor = "#f6f8fa"
 
   function renderStatCard({ className, x, label, value, accentColor }) {
     return `<g class="stat-card ${className}" transform="translate(${x} ${cardY})">
@@ -651,21 +659,32 @@ function renderSvg({ repos, totals, displayCommits, titleArtwork, githubIconArtw
       const fill = squareIndex < filledSquares ? languageBarColor : languageBarEmptyColor
       return `<rect x="${squareX}" y="${squareY}" width="${languageSquareSize}" height="${languageSquareSize}" rx="${languageSquareRadius}" ry="${languageSquareRadius}" fill="${fill}" stroke="#ffffff" stroke-width="1"/>`
     }).join("")
+    const rowFill = index % 2 === 0 ? rowStripeColor : "#ffffff"
     return `
+      <g class="language-row" data-language="${escapeXml(item.name)}">
+      <rect x="40" y="${squareY - 3}" width="840" height="18" rx="4" fill="${rowFill}" opacity="0.72"/>
+      <rect x="${barX - 17}" y="${squareY + 3}" width="6" height="6" rx="1.5" fill="${index < 3 ? languageBarColor : "#BDE8F5"}"/>
       <text x="${languageLabelX}" y="${textY}" class="language-label" text-anchor="end">${escapeXml(item.name)}</text>
       <g class="language-square-bar" data-language="${escapeXml(item.name)}">${squares}</g>
       <text x="${languageValueX}" y="${textY}" class="language-value">+${formatNumber(item.additions)} / -${formatNumber(item.deletions)} lines</text>
-      <text x="${languagePercentX}" y="${textY}" class="language-percent">(${percent}%)</text>`
+      <text x="${languagePercentX}" y="${textY}" class="language-percent">(${percent}%)</text>
+      </g>`
   }).join("")
 
   const repoRows = topRepos.map((repo, index) => {
-    const y = repoStartY + 30 + index * 26
+    const y = repoRowStartY + index * repoRowStep
     const name = publicRepoName(repo, index)
+    const rowFill = index % 2 === 0 ? rowStripeColor : "#ffffff"
+    const markerFill = index === 0 ? sectionColor : index === 1 ? languageBarColor : "#BDE8F5"
     return `
-      <text x="28" y="${y}" class="repo">${escapeXml(name)}</text>
+      <g class="repo-row" data-repo="${escapeXml(name)}">
+      <rect x="40" y="${y - 15}" width="840" height="20" rx="4" fill="${rowFill}" opacity="0.72"/>
+      <rect x="52" y="${y - 10}" width="7" height="7" rx="1.5" fill="${markerFill}"/>
+      <text x="66" y="${y}" class="repo">${escapeXml(name)}</text>
       <text x="${repoCommitsX}" y="${y}" class="small">${formatNumber(repo.commits)} commits</text>
       <text x="${repoPrsX}" y="${y}" class="small">${formatNumber(repo.prs)} PRs</text>
-      <text x="${repoLinesX}" y="${y}" class="small">+${formatNumber(repo.additions)} / -${formatNumber(repo.deletions)}</text>`
+      <text x="${repoLinesX}" y="${y}" class="small">+${formatNumber(repo.additions)} / -${formatNumber(repo.deletions)}</text>
+      </g>`
   }).join("")
 
   return `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" role="img" aria-label="Authored GitHub contribution metrics">
@@ -680,9 +699,14 @@ function renderSvg({ repos, totals, displayCommits, titleArtwork, githubIconArtw
     .language-percent { font-size: 10.5px; font-weight: 600; fill: #6e7781; font-variant-numeric: tabular-nums; }
     .repo { font-size: 12px; font-weight: 600; }
     .small { font-size: 12px; fill: #57606a; }
+    .repo-column-label { font-size: 9px; font-weight: 700; fill: #6e7781; letter-spacing: 0; }
   </style>
   <defs>
     <linearGradient id="stat-card-fill" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#f6f8fa"/>
+    </linearGradient>
+    <linearGradient id="activity-panel-fill" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0%" stop-color="#ffffff"/>
       <stop offset="100%" stop-color="#f6f8fa"/>
     </linearGradient>
@@ -706,10 +730,35 @@ function renderSvg({ repos, totals, displayCommits, titleArtwork, githubIconArtw
     accentColor: languageBarColor,
   })}
 
-  <text x="24" y="${languageStartY}" class="section">Language activity</text>
+  <g class="section-heading section-heading-language">
+    <g class="section-pixels section-pixels-language" transform="translate(24 ${languageStartY - 26})">
+      <rect x="0" y="0" width="8" height="8" rx="1.5" fill="${sectionColor}"/>
+      <rect x="10" y="0" width="8" height="8" rx="1.5" fill="${languageBarColor}"/>
+      <rect x="20" y="10" width="8" height="8" rx="1.5" fill="#BDE8F5"/>
+    </g>
+    <text x="24" y="${languageStartY}" class="section">Language activity</text>
+    <rect x="24" y="${languageStartY + 8}" width="102" height="3" rx="1.5" fill="#BDE8F5" fill-opacity="0.75"/>
+    <rect x="24" y="${languageStartY + 8}" width="48" height="3" rx="1.5" fill="${languageBarColor}"/>
+  </g>
+  <rect class="activity-panel language-panel" x="24" y="${languagePanelY}" width="${width - paddingX * 2}" height="${languagePanelHeight}" rx="7" fill="url(#activity-panel-fill)" stroke="#d0d7de"/>
   ${languageRows || `<text x="28" y="${languageStartY + 34}" class="small">No language data found</text>`}
 
-  <text x="24" y="${repoStartY}" class="section">Repo activity</text>
+  <g class="section-heading section-heading-repo">
+    <g class="section-pixels section-pixels-repo" transform="translate(24 ${repoStartY - 26})">
+      <rect x="0" y="0" width="8" height="8" rx="1.5" fill="${sectionColor}"/>
+      <rect x="10" y="10" width="8" height="8" rx="1.5" fill="${languageBarColor}"/>
+      <rect x="20" y="0" width="8" height="8" rx="1.5" fill="#BDE8F5"/>
+    </g>
+    <text x="24" y="${repoStartY}" class="section">Repo activity</text>
+    <rect x="24" y="${repoStartY + 8}" width="82" height="3" rx="1.5" fill="#BDE8F5" fill-opacity="0.75"/>
+    <rect x="24" y="${repoStartY + 8}" width="42" height="3" rx="1.5" fill="${sectionColor}"/>
+  </g>
+  <rect class="activity-panel repo-panel" x="24" y="${repoPanelY}" width="${width - paddingX * 2}" height="${repoPanelHeight}" rx="7" fill="url(#activity-panel-fill)" stroke="#d0d7de"/>
+  <g class="repo-column-labels">
+    <text x="${repoCommitsX}" y="${repoHeaderY}" class="repo-column-label">COMMITS</text>
+    <text x="${repoPrsX}" y="${repoHeaderY}" class="repo-column-label">PRS</text>
+    <text x="${repoLinesX}" y="${repoHeaderY}" class="repo-column-label">LINES</text>
+  </g>
   ${repoRows || `<text x="28" y="${repoStartY + 30}" class="small">No repository data found</text>`}
 </svg>
 `
