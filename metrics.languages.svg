@@ -3,13 +3,20 @@
     text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; fill: #24292f; }
     .title { font-size: 22px; font-weight: 700; }
     .section { font-size: 15px; font-weight: 700; fill: #2C365D; }
-    .metric { font-size: 14px; font-weight: 600; }
+    .metric { font-size: 15px; font-weight: 700; }
+    .stat-label { font-size: 10px; font-weight: 700; fill: #2C365D; }
     .language-label { font-size: 11px; font-weight: 700; }
     .language-value { font-size: 10.5px; font-weight: 500; fill: #57606a; font-variant-numeric: tabular-nums; }
     .language-percent { font-size: 10.5px; font-weight: 600; fill: #6e7781; font-variant-numeric: tabular-nums; }
     .repo { font-size: 12px; font-weight: 600; }
     .small { font-size: 12px; fill: #57606a; }
   </style>
+  <defs>
+    <linearGradient id="stat-card-fill" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#f6f8fa"/>
+    </linearGradient>
+  </defs>
   <rect x="0.5" y="0.5" width="919" height="522" rx="8" fill="#ffffff" stroke="#d0d7de"/>
   <g class="useanimations-github-icon" data-source="https://useanimations.com/animations/github.json" transform="translate(24 18) scale(0.95)" fill="none" stroke="#24292f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
     <path d="M16 22C16 22 16 18.13 16 18.13C16.076 17.165 15.733 16.215 15.06 15.52C18.2 15.17 21.5 13.98 21.5 8.52C21.5 7.124 20.963 5.781 20 4.77C20.456 3.548 20.424 2.198 19.91 1C19.91 1 18.73 0.65 16 2.48C13.708 1.859 11.292 1.859 9 2.48C6.27 0.65 5.09 1 5.09 1C4.576 2.198 4.544 3.548 5 4.77C4.03 5.789 3.493 7.144 3.5 8.55C3.5 13.97 6.8 15.16 9.94 15.55C9.274 16.237 8.933 17.176 9 18.13C9 18.13 9 22 9 22"/>
@@ -40,11 +47,37 @@
 
   </g>
 
-  <rect x="24" y="70" width="274" height="58" rx="6" fill="#f6f8fa"/>
-  <text x="40" y="96" class="metric">550 commits / 21 PRs</text>
+  <g class="stat-card stat-card-commits" transform="translate(24 70)">
+    <rect width="274" height="66" rx="7" fill="url(#stat-card-fill)" stroke="#d0d7de"/>
+    <rect x="0" y="0" width="4" height="66" rx="2" fill="#BDE8F5"/>
+    <rect x="0" y="0" width="4" height="34" rx="2" fill="#2C365D"/>
+    <g class="stat-pixels" transform="translate(230 13)">
+      <rect x="0" y="0" width="8" height="8" rx="1" fill="#2C365D"/>
+      <rect x="10" y="0" width="8" height="8" rx="1" fill="#4988C4"/>
+      <rect x="20" y="0" width="8" height="8" rx="1" fill="#BDE8F5"/>
+      <rect x="30" y="10" width="8" height="8" rx="1" fill="#BDE8F5"/>
+    </g>
+    <text x="16" y="25" class="stat-label">Commits + PRs</text>
+    <text x="16" y="48" class="metric">550 commits / 21 PRs</text>
+    <rect x="16" y="56" width="86" height="4" rx="2" fill="#BDE8F5" fill-opacity="0.7"/>
+    <rect x="16" y="56" width="52" height="4" rx="2" fill="#2C365D"/>
+  </g>
 
-  <rect x="322" y="70" width="274" height="58" rx="6" fill="#f6f8fa"/>
-  <text x="338" y="96" class="metric">+289,817 / -32,673 lines</text>
+  <g class="stat-card stat-card-lines" transform="translate(322 70)">
+    <rect width="274" height="66" rx="7" fill="url(#stat-card-fill)" stroke="#d0d7de"/>
+    <rect x="0" y="0" width="4" height="66" rx="2" fill="#BDE8F5"/>
+    <rect x="0" y="0" width="4" height="34" rx="2" fill="#4988C4"/>
+    <g class="stat-pixels" transform="translate(230 13)">
+      <rect x="0" y="0" width="8" height="8" rx="1" fill="#2C365D"/>
+      <rect x="10" y="0" width="8" height="8" rx="1" fill="#4988C4"/>
+      <rect x="20" y="0" width="8" height="8" rx="1" fill="#BDE8F5"/>
+      <rect x="30" y="10" width="8" height="8" rx="1" fill="#BDE8F5"/>
+    </g>
+    <text x="16" y="25" class="stat-label">Line Delta</text>
+    <text x="16" y="48" class="metric">+289,817 / -32,673 lines</text>
+    <rect x="16" y="56" width="86" height="4" rx="2" fill="#BDE8F5" fill-opacity="0.7"/>
+    <rect x="16" y="56" width="52" height="4" rx="2" fill="#4988C4"/>
+  </g>
 
   <text x="24" y="173" class="section">Language activity</text>
   

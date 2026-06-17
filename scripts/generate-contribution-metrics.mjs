@@ -620,6 +620,24 @@ function renderSvg({ repos, totals, displayCommits, titleArtwork, githubIconArtw
   const languageBarColor = "#4988C4"
   const languageBarEmptyColor = "#eaeef2"
 
+  function renderStatCard({ className, x, label, value, accentColor }) {
+    return `<g class="stat-card ${className}" transform="translate(${x} ${cardY})">
+    <rect width="${cardWidth}" height="66" rx="7" fill="url(#stat-card-fill)" stroke="#d0d7de"/>
+    <rect x="0" y="0" width="4" height="66" rx="2" fill="#BDE8F5"/>
+    <rect x="0" y="0" width="4" height="34" rx="2" fill="${accentColor}"/>
+    <g class="stat-pixels" transform="translate(${cardWidth - 44} 13)">
+      <rect x="0" y="0" width="8" height="8" rx="1" fill="#2C365D"/>
+      <rect x="10" y="0" width="8" height="8" rx="1" fill="#4988C4"/>
+      <rect x="20" y="0" width="8" height="8" rx="1" fill="#BDE8F5"/>
+      <rect x="30" y="10" width="8" height="8" rx="1" fill="#BDE8F5"/>
+    </g>
+    <text x="16" y="25" class="stat-label">${label}</text>
+    <text x="16" y="48" class="metric">${value}</text>
+    <rect x="16" y="56" width="86" height="4" rx="2" fill="#BDE8F5" fill-opacity="0.7"/>
+    <rect x="16" y="56" width="52" height="4" rx="2" fill="${accentColor}"/>
+  </g>`
+  }
+
   const languageRows = topLanguages.map((item, index) => {
     const y = languageStartY + 34 + index * languageRowStep
     const filledSquares = item.additions || item.deletions
@@ -655,21 +673,38 @@ function renderSvg({ repos, totals, displayCommits, titleArtwork, githubIconArtw
     text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; fill: #24292f; }
     .title { font-size: 22px; font-weight: 700; }
     .section { font-size: 15px; font-weight: 700; fill: ${sectionColor}; }
-    .metric { font-size: 14px; font-weight: 600; }
+    .metric { font-size: 15px; font-weight: 700; }
+    .stat-label { font-size: 10px; font-weight: 700; fill: ${sectionColor}; }
     .language-label { font-size: 11px; font-weight: 700; }
     .language-value { font-size: 10.5px; font-weight: 500; fill: #57606a; font-variant-numeric: tabular-nums; }
     .language-percent { font-size: 10.5px; font-weight: 600; fill: #6e7781; font-variant-numeric: tabular-nums; }
     .repo { font-size: 12px; font-weight: 600; }
     .small { font-size: 12px; fill: #57606a; }
   </style>
+  <defs>
+    <linearGradient id="stat-card-fill" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#f6f8fa"/>
+    </linearGradient>
+  </defs>
   <rect x="0.5" y="0.5" width="${width - 1}" height="${height - 1}" rx="8" fill="#ffffff" stroke="#d0d7de"/>
   ${renderTitleHeader({ titleArtwork, githubIconArtwork })}
 
-  <rect x="${paddingX}" y="${cardY}" width="${cardWidth}" height="58" rx="6" fill="#f6f8fa"/>
-  <text x="${paddingX + 16}" y="${cardY + 26}" class="metric">${formatNumber(shownCommits)} commits / ${formatNumber(totals.prs)} PRs</text>
+  ${renderStatCard({
+    className: "stat-card-commits",
+    x: paddingX,
+    label: "Commits + PRs",
+    value: `${formatNumber(shownCommits)} commits / ${formatNumber(totals.prs)} PRs`,
+    accentColor: sectionColor,
+  })}
 
-  <rect x="${paddingX + cardWidth + cardGap}" y="${cardY}" width="${cardWidth}" height="58" rx="6" fill="#f6f8fa"/>
-  <text x="${paddingX + cardWidth + cardGap + 16}" y="${cardY + 26}" class="metric">+${formatNumber(totals.additions)} / -${formatNumber(totals.deletions)} lines</text>
+  ${renderStatCard({
+    className: "stat-card-lines",
+    x: paddingX + cardWidth + cardGap,
+    label: "Line Delta",
+    value: `+${formatNumber(totals.additions)} / -${formatNumber(totals.deletions)} lines`,
+    accentColor: languageBarColor,
+  })}
 
   <text x="24" y="${languageStartY}" class="section">Language activity</text>
   ${languageRows || `<text x="28" y="${languageStartY + 34}" class="small">No language data found</text>`}
