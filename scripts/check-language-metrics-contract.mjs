@@ -52,8 +52,12 @@ if (svg.includes('transform="translate(318 17) scale(0.82)"') || svg.includes('t
   fail("useAnimations GitHub icon is still using the old right-side placement")
 }
 
-if (!svg.includes('class="useanimations-github-icon" data-source="https://useanimations.com/animations/github.json" transform="translate(24 19) scale(1)"')) {
-  fail("useAnimations GitHub icon is not positioned on the left with the requested downward adjustment")
+if (svg.includes('transform="translate(24 19) scale(1)"')) {
+  fail("useAnimations GitHub icon is still too small and visually offset from the 24px Tiny5 title")
+}
+
+if (!svg.includes('class="useanimations-github-icon" data-source="https://useanimations.com/animations/github.json" transform="translate(24 18) scale(1.08)"')) {
+  fail("useAnimations GitHub icon is not scaled and vertically aligned with the 24px Tiny5 title")
 }
 
 const iconIndex = svg.indexOf('class="useanimations-github-icon"')

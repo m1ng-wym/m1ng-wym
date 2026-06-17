@@ -524,9 +524,9 @@ function renderUseAnimationsGithubIcon(animation) {
     })
     .join(";")
   const duration = `${formatPathNumber((animation.op - animation.ip) / animation.fr)}s`
-  const scale = 1
+  const scale = 1.08
 
-  return `<g class="useanimations-github-icon" data-source="https://useanimations.com/animations/github.json" transform="translate(24 19) scale(${scale})" fill="none" stroke="#24292f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  return `<g class="useanimations-github-icon" data-source="https://useanimations.com/animations/github.json" transform="translate(24 18) scale(${scale})" fill="none" stroke="#24292f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
     <path d="${bodyPath}"/>
     <path d="${tailPaths[0]}">
       <animate attributeName="d" dur="${duration}" repeatCount="indefinite" calcMode="spline" keyTimes="${keyTimes}" keySplines="${keySplines}" values="${tailPaths.join(";")}"/>
