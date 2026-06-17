@@ -41,7 +41,7 @@
   </g>
 
   <rect x="24" y="70" width="274" height="58" rx="6" fill="#f6f8fa"/>
-  <text x="40" y="96" class="metric">548 commits / 21 PRs</text>
+  <text x="40" y="96" class="metric">550 commits / 21 PRs</text>
 
   <rect x="322" y="70" width="274" height="58" rx="6" fill="#f6f8fa"/>
   <text x="338" y="96" class="metric">+289,800 / -32,664 lines</text>
