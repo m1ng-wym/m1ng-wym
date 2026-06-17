@@ -12,8 +12,7 @@ const expectedSquareRadius = 2
 const expectedSquareStep = 14
 const expectedLanguageRowStep = expectedSquareSize + 2
 const expectedLanguageTextYOffset = 10
-const expectedLanguageLabelX = 183
-const expectedLanguageMarkerX = 207
+const expectedLanguageLabelX = 220
 const expectedLanguageValueX = 690
 const expectedLanguagePercentX = 253
 const expectedLanguageBarX = 265
@@ -125,6 +124,10 @@ if (/<text x="[0-9.]+" y="[0-9.]+" class="language-percent"[^>]*>\([0-9]+%\)<\/t
   fail("language percentages should move left of the square bars without parentheses")
 }
 
+if (/<g class="language-row" data-language="[^"]+">[\s\S]*?<rect x="[0-9.]+" y="[0-9.]+" width="6" height="6" rx="1\.5"/.test(svg)) {
+  fail("standalone language marker squares should be removed from the language activity rows")
+}
+
 if (!svg.includes('class="activity-panel language-panel"')) {
   fail("language activity is missing the refreshed panel surface")
 }
@@ -210,7 +213,6 @@ if (Number(firstLanguageSquares[0]?.[1]) !== expectedLanguageBarX) {
 const languageLabelMatches = Array.from(svg.matchAll(new RegExp(`<text x="${expectedLanguageLabelX}" y="([0-9.]+)" class="language-label" text-anchor="end">([^<]+)<\\/text>`, "g")))
 const languageValueMatches = Array.from(svg.matchAll(new RegExp(`<text x="${expectedLanguageValueX}" y="([0-9.]+)" class="language-value">\\+[0-9,]+ \\/ -[0-9,]+ lines<\\/text>`, "g")))
 const languagePercentMatches = Array.from(svg.matchAll(new RegExp(`<text x="${expectedLanguagePercentX}" y="([0-9.]+)" class="language-percent" text-anchor="end">[0-9]+%<\\/text>`, "g")))
-const languageMarkerMatches = Array.from(svg.matchAll(new RegExp(`<rect x="${expectedLanguageMarkerX}" y="([0-9.]+)" width="6" height="6" rx="1\\.5" fill="(?:${expectedLanguageBarColor}|#BDE8F5)"\\/>`, "g")))
 
 if (expectedLanguagePercentX >= expectedLanguageBarX) {
   fail(`language percentages should stay left of the square bars: percent x=${expectedLanguagePercentX}, bar x=${expectedLanguageBarX}`)
@@ -228,10 +230,6 @@ if (languagePercentMatches.length !== squareGroups.length) {
   fail(`language percent count is ${languagePercentMatches.length}, expected ${squareGroups.length}`)
 }
 
-if (languageMarkerMatches.length !== squareGroups.length) {
-  fail(`language marker count is ${languageMarkerMatches.length}, expected ${squareGroups.length}`)
-}
-
 for (let index = 1; index < squareRowYs.length; index += 1) {
   const rowStep = squareRowYs[index] - squareRowYs[index - 1]
   if (rowStep !== expectedLanguageRowStep) {
@@ -245,14 +243,9 @@ for (let index = 0; index < squareGroups.length; index += 1) {
   const [, labelY, labelText] = languageLabelMatches[index]
   const [, valueY] = languageValueMatches[index]
   const [, percentY] = languagePercentMatches[index]
-  const [, markerY] = languageMarkerMatches[index]
 
   if (labelText !== expectedLanguage) {
     fail(`language label ${labelText} is not aligned with square row ${expectedLanguage}`)
-  }
-
-  if (Number(markerY) !== squareRowYs[index] + 3) {
-    fail(`${expectedLanguage} marker y is ${markerY}, expected ${squareRowYs[index] + 3} to remain aligned with the square row`)
   }
 
   for (const [kind, actualY] of [["label", labelY], ["value", valueY], ["percent", percentY]]) {
