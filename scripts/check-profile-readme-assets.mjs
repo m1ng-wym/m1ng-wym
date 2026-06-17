@@ -206,7 +206,11 @@ if (terminalIcon.includes('transform="translate(2 2.4) scale(1.15)"')) {
   fail("animated terminal icon is still using the oversized high-floating placement")
 }
 
-if (!terminalIcon.includes('transform="translate(3 6) scale(1)"')) {
+if (terminalIcon.includes('transform="translate(3 6) scale(1)"')) {
+  fail("animated terminal icon is still using the slightly high placement")
+}
+
+if (!terminalIcon.includes('transform="translate(3 7.4) scale(1)"')) {
   fail("animated terminal icon is not sized and vertically balanced against the Tiny5 intro glyphs")
 }
 
@@ -214,8 +218,8 @@ if (!terminalIcon.includes('<line x1="12" y1="19" x2="20" y2="19">')) {
   fail("animated terminal icon is missing the cursor line")
 }
 
-if (!terminalIcon.includes('<animate attributeName="opacity" values="1;0;1" dur="1.333s" repeatCount="indefinite"/>')) {
-  fail("animated terminal icon cursor is not configured to loop at 0.6x speed")
+if (!terminalIcon.includes('<animate attributeName="opacity" values="1;0;1" dur="2.6s" repeatCount="indefinite"/>')) {
+  fail("animated terminal icon cursor is not configured to loop with the 2600ms typing cadence")
 }
 
 if (!profileIntro.includes("id=\"tiny5-profile-intro\" aria-label=\"Hi, I'm @m1ng-wym,\" data-font=\"Tiny5\"")) {
