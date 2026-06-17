@@ -202,8 +202,12 @@ if (terminalIcon.includes('transform="translate(2 8.8) scale(1.15)"')) {
   fail("animated terminal icon is still using the old low-floating vertical placement")
 }
 
-if (!terminalIcon.includes('transform="translate(2 2.4) scale(1.15)"')) {
-  fail("animated terminal icon is not vertically balanced against the Tiny5 intro glyphs")
+if (terminalIcon.includes('transform="translate(2 2.4) scale(1.15)"')) {
+  fail("animated terminal icon is still using the oversized high-floating placement")
+}
+
+if (!terminalIcon.includes('transform="translate(3 6) scale(1)"')) {
+  fail("animated terminal icon is not sized and vertically balanced against the Tiny5 intro glyphs")
 }
 
 if (!terminalIcon.includes('<line x1="12" y1="19" x2="20" y2="19">')) {
