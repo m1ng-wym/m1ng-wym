@@ -79,7 +79,7 @@
       <rect x="30" y="10" width="8" height="8" rx="1" fill="#BDE8F5"/>
     </g>
     <text x="16" y="25" class="stat-label">Line Delta</text>
-    <text x="16" y="48" class="metric">+290,224 / -32,852 lines</text>
+    <text x="16" y="48" class="metric">+290,227 / -32,852 lines</text>
     <rect x="16" y="56" width="86" height="4" rx="2" fill="#BDE8F5" fill-opacity="0.7"/>
     <rect x="16" y="56" width="52" height="4" rx="2" fill="#4988C4"/>
   </g>
@@ -196,8 +196,8 @@
       <rect x="40" y="497" width="840" height="20" rx="4" fill="#ffffff" opacity="0.72"/>
       <rect x="52" y="502" width="7" height="7" rx="1.5" fill="#BDE8F5"/>
       <text x="66" y="512" class="repo">m1ng-wym/Notes</text>
-      <text x="500" y="512" class="small">3 commits</text>
+      <text x="500" y="512" class="small">4 commits</text>
       <text x="635" y="512" class="small">0 PRs</text>
-      <text x="720" y="512" class="small">+26 / -1</text>
+      <text x="720" y="512" class="small">+29 / -1</text>
       </g>
 </svg>
