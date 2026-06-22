@@ -1,14 +1,14 @@
 {
-  "generatedAt": "2026-06-22T15:28:35.978Z",
+  "generatedAt": "2026-06-22T16:53:40.160Z",
   "user": "m1ng-wym",
   "summary": {
     "repositories": 22,
-    "commits": 523,
+    "commits": 556,
     "pullRequests": 22,
-    "additions": 301021,
-    "deletions": 35824,
-    "files": 4564,
-    "ownCommits": 362,
+    "additions": 309170,
+    "deletions": 41891,
+    "files": 4741,
+    "ownCommits": 395,
     "externalCommits": 161,
     "languages": [
       {
@@ -25,9 +25,9 @@
       },
       {
         "name": "JavaScript",
-        "additions": 24241,
-        "deletions": 6324,
-        "files": 1773
+        "additions": 24287,
+        "deletions": 6346,
+        "files": 1776
       },
       {
         "name": "HTML",
@@ -37,15 +37,21 @@
       },
       {
         "name": "JSON",
-        "additions": 4857,
+        "additions": 4863,
         "deletions": 616,
-        "files": 104
+        "files": 111
+      },
+      {
+        "name": "Swift",
+        "additions": 4338,
+        "deletions": 73,
+        "files": 86
       },
       {
         "name": "Other",
-        "additions": 3856,
-        "deletions": 782,
-        "files": 208
+        "additions": 3911,
+        "deletions": 842,
+        "files": 216
       },
       {
         "name": "YAML",
@@ -58,6 +64,12 @@
         "additions": 925,
         "deletions": 0,
         "files": 3
+      },
+      {
+        "name": "Shell",
+        "additions": 758,
+        "deletions": 13,
+        "files": 8
       },
       {
         "name": "CSS",
@@ -78,12 +90,6 @@
         "files": 18
       },
       {
-        "name": "Swift",
-        "additions": 75,
-        "deletions": 0,
-        "files": 3
-      },
-      {
         "name": "Java",
         "additions": 27,
         "deletions": 14,
@@ -91,9 +97,9 @@
       },
       {
         "name": "TOML",
-        "additions": 13,
+        "additions": 24,
         "deletions": 0,
-        "files": 1
+        "files": 2
       }
     ]
   },
@@ -176,23 +182,23 @@
       "highlighted": false,
       "private": false,
       "own": true,
-      "commits": 80,
+      "commits": 81,
       "prs": 0,
-      "additions": 4910,
-      "deletions": 2245,
-      "files": 217,
+      "additions": 4959,
+      "deletions": 2328,
+      "files": 222,
       "languages": [
         {
           "name": "JavaScript",
-          "additions": 2171,
-          "deletions": 698,
-          "files": 81
+          "additions": 2217,
+          "deletions": 720,
+          "files": 84
         },
         {
           "name": "Other",
-          "additions": 1248,
-          "deletions": 623,
-          "files": 53
+          "additions": 1250,
+          "deletions": 683,
+          "files": 54
         },
         {
           "name": "JSON",
@@ -209,28 +215,34 @@
       ]
     },
     {
-      "nameWithOwner": "m1ng-wym/Notes",
-      "highlighted": false,
-      "private": false,
-      "own": true,
-      "commits": 5,
-      "prs": 0,
-      "additions": 30,
-      "deletions": 3,
-      "files": 5,
-      "languages": []
-    },
-    {
       "nameWithOwner": "m1ng-wym/walkflow-mac",
       "highlighted": false,
       "private": false,
       "own": true,
-      "commits": 3,
+      "commits": 34,
       "prs": 0,
-      "additions": 3905,
-      "deletions": 529,
-      "files": 25,
+      "additions": 12002,
+      "deletions": 6512,
+      "files": 196,
       "languages": [
+        {
+          "name": "Swift",
+          "additions": 4263,
+          "deletions": 73,
+          "files": 83
+        },
+        {
+          "name": "Shell",
+          "additions": 758,
+          "deletions": 13,
+          "files": 8
+        },
+        {
+          "name": "Other",
+          "additions": 64,
+          "deletions": 2,
+          "files": 13
+        },
         {
           "name": "HTML",
           "additions": 43,
@@ -238,12 +250,30 @@
           "files": 6
         },
         {
-          "name": "Other",
+          "name": "TOML",
           "additions": 11,
-          "deletions": 2,
-          "files": 6
+          "deletions": 0,
+          "files": 1
+        },
+        {
+          "name": "JSON",
+          "additions": 6,
+          "deletions": 0,
+          "files": 7
         }
       ]
+    },
+    {
+      "nameWithOwner": "m1ng-wym/Notes",
+      "highlighted": false,
+      "private": false,
+      "own": true,
+      "commits": 6,
+      "prs": 0,
+      "additions": 33,
+      "deletions": 4,
+      "files": 6,
+      "languages": []
     },
     {
       "nameWithOwner": "m1ng-wym/collection-ai",
