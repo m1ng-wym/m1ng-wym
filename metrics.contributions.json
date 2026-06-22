@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-21T19:22:10.645Z",
+  "generatedAt": "2026-06-22T07:23:06.931Z",
   "user": "m1ng-wym",
   "summary": {
     "repositories": 22,
@@ -172,18 +172,6 @@
       ]
     },
     {
-      "nameWithOwner": "m1ng-wym/Notes",
-      "highlighted": false,
-      "private": false,
-      "own": true,
-      "commits": 5,
-      "prs": 0,
-      "additions": 30,
-      "deletions": 3,
-      "files": 5,
-      "languages": []
-    },
-    {
       "nameWithOwner": "m1ng-wym/m1ng-wym",
       "highlighted": false,
       "private": false,
@@ -219,6 +207,18 @@
           "files": 27
         }
       ]
+    },
+    {
+      "nameWithOwner": "m1ng-wym/Notes",
+      "highlighted": false,
+      "private": false,
+      "own": true,
+      "commits": 5,
+      "prs": 0,
+      "additions": 30,
+      "deletions": 3,
+      "files": 5,
+      "languages": []
     },
     {
       "nameWithOwner": "m1ng-wym/walkflow-mac",
