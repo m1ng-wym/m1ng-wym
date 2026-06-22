@@ -16,6 +16,7 @@ const expectedLanguageLabelX = 220
 const expectedLanguageValueX = 690
 const expectedLanguagePercentX = 253
 const expectedLanguageBarX = 265
+const expectedSvgHeight = 333
 
 function fail(message) {
   console.error(`language metrics contract failed: ${message}`)
@@ -132,8 +133,12 @@ if (!svg.includes('class="activity-panel language-panel"')) {
   fail("language activity is missing the refreshed panel surface")
 }
 
-if (!svg.includes('class="activity-panel repo-panel"')) {
-  fail("repo activity is missing the refreshed panel surface")
+if (svg.includes(">Repo activity<")) {
+  fail("repo activity heading should be hidden from the profile metrics SVG")
+}
+
+if (svg.includes('class="activity-panel repo-panel"')) {
+  fail("repo activity panel should be hidden from the profile metrics SVG")
 }
 
 if (svg.includes("section-pixels")) {
@@ -144,16 +149,16 @@ if (/<rect x="24" y="[0-9.]+" width="(?:102|82|48|42)" height="3" rx="1\.5"/.tes
   fail("section heading underline bars should be removed while keeping the section titles")
 }
 
-if (!svg.includes('class="repo-column-label"')) {
-  fail("repo activity is missing compact column labels")
+if (svg.includes('class="repo-column-label"')) {
+  fail("repo activity column labels should be hidden from the profile metrics SVG")
 }
 
 if (!/<g class="language-row" data-language="[^"]+">/.test(svg)) {
   fail("language activity rows are not grouped for the refreshed layout")
 }
 
-if (!/<g class="repo-row" data-repo="[^"]+">/.test(svg)) {
-  fail("repo activity rows are not grouped for the refreshed layout")
+if (/<g class="repo-row" data-repo="[^"]+">/.test(svg)) {
+  fail("repo activity rows should be hidden from the profile metrics SVG")
 }
 
 const squareGroups = Array.from(svg.matchAll(/<g class="language-square-bar" data-language="([^"]+)">([\s\S]*?)<\/g>/g))
@@ -293,8 +298,22 @@ if (svg.includes('<rect x="620" y="70" width="274" height="58" rx="6" fill="#f6f
   fail("summary card layout still leaves the first card slot empty")
 }
 
+const svgDimensions = svg.match(/^<svg[^>]*width="([0-9]+)" height="([0-9]+)" viewBox="0 0 ([0-9]+) ([0-9]+)"/)
+if (!svgDimensions) {
+  fail("metrics SVG does not expose explicit width, height, and viewBox dimensions")
+}
+
+const [, svgWidth, svgHeight, viewBoxWidth, viewBoxHeight] = svgDimensions
+if (svgWidth !== "920" || viewBoxWidth !== "920") {
+  fail(`metrics SVG width/viewBox width is ${svgWidth}/${viewBoxWidth}, expected 920/920`)
+}
+
+if (Number(svgHeight) !== expectedSvgHeight || Number(viewBoxHeight) !== expectedSvgHeight) {
+  fail(`metrics SVG height/viewBox height is ${svgHeight}/${viewBoxHeight}, expected ${expectedSvgHeight}`)
+}
+
 if (svg.includes("changed files")) {
   fail("changed files subtitle is still present")
 }
 
-console.log("language metrics contract ok: title icon alignment, summary card alignment, language text layout, and language row spacing are valid")
+console.log("language metrics contract ok: title icon alignment, summary card alignment, language text layout, hidden repo activity, and language row spacing are valid")

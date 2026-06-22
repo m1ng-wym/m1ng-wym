@@ -10,6 +10,7 @@ const maxRepos = Number.parseInt(process.env.METRICS_REPOSITORY_LIMIT || "300", 
 const maxCommitsPerRepo = Number.parseInt(process.env.METRICS_COMMIT_LIMIT_PER_REPO || "2000", 10)
 const requestTimeout = Number.parseInt(process.env.METRICS_REQUEST_TIMEOUT || "30000", 10)
 const requestConcurrency = Number.parseInt(process.env.METRICS_REQUEST_CONCURRENCY || "6", 10)
+const showRepoActivity = process.env.METRICS_SHOW_REPO_ACTIVITY === "1"
 
 if (!token) {
   throw new Error("Missing GH_TOKEN, GITHUB_TOKEN, or METRICS_TOKEN")
@@ -619,7 +620,7 @@ function renderSvg({ repos, totals, displayCommits, titleArtwork, githubIconArtw
   const repoRowStartY = repoStartY + 52
   const repoRowStep = 22
   const repoPanelHeight = 48 + topRepos.length * repoRowStep
-  const height = repoPanelY + repoPanelHeight + 18
+  const height = showRepoActivity ? repoPanelY + repoPanelHeight + 18 : languagePanelY + languagePanelHeight + 18
   const maxLanguage = Math.max(1, ...topLanguages.map(item => item.additions))
   const totalLanguageLines = Math.max(1, topLanguages.reduce((sum, item) => sum + item.additions, 0))
   const shownCommits = displayCommits ?? totals.commits
@@ -627,6 +628,9 @@ function renderSvg({ repos, totals, displayCommits, titleArtwork, githubIconArtw
   const languageBarColor = "#4988C4"
   const languageBarEmptyColor = "#eaeef2"
   const rowStripeColor = "#f6f8fa"
+  const repoStyles = showRepoActivity ? `
+    .repo { font-size: 12px; font-weight: 600; }
+    .repo-column-label { font-size: 9px; font-weight: 700; fill: #6e7781; letter-spacing: 0; }` : ""
 
   function renderStatCard({ className, x, label, value, accentColor }) {
     return `<g class="stat-card ${className}" transform="translate(${x} ${cardY})">
@@ -670,7 +674,7 @@ function renderSvg({ repos, totals, displayCommits, titleArtwork, githubIconArtw
       </g>`
   }).join("")
 
-  const repoRows = topRepos.map((repo, index) => {
+  const repoRows = showRepoActivity ? topRepos.map((repo, index) => {
     const y = repoRowStartY + index * repoRowStep
     const name = publicRepoName(repo, index)
     const rowFill = index % 2 === 0 ? rowStripeColor : "#ffffff"
@@ -684,7 +688,17 @@ function renderSvg({ repos, totals, displayCommits, titleArtwork, githubIconArtw
       <text x="${repoPrsX}" y="${y}" class="small">${formatNumber(repo.prs)} PRs</text>
       <text x="${repoLinesX}" y="${y}" class="small">+${formatNumber(repo.additions)} / -${formatNumber(repo.deletions)}</text>
       </g>`
-  }).join("")
+  }).join("") : ""
+
+  const repoActivitySection = showRepoActivity ? `
+  <text x="24" y="${repoStartY}" class="section">Repo activity</text>
+  <rect class="activity-panel repo-panel" x="24" y="${repoPanelY}" width="${width - paddingX * 2}" height="${repoPanelHeight}" rx="7" fill="url(#activity-panel-fill)" stroke="#d0d7de"/>
+  <g class="repo-column-labels">
+    <text x="${repoCommitsX}" y="${repoHeaderY}" class="repo-column-label">COMMITS</text>
+    <text x="${repoPrsX}" y="${repoHeaderY}" class="repo-column-label">PRS</text>
+    <text x="${repoLinesX}" y="${repoHeaderY}" class="repo-column-label">LINES</text>
+  </g>
+  ${repoRows || `<text x="28" y="${repoStartY + 30}" class="small">No repository data found</text>`}` : ""
 
   return `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" role="img" aria-label="Authored GitHub contribution metrics">
   <style>
@@ -696,9 +710,8 @@ function renderSvg({ repos, totals, displayCommits, titleArtwork, githubIconArtw
     .language-label { font-size: 11px; font-weight: 700; }
     .language-value { font-size: 10.5px; font-weight: 500; fill: #57606a; font-variant-numeric: tabular-nums; }
     .language-percent { font-size: 10.5px; font-weight: 600; fill: #6e7781; font-variant-numeric: tabular-nums; }
-    .repo { font-size: 12px; font-weight: 600; }
     .small { font-size: 12px; fill: #57606a; }
-    .repo-column-label { font-size: 9px; font-weight: 700; fill: #6e7781; letter-spacing: 0; }
+    ${repoStyles}
   </style>
   <defs>
     <linearGradient id="stat-card-fill" x1="0" y1="0" x2="1" y2="1">
@@ -732,15 +745,7 @@ function renderSvg({ repos, totals, displayCommits, titleArtwork, githubIconArtw
   <text x="24" y="${languageStartY}" class="section">Language activity</text>
   <rect class="activity-panel language-panel" x="24" y="${languagePanelY}" width="${width - paddingX * 2}" height="${languagePanelHeight}" rx="7" fill="url(#activity-panel-fill)" stroke="#d0d7de"/>
   ${languageRows || `<text x="28" y="${languageStartY + 34}" class="small">No language data found</text>`}
-
-  <text x="24" y="${repoStartY}" class="section">Repo activity</text>
-  <rect class="activity-panel repo-panel" x="24" y="${repoPanelY}" width="${width - paddingX * 2}" height="${repoPanelHeight}" rx="7" fill="url(#activity-panel-fill)" stroke="#d0d7de"/>
-  <g class="repo-column-labels">
-    <text x="${repoCommitsX}" y="${repoHeaderY}" class="repo-column-label">COMMITS</text>
-    <text x="${repoPrsX}" y="${repoHeaderY}" class="repo-column-label">PRS</text>
-    <text x="${repoLinesX}" y="${repoHeaderY}" class="repo-column-label">LINES</text>
-  </g>
-  ${repoRows || `<text x="28" y="${repoStartY + 30}" class="small">No repository data found</text>`}
+  ${repoActivitySection}
 </svg>
 `
 }

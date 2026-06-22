@@ -38,7 +38,7 @@ const expectedImages = [
     alt: "Language activity from authored commits",
     src: "./metrics.languages.svg",
     width: "920",
-    height: "560",
+    height: "333",
   },
   {
     alt: "Contribution snake",
