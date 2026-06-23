@@ -4,31 +4,24 @@ import { existsSync, readFileSync } from "node:fs"
 
 const profileAssetsWorkflowPath = ".github/workflows/profile-assets-contract.yml"
 const metricsWorkflowPath = ".github/workflows/metrics.yml"
+const renderMetricsOverviewWorkflowPath = ".github/workflows/render-metrics-overview.yml"
 const snakeWorkflowPath = ".github/workflows/snake.yml"
 const dependabotPath = ".github/dependabot.yml"
 
-const pinnedActions = [
-  {
-    file: metricsWorkflowPath,
-    mutable: "actions/checkout@v4",
-    pinned: "actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5",
-  },
-  {
-    file: metricsWorkflowPath,
-    mutable: "actions/setup-node@v4",
-    pinned: "actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
-  },
-  {
-    file: snakeWorkflowPath,
-    mutable: "Platane/snk/svg-only@v3",
-    pinned: "Platane/snk/svg-only@d8f6715049803e982ee5ff501b6b9b7d5deeb09b",
-  },
-  {
-    file: snakeWorkflowPath,
-    mutable: "crazy-max/ghaction-github-pages@v4",
-    pinned: "crazy-max/ghaction-github-pages@df5cc2bfa78282ded844b354faee141f06b41865",
-  },
+const workflowPaths = [
+  profileAssetsWorkflowPath,
+  metricsWorkflowPath,
+  renderMetricsOverviewWorkflowPath,
+  snakeWorkflowPath,
 ]
+
+const managedActions = new Set([
+  "actions/checkout",
+  "actions/setup-node",
+  "actions/upload-artifact",
+  "Platane/snk/svg-only",
+  "crazy-max/ghaction-github-pages",
+])
 
 function fail(message) {
   console.error(`profile workflow contract failed: ${message}`)
@@ -45,8 +38,16 @@ function readRequiredFile(filePath, label) {
 
 const profileAssetsWorkflow = readRequiredFile(profileAssetsWorkflowPath, "profile assets contract workflow")
 const metricsWorkflow = readRequiredFile(metricsWorkflowPath, "metrics workflow")
+const renderMetricsOverviewWorkflow = readRequiredFile(renderMetricsOverviewWorkflowPath, "render metrics overview workflow")
 const snakeWorkflow = readRequiredFile(snakeWorkflowPath, "snake workflow")
 const dependabot = readRequiredFile(dependabotPath, "Dependabot config")
+
+const workflowContents = new Map([
+  [profileAssetsWorkflowPath, profileAssetsWorkflow],
+  [metricsWorkflowPath, metricsWorkflow],
+  [renderMetricsOverviewWorkflowPath, renderMetricsOverviewWorkflow],
+  [snakeWorkflowPath, snakeWorkflow],
+])
 
 for (const required of [
   "name: Profile assets contract",
@@ -57,6 +58,7 @@ for (const required of [
   "node scripts/check-snake-workflow.mjs",
   '".github/dependabot.yml"',
   '".github/workflows/metrics.yml"',
+  '".github/workflows/render-metrics-overview.yml"',
   '"assets/lucide-terminal-animated.svg"',
   '"assets/tiny5-profile-intro.svg"',
   '"assets/tiny5-profile-tagline.svg"',
@@ -78,13 +80,20 @@ if (profileAssetsWorkflow.includes("contents: write")) {
   fail("profile assets contract workflow must not request contents: write")
 }
 
-for (const { file, mutable, pinned } of pinnedActions) {
-  const workflow = file === metricsWorkflowPath ? metricsWorkflow : snakeWorkflow
-  if (workflow.includes(mutable)) {
-    fail(`${file} still uses mutable action tag ${mutable}`)
-  }
-  if (!workflow.includes(pinned)) {
-    fail(`${file} does not pin ${pinned}`)
+const usesPattern = /^\s*uses:\s+([^@\s]+)@([a-f0-9]{40}|[^\s#]+)/gim
+const fullShaPattern = /^[a-f0-9]{40}$/
+
+for (const workflowPath of workflowPaths) {
+  const workflow = workflowContents.get(workflowPath)
+  for (const match of workflow.matchAll(usesPattern)) {
+    const [, actionName, ref] = match
+    if (!managedActions.has(actionName)) {
+      continue
+    }
+
+    if (!fullShaPattern.test(ref)) {
+      fail(`${workflowPath} must pin ${actionName} to a full 40-character commit SHA, not ${ref}`)
+    }
   }
 }
 
