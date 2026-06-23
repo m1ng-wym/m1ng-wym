@@ -6,7 +6,10 @@ const readmePath = "README.md"
 const terminalIconPath = "./assets/lucide-terminal-animated.svg"
 const profileIntroPath = "./assets/tiny5-profile-intro.svg"
 const profileTaglinePath = "./assets/tiny5-profile-tagline.svg"
+const profileTaglineMobilePath = "./assets/tiny5-profile-tagline-mobile.svg"
 const profileTaglineText = "Here to learn from the GitHub community and contribute where I can."
+const profileTaglineMobileFirstLine = "Here to learn from the GitHub community,"
+const profileTaglineMobileSecondLine = "and contribute where I can."
 const typingSvgUrl =
   "https://readme-typing-svg.demolab.com?font=Tiny5&weight=400&size=24&height=42&vCenter=true&duration=2600&pause=900&color=2C365D&background=FFFFFF&width=360&lines=a+Software+Engineering+Student.;a+Full-Stack+Developer+Intern.;an+AI+Explorer+%26+Creator.;an+Open+Source+Contributor.;an+Occasional+Overthinker."
 const expectedImages = [
@@ -29,12 +32,6 @@ const expectedImages = [
     height: "42",
   },
   {
-    alt: profileTaglineText,
-    src: profileTaglinePath,
-    width: "733",
-    height: "42",
-  },
-  {
     alt: "Language activity from authored commits",
     src: "./metrics.languages.svg",
     width: "920",
@@ -42,7 +39,7 @@ const expectedImages = [
   },
   {
     alt: "Contribution snake",
-    src: "https://raw.githubusercontent.com/m1ng-wym/m1ng-wym/output/github-contribution-grid-snake.svg?v=4988c4",
+    src: "https://raw.githubusercontent.com/m1ng-wym/m1ng-wym/output/github-contribution-grid-snake.svg",
     width: "880",
     height: "192",
   },
@@ -65,6 +62,7 @@ const readme = readRequiredFile(readmePath, "README")
 const terminalIcon = readRequiredFile(terminalIconPath, "animated terminal icon")
 const profileIntro = readRequiredFile(profileIntroPath, "static profile intro")
 const profileTagline = readRequiredFile(profileTaglinePath, "static profile tagline")
+const profileTaglineMobile = readRequiredFile(profileTaglineMobilePath, "mobile static profile tagline")
 
 if (readme.startsWith("# Hi, I'm @m1ng-wym")) {
   fail("README still uses the Markdown H1 profile intro")
@@ -99,6 +97,7 @@ if (readme.includes("font=Bytesized")) {
 }
 
 const imageTags = Array.from(readme.matchAll(/<img\b[^>]*>/g), match => match[0])
+const sourceTags = Array.from(readme.matchAll(/<source\b[^>]*>/g), match => match[0])
 
 function getAttributes(tag) {
   const attributes = new Map()
@@ -168,13 +167,37 @@ if (contentBetweenTerminalAndIntro !== "&nbsp;") {
 }
 
 const contentBetweenIntroAndTyping = readme.slice(profileIntroIndex + profileIntroTag.length, typingIndex)
-if (contentBetweenIntroAndTyping !== "") {
-  fail("static intro and Typing SVG must be directly joined into one sentence")
+if (contentBetweenIntroAndTyping !== "&#8203;") {
+  fail("static intro and Typing SVG must be joined by exactly one invisible mobile break opportunity")
 }
 
 const contentBetweenTypingAndTagline = readme.slice(typingIndex + typingTag.length, profileTaglineIndex)
-if (contentBetweenTypingAndTagline !== "<br>") {
-  fail("Typing SVG and second-line tagline must be separated by exactly one HTML line break")
+if (contentBetweenTypingAndTagline !== "<br><picture>\n  <source media=\"(max-width: 700px)\" srcset=\"./assets/tiny5-profile-tagline-mobile.svg\">\n  ") {
+  fail("Typing SVG and responsive tagline picture must be separated by exactly one HTML line break")
+}
+
+const profileTaglinePicture = readme.match(/<picture>[\s\S]*?<source\b[^>]*>[\s\S]*?<img\b[^>]*alt="Here to learn from the GitHub community and contribute where I can\."[^>]*>[\s\S]*?<\/picture>/)
+if (!profileTaglinePicture) {
+  fail("README must wrap the profile tagline in a responsive picture element")
+}
+
+const mobileTaglineSource = sourceTags.find(candidate => {
+  const attributes = getAttributes(candidate)
+  return attributes.get("srcset") === profileTaglineMobilePath
+})
+
+if (!mobileTaglineSource) {
+  fail("responsive profile tagline picture is missing the mobile tagline source")
+}
+
+const mobileTaglineSourceAttributes = getAttributes(mobileTaglineSource)
+if (mobileTaglineSourceAttributes.get("media") !== "(max-width: 700px)") {
+  fail(`mobile profile tagline media query is ${mobileTaglineSourceAttributes.get("media") || "missing"}, expected (max-width: 700px)`)
+}
+
+const profileTaglineAttributes = getAttributes(profileTaglineTag)
+if (profileTaglineAttributes.get("width") || profileTaglineAttributes.get("height")) {
+  fail("responsive profile tagline fallback img must rely on SVG intrinsic size so the mobile source is not height-squashed")
 }
 
 if (snakeIndex > metricsIndex) {
@@ -258,4 +281,20 @@ if (!profileTagline.includes('x="34"') || !profileTagline.includes('font-size="2
   fail("static profile tagline must align under the first-line H with the same Tiny5 size")
 }
 
-console.log("profile README asset check ok: inline Tiny5 sentence, terminal icon baseline and loop, dynamic Typing SVG white background, explicit dimensions, and snake placement are valid")
+if (!profileTaglineMobile.includes('width="733" height="84"')) {
+  fail("mobile static profile tagline does not use the approved two-line dimensions")
+}
+
+if (!profileTaglineMobile.includes(`>${profileTaglineMobileFirstLine}<`)) {
+  fail("mobile static profile tagline first line does not match the approved comma split")
+}
+
+if (!profileTaglineMobile.includes(`>${profileTaglineMobileSecondLine}<`)) {
+  fail("mobile static profile tagline second line does not match the approved comma split")
+}
+
+if (!profileTaglineMobile.includes('font-size="24"') || !profileTaglineMobile.includes('dominant-baseline="middle"')) {
+  fail("mobile static profile tagline must keep the same Tiny5 size and centered baseline")
+}
+
+console.log("profile README asset check ok: responsive Tiny5 sentence, terminal icon baseline and loop, dynamic Typing SVG service, tagline picture sources, and snake placement are valid")

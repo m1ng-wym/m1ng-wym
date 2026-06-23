@@ -3,7 +3,9 @@
 import { readFileSync } from "node:fs"
 
 const svgPath = process.argv[2] || "metrics.languages.svg"
+const metricsJsonPath = "metrics.contributions.json"
 const svg = readFileSync(svgPath, "utf8")
+const metrics = JSON.parse(readFileSync(metricsJsonPath, "utf8"))
 const expectedLanguageBarColor = "#4988C4"
 const expectedLanguageEmptyColor = "#eaeef2"
 const previousLanguageBarColor = "#8FABD4"
@@ -17,6 +19,7 @@ const expectedLanguageValueX = 690
 const expectedLanguagePercentX = 253
 const expectedLanguageBarX = 265
 const expectedSvgHeight = 333
+const expectedLanguageCount = 8
 
 function fail(message) {
   console.error(`language metrics contract failed: ${message}`)
@@ -169,6 +172,7 @@ if (!squareGroups.length) {
 
 const squareCounts = []
 const squareRowYs = []
+const squareFilledCountsByLanguage = new Map()
 for (const [, language, groupContent] of squareGroups) {
   const squares = Array.from(groupContent.matchAll(/<rect x="([0-9]+)" y="([0-9]+)" width="([0-9]+)" height="([0-9]+)" rx="([0-9]+)" ry="([0-9]+)" fill="(#[0-9A-Fa-f]{6})" stroke="#ffffff" stroke-width="1"\/>/g))
   if (!squares.length) {
@@ -198,6 +202,7 @@ for (const [, language, groupContent] of squareGroups) {
   }
 
   squareRowYs.push(rowY)
+  squareFilledCountsByLanguage.set(language, filledCount)
 
   if (!filledCount) {
     fail(`${language} square bar has no filled squares`)
@@ -217,7 +222,7 @@ if (Number(firstLanguageSquares[0]?.[1]) !== expectedLanguageBarX) {
 
 const languageLabelMatches = Array.from(svg.matchAll(new RegExp(`<text x="${expectedLanguageLabelX}" y="([0-9.]+)" class="language-label" text-anchor="end">([^<]+)<\\/text>`, "g")))
 const languageValueMatches = Array.from(svg.matchAll(new RegExp(`<text x="${expectedLanguageValueX}" y="([0-9.]+)" class="language-value">\\+[0-9,]+ \\/ -[0-9,]+ lines<\\/text>`, "g")))
-const languagePercentMatches = Array.from(svg.matchAll(new RegExp(`<text x="${expectedLanguagePercentX}" y="([0-9.]+)" class="language-percent" text-anchor="end">[0-9]+%<\\/text>`, "g")))
+const languagePercentMatches = Array.from(svg.matchAll(new RegExp(`<text x="${expectedLanguagePercentX}" y="([0-9.]+)" class="language-percent" text-anchor="end">([0-9]+%)<\\/text>`, "g")))
 
 if (expectedLanguagePercentX >= expectedLanguageBarX) {
   fail(`language percentages should stay left of the square bars: percent x=${expectedLanguagePercentX}, bar x=${expectedLanguageBarX}`)
@@ -262,7 +267,51 @@ for (let index = 0; index < squareGroups.length; index += 1) {
 
 const firstGroupSquares = Array.from(squareGroups[0][2].matchAll(/<rect\b[^>]*fill="(#[0-9A-Fa-f]{6})"[^>]*\/>/g))
 if (!firstGroupSquares.every(([, fill]) => fill === expectedLanguageBarColor)) {
-  fail("the highest-additions language row is not fully filled")
+  fail("the highest-activity language row is not fully filled")
+}
+
+const expectedLanguages = [...(metrics.summary?.languages || [])]
+  .filter(item => item.additions > 0 || item.deletions > 0)
+  .map(item => ({
+    ...item,
+    activity: item.additions + item.deletions,
+  }))
+  .sort((a, b) => {
+    if (b.activity !== a.activity) return b.activity - a.activity
+    return b.additions - a.additions
+  })
+  .slice(0, expectedLanguageCount)
+
+if (expectedLanguages.length !== squareGroups.length) {
+  fail(`rendered language count is ${squareGroups.length}, expected ${expectedLanguages.length} from ${metricsJsonPath}`)
+}
+
+const totalLanguageActivity = Math.max(1, expectedLanguages.reduce((sum, item) => sum + item.activity, 0))
+const maxLanguageActivity = Math.max(1, ...expectedLanguages.map(item => item.activity))
+
+for (const [index, expected] of expectedLanguages.entries()) {
+  const renderedLanguage = squareGroups[index]?.[1]
+  if (renderedLanguage !== expected.name) {
+    fail(`language row ${index + 1} is ${renderedLanguage || "missing"}, expected ${expected.name} by additions+deletions activity`)
+  }
+
+  const [, , renderedPercent] = languagePercentMatches[index] || []
+  const expectedPercent = `${Math.round((expected.activity / totalLanguageActivity) * 100)}%`
+  if (renderedPercent !== expectedPercent) {
+    fail(`${expected.name} percent is ${renderedPercent || "missing"}, expected ${expectedPercent} from additions+deletions activity`)
+  }
+
+  const expectedFilledSquares = expected.activity
+    ? Math.max(1, Math.round((expected.activity / maxLanguageActivity) * squareCounts[0]))
+    : 0
+  const renderedFilledSquares = squareFilledCountsByLanguage.get(expected.name)
+  if (renderedFilledSquares !== expectedFilledSquares) {
+    fail(`${expected.name} filled squares are ${renderedFilledSquares}, expected ${expectedFilledSquares} from additions+deletions activity`)
+  }
+}
+
+if (svg.includes("additions") || svg.includes("deletions")) {
+  fail("visible language metric labels should remain compact + / - lines, not additions/deletions wording")
 }
 
 if (svg.includes('<rect x="24" y="70" width="274" height="58" rx="6" fill="#f6f8fa"/>')) {

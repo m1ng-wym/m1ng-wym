@@ -436,11 +436,18 @@ function mergeStats(target, source) {
   }
 }
 
+function languageActivity(item) {
+  return item.additions + item.deletions
+}
+
 function languageEntries(stats) {
   return [...stats.languages.entries()]
-    .map(([name, value]) => ({ name, ...value }))
-    .filter(item => item.additions > 0 || item.deletions > 0)
-    .sort((a, b) => b.additions - a.additions)
+    .map(([name, value]) => ({ name, ...value, activity: languageActivity(value) }))
+    .filter(item => item.activity > 0)
+    .sort((a, b) => {
+      if (b.activity !== a.activity) return b.activity - a.activity
+      return b.additions - a.additions
+    })
 }
 
 function formatNumber(value) {
@@ -621,8 +628,8 @@ function renderSvg({ repos, totals, displayCommits, titleArtwork, githubIconArtw
   const repoRowStep = 22
   const repoPanelHeight = 48 + topRepos.length * repoRowStep
   const height = showRepoActivity ? repoPanelY + repoPanelHeight + 18 : languagePanelY + languagePanelHeight + 18
-  const maxLanguage = Math.max(1, ...topLanguages.map(item => item.additions))
-  const totalLanguageLines = Math.max(1, topLanguages.reduce((sum, item) => sum + item.additions, 0))
+  const maxLanguageActivity = Math.max(1, ...topLanguages.map(languageActivity))
+  const totalLanguageActivity = Math.max(1, topLanguages.reduce((sum, item) => sum + languageActivity(item), 0))
   const shownCommits = displayCommits ?? totals.commits
   const sectionColor = "#2C365D"
   const languageBarColor = "#4988C4"
@@ -652,10 +659,11 @@ function renderSvg({ repos, totals, displayCommits, titleArtwork, githubIconArtw
 
   const languageRows = topLanguages.map((item, index) => {
     const y = languageStartY + 34 + index * languageRowStep
-    const filledSquares = item.additions || item.deletions
-      ? Math.max(1, Math.round((item.additions / maxLanguage) * languageSquareCount))
+    const activity = languageActivity(item)
+    const filledSquares = activity
+      ? Math.max(1, Math.round((activity / maxLanguageActivity) * languageSquareCount))
       : 0
-    const percent = Math.round((item.additions / totalLanguageLines) * 100)
+    const percent = Math.round((activity / totalLanguageActivity) * 100)
     const squareY = y - 13
     const textY = squareY + languageTextYOffset
     const squares = Array.from({ length: languageSquareCount }, (_, squareIndex) => {
@@ -711,7 +719,7 @@ function renderSvg({ repos, totals, displayCommits, titleArtwork, githubIconArtw
     .language-value { font-size: 10.5px; font-weight: 500; fill: #57606a; font-variant-numeric: tabular-nums; }
     .language-percent { font-size: 10.5px; font-weight: 600; fill: #6e7781; font-variant-numeric: tabular-nums; }
     .small { font-size: 12px; fill: #57606a; }
-    ${repoStyles}
+${repoStyles}
   </style>
   <defs>
     <linearGradient id="stat-card-fill" x1="0" y1="0" x2="1" y2="1">
@@ -745,8 +753,7 @@ function renderSvg({ repos, totals, displayCommits, titleArtwork, githubIconArtw
   <text x="24" y="${languageStartY}" class="section">Language activity</text>
   <rect class="activity-panel language-panel" x="24" y="${languagePanelY}" width="${width - paddingX * 2}" height="${languagePanelHeight}" rx="7" fill="url(#activity-panel-fill)" stroke="#d0d7de"/>
   ${languageRows || `<text x="28" y="${languageStartY + 34}" class="small">No language data found</text>`}
-  ${repoActivitySection}
-</svg>
+${repoActivitySection}</svg>
 `
 }
 

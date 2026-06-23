@@ -1,7 +1,5 @@
 version: 2
 updates:
-  # Keep this scoped to lowlighter/metrics because metrics.overview.svg is an
-  # implicit data source for scripts/generate-contribution-metrics.mjs.
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
@@ -9,8 +7,6 @@ updates:
       day: "monday"
       time: "09:00"
       timezone: "Asia/Shanghai"
-    allow:
-      - dependency-name: "lowlighter/metrics"
     assignees:
       - "m1ng-wym"
     labels:
