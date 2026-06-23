@@ -1,0 +1,70 @@
+name: Profile assets contract
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - ".github/dependabot.yml"
+      - ".github/workflows/metrics.yml"
+      - ".github/workflows/profile-assets-contract.yml"
+      - ".github/workflows/snake.yml"
+      - "README.md"
+      - "assets/lucide-terminal-animated.svg"
+      - "assets/tiny5-profile-intro.svg"
+      - "assets/tiny5-profile-tagline.svg"
+      - "assets/tiny5-profile-tagline-mobile.svg"
+      - "metrics.contributions.json"
+      - "metrics.languages.svg"
+      - "scripts/check-language-metrics-contract.mjs"
+      - "scripts/check-profile-readme-assets.mjs"
+      - "scripts/check-profile-workflows-contract.mjs"
+      - "scripts/check-snake-workflow.mjs"
+      - "scripts/generate-contribution-metrics.mjs"
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/dependabot.yml"
+      - ".github/workflows/metrics.yml"
+      - ".github/workflows/profile-assets-contract.yml"
+      - ".github/workflows/snake.yml"
+      - "README.md"
+      - "assets/lucide-terminal-animated.svg"
+      - "assets/tiny5-profile-intro.svg"
+      - "assets/tiny5-profile-tagline.svg"
+      - "assets/tiny5-profile-tagline-mobile.svg"
+      - "metrics.contributions.json"
+      - "metrics.languages.svg"
+      - "scripts/check-language-metrics-contract.mjs"
+      - "scripts/check-profile-readme-assets.mjs"
+      - "scripts/check-profile-workflows-contract.mjs"
+      - "scripts/check-snake-workflow.mjs"
+      - "scripts/generate-contribution-metrics.mjs"
+
+permissions:
+  contents: read
+
+jobs:
+  check-profile-assets:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 20
+
+      - name: Check profile README assets
+        run: node scripts/check-profile-readme-assets.mjs
+
+      - name: Check language metrics contract
+        run: node scripts/check-language-metrics-contract.mjs
+
+      - name: Check profile workflow contracts
+        run: node scripts/check-profile-workflows-contract.mjs
+
+      - name: Check contribution snake workflow
+        run: node scripts/check-snake-workflow.mjs
