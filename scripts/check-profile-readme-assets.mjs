@@ -8,7 +8,7 @@ const profileIntroPath = "./assets/tiny5-profile-intro.svg"
 const profileTaglinePath = "./assets/tiny5-profile-tagline.svg"
 const profileTaglineMobilePath = "./assets/tiny5-profile-tagline-mobile.svg"
 const profileTaglineText = "Here to learn from the GitHub community and contribute where I can."
-const profileTaglineMobileFirstLine = "Here to learn from the GitHub community,"
+const profileTaglineMobileFirstLine = "Here to learn from the GitHub community"
 const profileTaglineMobileSecondLine = "and contribute where I can."
 const typingSvgUrl =
   "https://readme-typing-svg.demolab.com?font=Tiny5&weight=400&size=24&height=42&vCenter=true&duration=2600&pause=900&color=2C365D&background=FFFFFF&width=360&lines=a+Software+Engineering+Student.;a+Full-Stack+Developer+Intern.;an+AI+Explorer+%26+Creator.;an+Open+Source+Contributor.;an+Occasional+Overthinker."
