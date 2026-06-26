@@ -80,6 +80,22 @@ if (profileAssetsWorkflow.includes("contents: write")) {
   fail("profile assets contract workflow must not request contents: write")
 }
 
+for (const required of [
+  "for attempt in 1 2 3; do",
+  "git pull --rebase origin main",
+  "git push origin HEAD:main",
+  "Failed to push contribution metrics after 3 attempts",
+  "sleep $((attempt * 5))",
+]) {
+  if (!metricsWorkflow.includes(required)) {
+    fail(`metrics workflow is missing contribution metrics push retry contract: ${required}`)
+  }
+}
+
+if (metricsWorkflow.includes("git push origin main")) {
+  fail("metrics workflow must not use bare git push origin main for generated contribution metrics")
+}
+
 const usesPattern = /^\s*uses:\s+([^@\s]+)@([a-f0-9]{40}|[^\s#]+)/gim
 const fullShaPattern = /^[a-f0-9]{40}$/
 
@@ -105,4 +121,6 @@ if (dependabot.includes("allow:") || dependabot.includes('dependency-name: "lowl
   fail("Dependabot GitHub Actions updates must not be restricted to only lowlighter/metrics")
 }
 
-console.log("profile workflow contract ok: asset workflow, action pins, and Dependabot coverage are valid")
+console.log(
+  "profile workflow contract ok: asset workflow, action pins, Dependabot coverage, and metrics push retry are valid",
+)
