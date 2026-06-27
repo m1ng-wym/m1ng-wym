@@ -32,6 +32,28 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Add mobile snake background
+        run: |
+          node <<'NODE'
+          const { readFileSync, writeFileSync } = require("node:fs")
+
+          const source = "dist/github-contribution-grid-snake.svg"
+          const target = "dist/github-contribution-grid-snake-mobile.svg"
+          const expectedViewBox = 'viewBox="-16 -32 880 192"'
+          const background = '<rect x="-16" y="-32" width="880" height="192" rx="8" ry="8" fill="#f6f8fa"/>'
+          const svg = readFileSync(source, "utf8")
+
+          if (!svg.includes(expectedViewBox)) {
+            throw new Error(`Unexpected contribution snake viewBox; expected ${expectedViewBox}`)
+          }
+
+          if (!svg.includes("</desc>")) {
+            throw new Error("Contribution snake SVG is missing the description marker")
+          }
+
+          writeFileSync(target, svg.replace("</desc>", `</desc>${background}`))
+          NODE
+
       - name: Publish contribution snake
         uses: crazy-max/ghaction-github-pages@df5cc2bfa78282ded844b354faee141f06b41865 # v4
         with:

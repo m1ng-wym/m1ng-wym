@@ -17,6 +17,8 @@ const typingSvgUrl =
   "https://readme-typing-svg.demolab.com?font=Tiny5&weight=400&size=24&height=42&vCenter=true&duration=2600&pause=900&color=2C365D&background=FFFFFF&width=360&lines=a+Software+Engineering+Student.;a+Full-Stack+Developer+Intern.;an+AI+Explorer+%26+Creator.;an+Open+Source+Contributor.;an+Occasional+Overthinker."
 const mobileTypingSvgUrl =
   "https://readme-typing-svg.demolab.com?font=Tiny5&weight=400&size=16&height=28&vCenter=true&duration=2600&pause=900&color=2C365D&background=FFFFFF&width=360&lines=%C2%A0%C2%A0%C2%A0%C2%A0%C2%A0%C2%A0a+Software+Engineering+Student.;%C2%A0%C2%A0%C2%A0%C2%A0%C2%A0%C2%A0a+Full-Stack+Developer+Intern.;%C2%A0%C2%A0%C2%A0%C2%A0%C2%A0%C2%A0an+AI+Explorer+%26+Creator.;%C2%A0%C2%A0%C2%A0%C2%A0%C2%A0%C2%A0an+Open+Source+Contributor.;%C2%A0%C2%A0%C2%A0%C2%A0%C2%A0%C2%A0an+Occasional+Overthinker."
+const contributionSnakeUrl = "https://raw.githubusercontent.com/m1ng-wym/m1ng-wym/output/github-contribution-grid-snake.svg"
+const contributionSnakeMobileUrl = "https://raw.githubusercontent.com/m1ng-wym/m1ng-wym/output/github-contribution-grid-snake-mobile.svg"
 const expectedImages = [
   {
     alt: "Language activity from authored commits",
@@ -26,7 +28,7 @@ const expectedImages = [
   },
   {
     alt: "Contribution snake",
-    src: "https://raw.githubusercontent.com/m1ng-wym/m1ng-wym/output/github-contribution-grid-snake.svg",
+    src: contributionSnakeUrl,
     width: "880",
     height: "192",
   },
@@ -101,15 +103,28 @@ function escapeRegExp(value) {
 }
 
 function findResponsivePicture({ fallbackSrc, fallbackAlt, mobileSrc }) {
-  const picturePattern = new RegExp(
-    `<picture>[\\s\\S]*?<source\\b[^>]*srcset="${escapeRegExp(mobileSrc)}"[^>]*>[\\s\\S]*?<img\\b[^>]*src="${escapeRegExp(fallbackSrc)}"[^>]*alt="${escapeRegExp(fallbackAlt)}"[^>]*>[\\s\\S]*?<\\/picture>`,
-  )
-  const match = readme.match(picturePattern)
-  if (!match) {
+  const pictureTags = Array.from(readme.matchAll(/<picture>[\s\S]*?<\/picture>/g), match => match[0])
+  const picture = pictureTags.find(candidate => {
+    const sourceTag = candidate.match(/<source\b[^>]*>/)?.[0]
+    const fallbackImgTag = candidate.match(/<img\b[^>]*>/)?.[0]
+    if (!sourceTag || !fallbackImgTag) {
+      return false
+    }
+
+    const sourceAttributes = getAttributes(sourceTag)
+    const fallbackAttributes = getAttributes(fallbackImgTag)
+    return (
+      sourceAttributes.get("srcset") === mobileSrc &&
+      fallbackAttributes.get("src") === fallbackSrc &&
+      fallbackAttributes.get("alt") === fallbackAlt
+    )
+  })
+
+  if (!picture) {
     fail(`${fallbackAlt} must be wrapped in a responsive picture with mobile source ${mobileSrc}`)
   }
 
-  return match[0]
+  return picture
 }
 
 function requireResponsiveProfilePicture({ fallbackSrc, fallbackAlt, mobileSrc }) {
@@ -128,6 +143,27 @@ function requireResponsiveProfilePicture({ fallbackSrc, fallbackAlt, mobileSrc }
   const fallbackAttributes = getAttributes(fallbackImgTag)
   if (fallbackAttributes.get("width") || fallbackAttributes.get("height")) {
     fail(`${fallbackAlt} responsive fallback img must rely on selected SVG intrinsic size`)
+  }
+
+  return { picture, fallbackImgTag }
+}
+
+function requireResponsiveSizedPicture({ fallbackSrc, fallbackAlt, mobileSrc, width, height }) {
+  const picture = findResponsivePicture({ fallbackSrc, fallbackAlt, mobileSrc })
+  const sourceTag = picture.match(/<source\b[^>]*>/)?.[0]
+  const fallbackImgTag = picture.match(/<img\b[^>]*>/)?.[0]
+  if (!sourceTag || !fallbackImgTag) {
+    fail(`${fallbackAlt} responsive picture is malformed`)
+  }
+
+  const sourceAttributes = getAttributes(sourceTag)
+  if (sourceAttributes.get("media") !== "(max-width: 700px)") {
+    fail(`${fallbackAlt} mobile source media is ${sourceAttributes.get("media") || "missing"}, expected (max-width: 700px)`)
+  }
+
+  const fallbackAttributes = getAttributes(fallbackImgTag)
+  if (fallbackAttributes.get("width") !== width || fallbackAttributes.get("height") !== height) {
+    fail(`${fallbackAlt} fallback img dimensions must stay ${width}x${height} for the desktop rendering`)
   }
 
   return { picture, fallbackImgTag }
@@ -176,7 +212,15 @@ const metricsTag = imageTags.find(candidate => {
   return attributes.get("alt") === "Language activity from authored commits"
 })
 
-const snakeIndex = readme.indexOf(snakeTag)
+const contributionSnakePicture = requireResponsiveSizedPicture({
+  fallbackSrc: contributionSnakeUrl,
+  fallbackAlt: "Contribution snake",
+  mobileSrc: contributionSnakeMobileUrl,
+  width: "880",
+  height: "192",
+})
+
+const snakeIndex = readme.indexOf(contributionSnakePicture.picture)
 const terminalIndex = readme.indexOf(terminalTag)
 const profileIntroIndex = readme.indexOf(profileIntroTag)
 const typingIndex = readme.indexOf(typingTag)
@@ -248,7 +292,7 @@ if (snakeIndex > metricsIndex) {
   fail("Contribution snake must be placed directly above the language metrics image")
 }
 
-const contentBetweenSnakeAndMetrics = readme.slice(snakeIndex + snakeTag.length, metricsIndex)
+const contentBetweenSnakeAndMetrics = readme.slice(snakeIndex + contributionSnakePicture.picture.length, metricsIndex)
 if (contentBetweenSnakeAndMetrics !== "\n\n") {
   fail("Contribution snake and language metrics image must use standard Markdown block spacing")
 }
@@ -369,4 +413,4 @@ if (!mobileTypingSvgUrl.includes("%C2%A0%C2%A0%C2%A0%C2%A0%C2%A0%C2%A0a+Software
   fail("mobile Typing SVG service URL must keep 16px text and the approved H-aligned NBSP prefix")
 }
 
-console.log("profile README asset check ok: responsive Tiny5 sentence, terminal icon baseline and loop, dynamic Typing SVG service, mobile H-aligned intro stack, tagline picture sources, and snake placement are valid")
+console.log("profile README asset check ok: responsive Tiny5 sentence, terminal icon baseline and loop, dynamic Typing SVG service, mobile H-aligned intro stack, tagline picture sources, mobile snake source, and snake placement are valid")
