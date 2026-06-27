@@ -3,6 +3,8 @@
 import { existsSync, readFileSync } from "node:fs"
 
 const readmePath = "README.md"
+const profileIntroSpacerPath = "./assets/profile-intro-left-spacer.svg"
+const profileIntroSpacerMobilePath = "./assets/profile-intro-left-spacer-mobile.svg"
 const terminalIconPath = "./assets/lucide-terminal-animated.svg"
 const terminalIconMobilePath = "./assets/lucide-terminal-animated-mobile.svg"
 const profileIntroPath = "./assets/tiny5-profile-intro.svg"
@@ -48,6 +50,8 @@ function readRequiredFile(filePath, label) {
 }
 
 const readme = readRequiredFile(readmePath, "README")
+const profileIntroSpacer = readRequiredFile(profileIntroSpacerPath, "profile intro alignment spacer")
+const profileIntroSpacerMobile = readRequiredFile(profileIntroSpacerMobilePath, "mobile profile intro alignment spacer")
 const terminalIcon = readRequiredFile(terminalIconPath, "animated terminal icon")
 const terminalIconMobile = readRequiredFile(terminalIconMobilePath, "mobile animated terminal icon")
 const profileIntro = readRequiredFile(profileIntroPath, "static profile intro")
@@ -221,14 +225,22 @@ const contributionSnakePicture = requireResponsiveSizedPicture({
 })
 
 const snakeIndex = readme.indexOf(contributionSnakePicture.picture)
+const profileIntroSpacerPicture = `<picture><source media="(max-width: 700px)" srcset="${profileIntroSpacerMobilePath}"><img src="${profileIntroSpacerPath}" alt=""></picture>`
+const profileIntroSpacerOccurrences = Array.from(readme.matchAll(new RegExp(escapeRegExp(profileIntroSpacerPicture), "g")))
+const firstProfileIntroSpacerIndex = readme.indexOf(profileIntroSpacerPicture)
+const secondProfileIntroSpacerIndex = readme.indexOf(profileIntroSpacerPicture, firstProfileIntroSpacerIndex + profileIntroSpacerPicture.length)
 const terminalIndex = readme.indexOf(terminalTag)
 const profileIntroIndex = readme.indexOf(profileIntroTag)
 const typingIndex = readme.indexOf(typingTag)
 const profileTaglineIndex = readme.indexOf(profileTaglineTag)
 const metricsIndex = readme.indexOf(metricsTag)
 
-if (!(terminalIndex < profileIntroIndex && profileIntroIndex < typingIndex && typingIndex < profileTaglineIndex)) {
-  fail("profile sentence images must render as terminal icon, static intro, Typing SVG, then second-line tagline")
+if (profileIntroSpacerOccurrences.length !== 2) {
+  fail("profile intro must use the responsive left spacer before both the first line and tagline line")
+}
+
+if (!(firstProfileIntroSpacerIndex < terminalIndex && terminalIndex < profileIntroIndex && profileIntroIndex < typingIndex && typingIndex < secondProfileIntroSpacerIndex && secondProfileIntroSpacerIndex < profileTaglineIndex)) {
+  fail("profile sentence images must render as left spacer, terminal icon, static intro, Typing SVG, left spacer, then second-line tagline")
 }
 
 const contentBetweenTerminalAndIntro = readme.slice(terminalIndex + terminalTag.length, profileIntroIndex).trimStart()
@@ -242,9 +254,15 @@ if (contentBetweenIntroAndTyping !== "</picture>&#8203;<picture><source media=\"
 }
 
 const contentBetweenTypingAndTagline = readme.slice(typingIndex + typingTag.length, profileTaglineIndex).trimStart()
-if (contentBetweenTypingAndTagline !== "</picture><br><picture><source media=\"(max-width: 700px)\" srcset=\"./assets/tiny5-profile-tagline-mobile.svg\">") {
-  fail("Typing SVG and responsive tagline picture must be separated by exactly one HTML line break")
+if (contentBetweenTypingAndTagline !== `</picture><br>${profileIntroSpacerPicture}<picture><source media="(max-width: 700px)" srcset="./assets/tiny5-profile-tagline-mobile.svg">`) {
+  fail("Typing SVG and responsive tagline picture must be separated by exactly one HTML line break plus the approved desktop alignment spacer")
 }
+
+requireResponsiveProfilePicture({
+  fallbackSrc: profileIntroSpacerPath,
+  fallbackAlt: "",
+  mobileSrc: profileIntroSpacerMobilePath,
+})
 
 requireResponsiveProfilePicture({
   fallbackSrc: terminalIconPath,
@@ -299,6 +317,22 @@ if (contentBetweenSnakeAndMetrics !== "\n\n") {
 
 if (/!\[[^\]]*\]\([^)]*\.svg[^)]*\)/.test(readme)) {
   fail("README still contains Markdown SVG image syntax instead of sized HTML img tags")
+}
+
+if (!profileIntroSpacer.includes('width="19" height="1" viewBox="0 0 19 1"')) {
+  fail("desktop profile intro spacer must provide the approved 19px horizontal offset")
+}
+
+if (!profileIntroSpacer.includes('fill="none"')) {
+  fail("desktop profile intro spacer must be visually transparent")
+}
+
+if (!profileIntroSpacerMobile.includes('width="1" height="1" viewBox="0 0 1 1"')) {
+  fail("mobile profile intro spacer must collapse to a near-zero offset")
+}
+
+if (!profileIntroSpacerMobile.includes('fill="none"')) {
+  fail("mobile profile intro spacer must be visually transparent")
 }
 
 if (!terminalIcon.includes('<polyline points="4 17 10 11 4 5"/>')) {
@@ -413,4 +447,4 @@ if (!mobileTypingSvgUrl.includes("%C2%A0%C2%A0%C2%A0%C2%A0%C2%A0%C2%A0a+Software
   fail("mobile Typing SVG service URL must keep 16px text and the approved H-aligned NBSP prefix")
 }
 
-console.log("profile README asset check ok: responsive Tiny5 sentence, terminal icon baseline and loop, dynamic Typing SVG service, mobile H-aligned intro stack, tagline picture sources, mobile snake source, and snake placement are valid")
+console.log("profile README asset check ok: responsive Tiny5 sentence, desktop intro spacer alignment, terminal icon baseline and loop, dynamic Typing SVG service, mobile H-aligned intro stack, tagline picture sources, mobile snake source, and snake placement are valid")

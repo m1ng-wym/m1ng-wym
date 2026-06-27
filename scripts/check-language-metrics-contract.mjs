@@ -148,6 +148,14 @@ if (svg.includes("section-pixels")) {
   fail("section heading pixel accents should be removed while keeping the section titles")
 }
 
+if (svg.includes('class="stat-pixels"')) {
+  fail("summary card decorative pixel accents should be removed")
+}
+
+if (svg.includes(">Line Delta<")) {
+  fail("lines summary card still uses the ambiguous Line Delta label")
+}
+
 if (/<rect x="24" y="[0-9.]+" width="(?:102|82|48|42)" height="3" rx="1\.5"/.test(svg)) {
   fail("section heading underline bars should be removed while keeping the section titles")
 }
@@ -324,16 +332,12 @@ const requiredPatterns = [
     pattern: /<linearGradient id="stat-card-fill" x1="0" y1="0" x2="1" y2="1">[\s\S]*?<stop offset="0%" stop-color="#ffffff"\/>[\s\S]*?<stop offset="100%" stop-color="#f6f8fa"\/>[\s\S]*?<\/linearGradient>/,
   },
   {
-    label: "commits and PRs summary card keeps its original numeric text in an enhanced card",
-    pattern: /<g class="stat-card stat-card-commits" transform="translate\(24 70\)">[\s\S]*?<rect width="274" height="66" rx="7" fill="url\(#stat-card-fill\)" stroke="#d0d7de"\/>[\s\S]*?<text x="16" y="25" class="stat-label">Commits \+ PRs<\/text>[\s\S]*?<text x="16" y="48" class="metric">[0-9,]+ commits \/ [0-9,]+ PRs<\/text>[\s\S]*?<\/g>/,
+    label: "commits and PRs summary card keeps its numeric text in a compact enhanced card",
+    pattern: /<g class="stat-card stat-card-commits" transform="translate\(24 70\)">[\s\S]*?<rect width="250" height="66" rx="7" fill="url\(#stat-card-fill\)" stroke="#d0d7de"\/>[\s\S]*?<text x="16" y="25" class="stat-label">Commits \+ PRs<\/text>[\s\S]*?<text x="16" y="48" class="metric">[0-9,]+ commits \/ [0-9,]+ PRs<\/text>[\s\S]*?<\/g>/,
   },
   {
-    label: "lines summary card keeps its original numeric text in an enhanced card",
-    pattern: /<g class="stat-card stat-card-lines" transform="translate\(322 70\)">[\s\S]*?<rect width="274" height="66" rx="7" fill="url\(#stat-card-fill\)" stroke="#d0d7de"\/>[\s\S]*?<text x="16" y="25" class="stat-label">Line Delta<\/text>[\s\S]*?<text x="16" y="48" class="metric">\+[0-9,]+ \/ -[0-9,]+ lines<\/text>[\s\S]*?<\/g>/,
-  },
-  {
-    label: "summary cards include restrained pixel accents matching the profile palette",
-    pattern: /<g class="stat-pixels"[\s\S]*?fill="#2C365D"[\s\S]*?fill="#4988C4"[\s\S]*?fill="#BDE8F5"[\s\S]*?<\/g>/,
+    label: "lines summary card uses the authored-lines label in a compact enhanced card",
+    pattern: /<g class="stat-card stat-card-lines" transform="translate\(298 70\)">[\s\S]*?<rect width="250" height="66" rx="7" fill="url\(#stat-card-fill\)" stroke="#d0d7de"\/>[\s\S]*?<text x="16" y="25" class="stat-label">Lines Authored<\/text>[\s\S]*?<text x="16" y="48" class="metric">\+[0-9,]+ \/ -[0-9,]+ lines<\/text>[\s\S]*?<\/g>/,
   },
 ]
 

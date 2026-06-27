@@ -599,7 +599,7 @@ function renderSvg({ repos, totals, displayCommits, titleArtwork, githubIconArtw
   const width = 920
   const paddingX = 24
   const cardGap = 24
-  const cardWidth = Math.floor((width - paddingX * 2 - cardGap * 2) / 3)
+  const cardWidth = 250
   const cardY = 70
   const languageStartY = 173
   const barWidthMax = 400
@@ -644,12 +644,6 @@ function renderSvg({ repos, totals, displayCommits, titleArtwork, githubIconArtw
     <rect width="${cardWidth}" height="66" rx="7" fill="url(#stat-card-fill)" stroke="#d0d7de"/>
     <rect x="0" y="0" width="4" height="66" rx="2" fill="#BDE8F5"/>
     <rect x="0" y="0" width="4" height="34" rx="2" fill="${accentColor}"/>
-    <g class="stat-pixels" transform="translate(${cardWidth - 44} 13)">
-      <rect x="0" y="0" width="8" height="8" rx="1" fill="#2C365D"/>
-      <rect x="10" y="0" width="8" height="8" rx="1" fill="#4988C4"/>
-      <rect x="20" y="0" width="8" height="8" rx="1" fill="#BDE8F5"/>
-      <rect x="30" y="10" width="8" height="8" rx="1" fill="#BDE8F5"/>
-    </g>
     <text x="16" y="25" class="stat-label">${label}</text>
     <text x="16" y="48" class="metric">${value}</text>
     <rect x="16" y="56" width="86" height="4" rx="2" fill="#BDE8F5" fill-opacity="0.7"/>
@@ -745,7 +739,7 @@ ${repoStyles}
   ${renderStatCard({
     className: "stat-card-lines",
     x: paddingX + cardWidth + cardGap,
-    label: "Line Delta",
+    label: "Lines Authored",
     value: `+${formatNumber(totals.additions)} / -${formatNumber(totals.deletions)} lines`,
     accentColor: languageBarColor,
   })}

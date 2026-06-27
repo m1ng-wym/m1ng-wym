@@ -59,6 +59,8 @@ for (const required of [
   '".github/dependabot.yml"',
   '".github/workflows/metrics.yml"',
   '".github/workflows/render-metrics-overview.yml"',
+  '"assets/profile-intro-left-spacer.svg"',
+  '"assets/profile-intro-left-spacer-mobile.svg"',
   '"assets/lucide-terminal-animated.svg"',
   '"assets/tiny5-profile-intro.svg"',
   '"assets/tiny5-profile-tagline.svg"',
