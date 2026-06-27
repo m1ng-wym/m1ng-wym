@@ -1,14 +1,14 @@
 {
-  "generatedAt": "2026-06-27T14:08:18.725Z",
+  "generatedAt": "2026-06-27T15:54:49.982Z",
   "user": "m1ng-wym",
   "summary": {
     "repositories": 22,
-    "commits": 566,
+    "commits": 568,
     "pullRequests": 23,
-    "additions": 310887,
-    "deletions": 42320,
-    "files": 4794,
-    "ownCommits": 405,
+    "additions": 310997,
+    "deletions": 42368,
+    "files": 4805,
+    "ownCommits": 407,
     "externalCommits": 161,
     "languages": [
       {
@@ -27,10 +27,10 @@
       },
       {
         "name": "JavaScript",
-        "additions": 24957,
-        "deletions": 6466,
-        "files": 1790,
-        "activity": 31423
+        "additions": 25035,
+        "deletions": 6493,
+        "files": 1795,
+        "activity": 31528
       },
       {
         "name": "HTML",
@@ -47,6 +47,13 @@
         "activity": 5949
       },
       {
+        "name": "Other",
+        "additions": 4018,
+        "deletions": 896,
+        "files": 227,
+        "activity": 4914
+      },
+      {
         "name": "Swift",
         "additions": 4772,
         "deletions": 140,
@@ -54,18 +61,11 @@
         "activity": 4912
       },
       {
-        "name": "Other",
-        "additions": 4008,
-        "deletions": 880,
-        "files": 224,
-        "activity": 4888
-      },
-      {
         "name": "YAML",
-        "additions": 1766,
-        "deletions": 129,
-        "files": 42,
-        "activity": 1895
+        "additions": 1787,
+        "deletions": 133,
+        "files": 44,
+        "activity": 1920
       },
       {
         "name": "SQL",
@@ -207,25 +207,25 @@
       "highlighted": false,
       "private": false,
       "own": true,
-      "commits": 88,
+      "commits": 90,
       "prs": 1,
-      "additions": 6227,
-      "deletions": 2690,
-      "files": 263,
+      "additions": 6337,
+      "deletions": 2738,
+      "files": 274,
       "languages": [
         {
           "name": "JavaScript",
-          "additions": 2887,
-          "deletions": 840,
-          "files": 98,
-          "activity": 3727
+          "additions": 2965,
+          "deletions": 867,
+          "files": 103,
+          "activity": 3832
         },
         {
           "name": "Other",
-          "additions": 1347,
-          "deletions": 721,
-          "files": 62,
-          "activity": 2068
+          "additions": 1357,
+          "deletions": 737,
+          "files": 65,
+          "activity": 2094
         },
         {
           "name": "JSON",
@@ -236,10 +236,10 @@
         },
         {
           "name": "YAML",
-          "additions": 566,
-          "deletions": 129,
-          "files": 40,
-          "activity": 695
+          "additions": 587,
+          "deletions": 133,
+          "files": 42,
+          "activity": 720
         }
       ]
     },
