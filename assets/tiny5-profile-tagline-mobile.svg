@@ -1,6 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="733" height="84" viewBox="0 0 733 84" role="img" aria-labelledby="profile-tagline-title profile-tagline-desc">
-  <title id="profile-tagline-title">Here to learn from the GitHub community and contribute where I can.</title>
-  <desc id="profile-tagline-desc">Mobile two-line profile tagline split after the GitHub community phrase.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="56" viewBox="0 0 360 56" role="img" aria-labelledby="profile-tagline-mobile-title profile-tagline-mobile-desc">
+  <title id="profile-tagline-mobile-title">Here to learn from the GitHub community and contribute where I can.</title>
+  <desc id="profile-tagline-mobile-desc">Two-line mobile Tiny5 tagline aligned under the first-line greeting.</desc>
   <defs>
     <style>
       @font-face {
@@ -12,6 +12,6 @@
       }
     </style>
   </defs>
-  <text id="tiny5-profile-tagline-line-1" aria-label="Here to learn from the GitHub community" data-font="Tiny5" data-renderer="svg-text" x="34" y="24" fill="#2C365D" font-family="Tiny5ProfileTagline, monospace" font-size="24" font-weight="400" dominant-baseline="middle" text-anchor="start">Here to learn from the GitHub community</text>
-  <text id="tiny5-profile-tagline-line-2" aria-label="and contribute where I can." data-font="Tiny5" data-renderer="svg-text" x="34" y="60" fill="#2C365D" font-family="Tiny5ProfileTagline, monospace" font-size="24" font-weight="400" dominant-baseline="middle" text-anchor="start">and contribute where I can.</text>
+  <text id="tiny5-profile-tagline-mobile-line-1" aria-label="Here to learn from the GitHub community" data-font="Tiny5" data-renderer="svg-text" x="23" y="14" fill="#2C365D" font-family="Tiny5ProfileTagline, monospace" font-size="16" font-weight="400" dominant-baseline="middle" text-anchor="start">Here to learn from the GitHub community</text>
+  <text id="tiny5-profile-tagline-mobile-line-2" aria-label="and contribute where I can." data-font="Tiny5" data-renderer="svg-text" x="23" y="42" fill="#2C365D" font-family="Tiny5ProfileTagline, monospace" font-size="16" font-weight="400" dominant-baseline="middle" text-anchor="start">and contribute where I can.</text>
 </svg>
