@@ -18,6 +18,8 @@ const expectedLanguageLabelX = 220
 const expectedLanguageValueX = 690
 const expectedLanguagePercentX = 253
 const expectedLanguageBarX = 265
+const expectedCommitsCardX = 186
+const expectedLinesCardX = 484
 const expectedSvgHeight = 333
 const expectedLanguageCount = 8
 
@@ -229,8 +231,12 @@ if (Number(firstLanguageSquares[0]?.[1]) !== expectedLanguageBarX) {
 }
 
 const languageLabelMatches = Array.from(svg.matchAll(new RegExp(`<text x="${expectedLanguageLabelX}" y="([0-9.]+)" class="language-label" text-anchor="end">([^<]+)<\\/text>`, "g")))
-const languageValueMatches = Array.from(svg.matchAll(new RegExp(`<text x="${expectedLanguageValueX}" y="([0-9.]+)" class="language-value">\\+[0-9,]+ \\/ -[0-9,]+ lines<\\/text>`, "g")))
+const languageValueMatches = Array.from(svg.matchAll(new RegExp(`<text x="${expectedLanguageValueX}" y="([0-9.]+)" class="language-value">\\+[0-9,]+ \\/ -[0-9,]+<\\/text>`, "g")))
 const languagePercentMatches = Array.from(svg.matchAll(new RegExp(`<text x="${expectedLanguagePercentX}" y="([0-9.]+)" class="language-percent" text-anchor="end">([0-9]+%)<\\/text>`, "g")))
+
+if (new RegExp(`<text x="${expectedLanguageValueX}" y="[0-9.]+" class="language-value">\\+[0-9,]+ \\/ -[0-9,]+ lines<\\/text>`).test(svg)) {
+  fail("language row values should omit the repeated lines unit")
+}
 
 if (expectedLanguagePercentX >= expectedLanguageBarX) {
   fail(`language percentages should stay left of the square bars: percent x=${expectedLanguagePercentX}, bar x=${expectedLanguageBarX}`)
@@ -333,11 +339,11 @@ const requiredPatterns = [
   },
   {
     label: "commits and PRs summary card keeps its numeric text in a compact enhanced card",
-    pattern: /<g class="stat-card stat-card-commits" transform="translate\(24 70\)">[\s\S]*?<rect width="250" height="66" rx="7" fill="url\(#stat-card-fill\)" stroke="#d0d7de"\/>[\s\S]*?<text x="16" y="25" class="stat-label">Commits \+ PRs<\/text>[\s\S]*?<text x="16" y="48" class="metric">[0-9,]+ commits \/ [0-9,]+ PRs<\/text>[\s\S]*?<\/g>/,
+    pattern: new RegExp(`<g class="stat-card stat-card-commits" transform="translate\\(${expectedCommitsCardX} 70\\)">[\\s\\S]*?<rect width="250" height="66" rx="7" fill="url\\(#stat-card-fill\\)" stroke="#d0d7de"\\/>[\\s\\S]*?<text x="16" y="25" class="stat-label">Commits \\+ PRs<\\/text>[\\s\\S]*?<text x="16" y="48" class="metric">[0-9,]+ commits \\/ [0-9,]+ PRs<\\/text>[\\s\\S]*?<\\/g>`),
   },
   {
     label: "lines summary card uses the authored-lines label in a compact enhanced card",
-    pattern: /<g class="stat-card stat-card-lines" transform="translate\(298 70\)">[\s\S]*?<rect width="250" height="66" rx="7" fill="url\(#stat-card-fill\)" stroke="#d0d7de"\/>[\s\S]*?<text x="16" y="25" class="stat-label">Lines Authored<\/text>[\s\S]*?<text x="16" y="48" class="metric">\+[0-9,]+ \/ -[0-9,]+ lines<\/text>[\s\S]*?<\/g>/,
+    pattern: new RegExp(`<g class="stat-card stat-card-lines" transform="translate\\(${expectedLinesCardX} 70\\)">[\\s\\S]*?<rect width="250" height="66" rx="7" fill="url\\(#stat-card-fill\\)" stroke="#d0d7de"\\/>[\\s\\S]*?<text x="16" y="25" class="stat-label">Lines Authored<\\/text>[\\s\\S]*?<text x="16" y="48" class="metric">\\+[0-9,]+ \\/ -[0-9,]+ lines<\\/text>[\\s\\S]*?<\\/g>`),
   },
 ]
 

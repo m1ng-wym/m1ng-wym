@@ -598,8 +598,9 @@ function renderSvg({ repos, totals, displayCommits, titleArtwork, githubIconArtw
     .slice(0, 8)
   const width = 920
   const paddingX = 24
-  const cardGap = 24
+  const cardGap = 48
   const cardWidth = 250
+  const cardStartX = Math.round((width - (cardWidth * 2 + cardGap)) / 2)
   const cardY = 70
   const languageStartY = 173
   const barWidthMax = 400
@@ -672,7 +673,7 @@ function renderSvg({ repos, totals, displayCommits, titleArtwork, githubIconArtw
       <text x="${languageLabelX}" y="${textY}" class="language-label" text-anchor="end">${escapeXml(item.name)}</text>
       <text x="${languagePercentX}" y="${textY}" class="language-percent" text-anchor="end">${percent}%</text>
       <g class="language-square-bar" data-language="${escapeXml(item.name)}">${squares}</g>
-      <text x="${languageValueX}" y="${textY}" class="language-value">+${formatNumber(item.additions)} / -${formatNumber(item.deletions)} lines</text>
+      <text x="${languageValueX}" y="${textY}" class="language-value">+${formatNumber(item.additions)} / -${formatNumber(item.deletions)}</text>
       </g>`
   }).join("")
 
@@ -730,7 +731,7 @@ ${repoStyles}
 
   ${renderStatCard({
     className: "stat-card-commits",
-    x: paddingX,
+    x: cardStartX,
     label: "Commits + PRs",
     value: `${formatNumber(shownCommits)} commits / ${formatNumber(totals.prs)} PRs`,
     accentColor: sectionColor,
@@ -738,7 +739,7 @@ ${repoStyles}
 
   ${renderStatCard({
     className: "stat-card-lines",
-    x: paddingX + cardWidth + cardGap,
+    x: cardStartX + cardWidth + cardGap,
     label: "Lines Authored",
     value: `+${formatNumber(totals.additions)} / -${formatNumber(totals.deletions)} lines`,
     accentColor: languageBarColor,
