@@ -641,14 +641,19 @@ function renderSvg({ repos, totals, displayCommits, titleArtwork, githubIconArtw
     .repo-column-label { font-size: 9px; font-weight: 700; fill: #6e7781; letter-spacing: 0; }` : ""
 
   function renderStatCard({ className, x, label, value, accentColor }) {
+    const clipId = `${className}-clip`
     return `<g class="stat-card ${className}" transform="translate(${x} ${cardY})">
-    <rect width="${cardWidth}" height="66" rx="7" fill="url(#stat-card-fill)" stroke="#d0d7de"/>
-    <rect x="0" y="0" width="4" height="66" rx="2" fill="#BDE8F5"/>
-    <rect x="0" y="0" width="4" height="34" rx="2" fill="${accentColor}"/>
+    <rect width="${cardWidth}" height="66" rx="7" fill="url(#stat-card-fill)"/>
+    <clipPath id="${clipId}">
+      <rect width="${cardWidth}" height="66" rx="7"/>
+    </clipPath>
+    <g class="stat-accent" clip-path="url(#${clipId})">
+      <rect x="0" y="0" width="4" height="34" fill="${accentColor}"/>
+      <rect x="0" y="34" width="4" height="32" fill="#BDE8F5"/>
+    </g>
     <text x="16" y="25" class="stat-label">${label}</text>
     <text x="16" y="48" class="metric">${value}</text>
-    <rect x="16" y="56" width="86" height="4" rx="2" fill="#BDE8F5" fill-opacity="0.7"/>
-    <rect x="16" y="56" width="52" height="4" rx="2" fill="${accentColor}"/>
+    <rect width="${cardWidth}" height="66" rx="7" fill="none" stroke="#d0d7de"/>
   </g>`
   }
 

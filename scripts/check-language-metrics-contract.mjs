@@ -22,6 +22,11 @@ const expectedCommitsCardX = 186
 const expectedLinesCardX = 484
 const expectedSvgHeight = 333
 const expectedLanguageCount = 8
+const expectedStatCardWidth = 250
+const expectedStatCardHeight = 66
+const expectedStatCardRadius = 7
+const expectedStatCardAccentWidth = 4
+const expectedStatCardAccentSplitY = 34
 
 function fail(message) {
   console.error(`language metrics contract failed: ${message}`)
@@ -332,18 +337,28 @@ if (svg.includes('<rect x="24" y="70" width="274" height="58" rx="6" fill="#f6f8
   fail("summary cards are still using the flat legacy block style")
 }
 
+if (/<rect x="0" y="0" width="4" height="66" rx="2" fill="#BDE8F5"\/>/.test(svg) ||
+    /<rect x="0" y="0" width="4" height="34" rx="2" fill="#(?:2C365D|4988C4)"\/>/.test(svg)) {
+  fail("summary card accent is still built from overlapping rounded external-looking bars")
+}
+
+if (/<rect x="16" y="56" width="86" height="4" rx="2" fill="#BDE8F5"[^>]*\/>/.test(svg) ||
+    /<rect x="16" y="56" width="52" height="4" rx="2" fill="#(?:2C365D|4988C4)"\/>/.test(svg)) {
+  fail("summary cards still render the bottom mini progress bar")
+}
+
 const requiredPatterns = [
   {
     label: "summary cards use the shared subtle gradient fill",
     pattern: /<linearGradient id="stat-card-fill" x1="0" y1="0" x2="1" y2="1">[\s\S]*?<stop offset="0%" stop-color="#ffffff"\/>[\s\S]*?<stop offset="100%" stop-color="#f6f8fa"\/>[\s\S]*?<\/linearGradient>/,
   },
   {
-    label: "commits and PRs summary card keeps its numeric text in a compact enhanced card",
-    pattern: new RegExp(`<g class="stat-card stat-card-commits" transform="translate\\(${expectedCommitsCardX} 70\\)">[\\s\\S]*?<rect width="250" height="66" rx="7" fill="url\\(#stat-card-fill\\)" stroke="#d0d7de"\\/>[\\s\\S]*?<text x="16" y="25" class="stat-label">Commits \\+ PRs<\\/text>[\\s\\S]*?<text x="16" y="48" class="metric">[0-9,]+ commits \\/ [0-9,]+ PRs<\\/text>[\\s\\S]*?<\\/g>`),
+    label: "commits and PRs summary card keeps its numeric text with an internal clipped accent",
+    pattern: new RegExp(`<g class="stat-card stat-card-commits" transform="translate\\(${expectedCommitsCardX} 70\\)">[\\s\\S]*?<rect width="${expectedStatCardWidth}" height="${expectedStatCardHeight}" rx="${expectedStatCardRadius}" fill="url\\(#stat-card-fill\\)"\\/>[\\s\\S]*?<clipPath id="stat-card-commits-clip">[\\s\\S]*?<rect width="${expectedStatCardWidth}" height="${expectedStatCardHeight}" rx="${expectedStatCardRadius}"\\/>[\\s\\S]*?<\\/clipPath>[\\s\\S]*?<g class="stat-accent" clip-path="url\\(#stat-card-commits-clip\\)">[\\s\\S]*?<rect x="0" y="0" width="${expectedStatCardAccentWidth}" height="${expectedStatCardAccentSplitY}" fill="#2C365D"\\/>[\\s\\S]*?<rect x="0" y="${expectedStatCardAccentSplitY}" width="${expectedStatCardAccentWidth}" height="${expectedStatCardHeight - expectedStatCardAccentSplitY}" fill="#BDE8F5"\\/>[\\s\\S]*?<\\/g>[\\s\\S]*?<text x="16" y="25" class="stat-label">Commits \\+ PRs<\\/text>[\\s\\S]*?<text x="16" y="48" class="metric">[0-9,]+ commits \\/ [0-9,]+ PRs<\\/text>[\\s\\S]*?<rect width="${expectedStatCardWidth}" height="${expectedStatCardHeight}" rx="${expectedStatCardRadius}" fill="none" stroke="#d0d7de"\\/>[\\s\\S]*?<\\/g>`),
   },
   {
-    label: "lines summary card uses the authored-lines label in a compact enhanced card",
-    pattern: new RegExp(`<g class="stat-card stat-card-lines" transform="translate\\(${expectedLinesCardX} 70\\)">[\\s\\S]*?<rect width="250" height="66" rx="7" fill="url\\(#stat-card-fill\\)" stroke="#d0d7de"\\/>[\\s\\S]*?<text x="16" y="25" class="stat-label">Lines Authored<\\/text>[\\s\\S]*?<text x="16" y="48" class="metric">\\+[0-9,]+ \\/ -[0-9,]+ lines<\\/text>[\\s\\S]*?<\\/g>`),
+    label: "lines summary card uses the authored-lines label with an internal clipped accent",
+    pattern: new RegExp(`<g class="stat-card stat-card-lines" transform="translate\\(${expectedLinesCardX} 70\\)">[\\s\\S]*?<rect width="${expectedStatCardWidth}" height="${expectedStatCardHeight}" rx="${expectedStatCardRadius}" fill="url\\(#stat-card-fill\\)"\\/>[\\s\\S]*?<clipPath id="stat-card-lines-clip">[\\s\\S]*?<rect width="${expectedStatCardWidth}" height="${expectedStatCardHeight}" rx="${expectedStatCardRadius}"\\/>[\\s\\S]*?<\\/clipPath>[\\s\\S]*?<g class="stat-accent" clip-path="url\\(#stat-card-lines-clip\\)">[\\s\\S]*?<rect x="0" y="0" width="${expectedStatCardAccentWidth}" height="${expectedStatCardAccentSplitY}" fill="#4988C4"\\/>[\\s\\S]*?<rect x="0" y="${expectedStatCardAccentSplitY}" width="${expectedStatCardAccentWidth}" height="${expectedStatCardHeight - expectedStatCardAccentSplitY}" fill="#BDE8F5"\\/>[\\s\\S]*?<\\/g>[\\s\\S]*?<text x="16" y="25" class="stat-label">Lines Authored<\\/text>[\\s\\S]*?<text x="16" y="48" class="metric">\\+[0-9,]+ \\/ -[0-9,]+ lines<\\/text>[\\s\\S]*?<rect width="${expectedStatCardWidth}" height="${expectedStatCardHeight}" rx="${expectedStatCardRadius}" fill="none" stroke="#d0d7de"\\/>[\\s\\S]*?<\\/g>`),
   },
 ]
 
