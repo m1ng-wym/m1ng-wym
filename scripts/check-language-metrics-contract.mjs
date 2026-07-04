@@ -20,13 +20,21 @@ const expectedLanguagePercentX = 253
 const expectedLanguageBarX = 265
 const expectedCommitsCardX = 186
 const expectedLinesCardX = 484
-const expectedSvgHeight = 333
+const expectedSvgHeight = 341
 const expectedLanguageCount = 8
 const expectedStatCardWidth = 250
 const expectedStatCardHeight = 66
 const expectedStatCardRadius = 7
 const expectedStatCardAccentWidth = 4
 const expectedStatCardAccentSplitY = 34
+const expectedLanguagePanelX = 140
+const expectedLanguagePanelY = 161
+const expectedLanguagePanelWidth = 680
+const expectedLanguagePanelHeight = 162
+const expectedLanguagePanelTitleX = 156
+const expectedLanguagePanelTitleY = 181
+const expectedLanguageRowBackgroundX = 156
+const expectedLanguageRowBackgroundWidth = 648
 
 function fail(message) {
   console.error(`language metrics contract failed: ${message}`)
@@ -141,6 +149,41 @@ if (/<g class="language-row" data-language="[^"]+">[\s\S]*?<rect x="[0-9.]+" y="
 
 if (!svg.includes('class="activity-panel language-panel"')) {
   fail("language activity is missing the refreshed panel surface")
+}
+
+if (/<text x="24" y="[0-9.]+" class="section">Language activity<\/text>/.test(svg)) {
+  fail("language activity title is still outside the language panel")
+}
+
+const languagePanelPattern = new RegExp(`<rect class="activity-panel language-panel" x="${expectedLanguagePanelX}" y="${expectedLanguagePanelY}" width="${expectedLanguagePanelWidth}" height="${expectedLanguagePanelHeight}" rx="7" fill="url\\(#activity-panel-fill\\)" stroke="#d0d7de"\\/>`)
+if (!languagePanelPattern.test(svg)) {
+  fail(`language panel should hug the content at x=${expectedLanguagePanelX}, width=${expectedLanguagePanelWidth}`)
+}
+
+const languagePanelIndex = svg.indexOf(`class="activity-panel language-panel" x="${expectedLanguagePanelX}"`)
+const languagePanelTitleIndex = svg.indexOf(`<text x="${expectedLanguagePanelTitleX}" y="${expectedLanguagePanelTitleY}" class="section">Language activity</text>`)
+const firstLanguageRowIndex = svg.indexOf('<g class="language-row"')
+if (languagePanelTitleIndex === -1) {
+  fail("language activity title is not rendered inside the language panel header row")
+}
+
+if (!(languagePanelIndex < languagePanelTitleIndex && languagePanelTitleIndex < firstLanguageRowIndex)) {
+  fail("language activity title should render after the panel surface and before the first language row")
+}
+
+if (svg.includes('<rect x="40" y="191" width="840" height="18" rx="4"')) {
+  fail("language row background stripes still use the old full-width layout")
+}
+
+const languageRowBackgrounds = Array.from(svg.matchAll(/<g class="language-row" data-language="[^"]+">\s*<rect x="([0-9]+)" y="([0-9]+)" width="([0-9]+)" height="18" rx="4" fill="(?:#f6f8fa|#ffffff)" opacity="0\.72"\/>/g))
+if (!languageRowBackgrounds.length) {
+  fail("language row background stripes are missing")
+}
+
+for (const [, x, , width] of languageRowBackgrounds) {
+  if (Number(x) !== expectedLanguageRowBackgroundX || Number(width) !== expectedLanguageRowBackgroundWidth) {
+    fail(`language row background is x=${x}, width=${width}; expected x=${expectedLanguageRowBackgroundX}, width=${expectedLanguageRowBackgroundWidth}`)
+  }
 }
 
 if (svg.includes(">Repo activity<")) {

@@ -602,7 +602,12 @@ function renderSvg({ repos, totals, displayCommits, titleArtwork, githubIconArtw
   const cardWidth = 250
   const cardStartX = Math.round((width - (cardWidth * 2 + cardGap)) / 2)
   const cardY = 70
-  const languageStartY = 173
+  const languagePanelX = 140
+  const languagePanelY = 161
+  const languagePanelWidth = 680
+  const languagePanelPaddingX = 16
+  const languagePanelTitleY = 181
+  const languageRowStartY = languagePanelY + 51
   const barWidthMax = 400
   const languageSquareSize = 12
   const languageSquareGap = 2
@@ -620,8 +625,7 @@ function renderSvg({ repos, totals, displayCommits, titleArtwork, githubIconArtw
   const repoCommitsX = 500
   const repoPrsX = 635
   const repoLinesX = 720
-  const languagePanelY = languageStartY + 12
-  const languagePanelHeight = topLanguages.length * languageRowStep + 18
+  const languagePanelHeight = topLanguages.length * languageRowStep + 50
   const repoStartY = languagePanelY + languagePanelHeight + 35
   const repoPanelY = repoStartY + 12
   const repoHeaderY = repoStartY + 32
@@ -658,7 +662,7 @@ function renderSvg({ repos, totals, displayCommits, titleArtwork, githubIconArtw
   }
 
   const languageRows = topLanguages.map((item, index) => {
-    const y = languageStartY + 34 + index * languageRowStep
+    const y = languageRowStartY + index * languageRowStep
     const activity = languageActivity(item)
     const filledSquares = activity
       ? Math.max(1, Math.round((activity / maxLanguageActivity) * languageSquareCount))
@@ -674,7 +678,7 @@ function renderSvg({ repos, totals, displayCommits, titleArtwork, githubIconArtw
     const rowFill = index % 2 === 0 ? rowStripeColor : "#ffffff"
     return `
       <g class="language-row" data-language="${escapeXml(item.name)}">
-      <rect x="40" y="${squareY - 3}" width="840" height="18" rx="4" fill="${rowFill}" opacity="0.72"/>
+      <rect x="${languagePanelX + languagePanelPaddingX}" y="${squareY - 3}" width="${languagePanelWidth - languagePanelPaddingX * 2}" height="18" rx="4" fill="${rowFill}" opacity="0.72"/>
       <text x="${languageLabelX}" y="${textY}" class="language-label" text-anchor="end">${escapeXml(item.name)}</text>
       <text x="${languagePercentX}" y="${textY}" class="language-percent" text-anchor="end">${percent}%</text>
       <g class="language-square-bar" data-language="${escapeXml(item.name)}">${squares}</g>
@@ -750,9 +754,9 @@ ${repoStyles}
     accentColor: languageBarColor,
   })}
 
-  <text x="24" y="${languageStartY}" class="section">Language activity</text>
-  <rect class="activity-panel language-panel" x="24" y="${languagePanelY}" width="${width - paddingX * 2}" height="${languagePanelHeight}" rx="7" fill="url(#activity-panel-fill)" stroke="#d0d7de"/>
-  ${languageRows || `<text x="28" y="${languageStartY + 34}" class="small">No language data found</text>`}
+  <rect class="activity-panel language-panel" x="${languagePanelX}" y="${languagePanelY}" width="${languagePanelWidth}" height="${languagePanelHeight}" rx="7" fill="url(#activity-panel-fill)" stroke="#d0d7de"/>
+  <text x="${languagePanelX + languagePanelPaddingX}" y="${languagePanelTitleY}" class="section">Language activity</text>
+  ${languageRows || `<text x="${languagePanelX + languagePanelPaddingX}" y="${languageRowStartY - 3}" class="small">No language data found</text>`}
 ${repoActivitySection}</svg>
 `
 }
