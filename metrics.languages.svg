@@ -61,7 +61,7 @@
       <rect x="0" y="34" width="4" height="32" fill="#BDE8F5"/>
     </g>
     <text x="16" y="25" class="stat-label">Commits + PRs</text>
-    <text x="16" y="48" class="metric">629 commits / 26 PRs</text>
+    <text x="16" y="48" class="metric">632 commits / 26 PRs</text>
     <rect width="250" height="66" rx="7" fill="none" stroke="#d0d7de"/>
   </g>
 
