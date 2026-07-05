@@ -27,14 +27,16 @@ const expectedStatCardHeight = 66
 const expectedStatCardRadius = 7
 const expectedStatCardAccentWidth = 4
 const expectedStatCardAccentSplitY = 34
-const expectedLanguagePanelX = 140
+const expectedLanguagePanelX = 120
 const expectedLanguagePanelY = 161
 const expectedLanguagePanelWidth = 680
 const expectedLanguagePanelHeight = 162
-const expectedLanguagePanelTitleX = 156
+const expectedLanguagePanelTitleX = 136
 const expectedLanguagePanelTitleY = 181
-const expectedLanguageRowBackgroundX = 156
+const expectedLanguageRowBackgroundX = 136
 const expectedLanguageRowBackgroundWidth = 648
+const expectedSvgCenterX = 460
+const expectedLanguagePanelSideExtension = 66
 
 function fail(message) {
   console.error(`language metrics contract failed: ${message}`)
@@ -149,6 +151,26 @@ if (/<g class="language-row" data-language="[^"]+">[\s\S]*?<rect x="[0-9.]+" y="
 
 if (!svg.includes('class="activity-panel language-panel"')) {
   fail("language activity is missing the refreshed panel surface")
+}
+
+const languagePanelRect = svg.match(/<rect class="activity-panel language-panel" x="([0-9]+)" y="([0-9]+)" width="([0-9]+)" height="([0-9]+)" rx="7" fill="url\(#activity-panel-fill\)" stroke="#d0d7de"\/>/)
+if (!languagePanelRect) {
+  fail("language activity panel rect is missing")
+}
+
+const [, actualLanguagePanelX, , actualLanguagePanelWidth] = languagePanelRect
+const actualLanguagePanelCenterX = Number(actualLanguagePanelX) + Number(actualLanguagePanelWidth) / 2
+if (actualLanguagePanelCenterX !== expectedSvgCenterX) {
+  fail(`language panel center is ${actualLanguagePanelCenterX}, expected ${expectedSvgCenterX}`)
+}
+
+const actualLanguagePanelLeftExtension = expectedCommitsCardX - Number(actualLanguagePanelX)
+const actualLanguagePanelRightExtension = Number(actualLanguagePanelX) + Number(actualLanguagePanelWidth) - (expectedLinesCardX + expectedStatCardWidth)
+if (
+  actualLanguagePanelLeftExtension !== expectedLanguagePanelSideExtension
+  || actualLanguagePanelRightExtension !== expectedLanguagePanelSideExtension
+) {
+  fail(`language panel side extensions are ${actualLanguagePanelLeftExtension}/${actualLanguagePanelRightExtension}, expected ${expectedLanguagePanelSideExtension}/${expectedLanguagePanelSideExtension}`)
 }
 
 if (/<text x="24" y="[0-9.]+" class="section">Language activity<\/text>/.test(svg)) {

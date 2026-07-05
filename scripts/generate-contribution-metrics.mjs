@@ -602,9 +602,9 @@ function renderSvg({ repos, totals, displayCommits, titleArtwork, githubIconArtw
   const cardWidth = 250
   const cardStartX = Math.round((width - (cardWidth * 2 + cardGap)) / 2)
   const cardY = 70
-  const languagePanelX = 140
-  const languagePanelY = 161
   const languagePanelWidth = 680
+  const languagePanelX = Math.round((width - languagePanelWidth) / 2)
+  const languagePanelY = 161
   const languagePanelPaddingX = 16
   const languagePanelTitleY = 181
   const languageRowStartY = languagePanelY + 51
