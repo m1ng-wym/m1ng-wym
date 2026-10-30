@@ -1,22 +1,29 @@
 {
-  "generatedAt": "2026-10-30T08:01:50.740Z",
+  "generatedAt": "2026-10-30T16:38:16.056Z",
   "user": "m1ng-wym",
   "summary": {
     "repositories": 23,
-    "commits": 915,
+    "commits": 922,
     "pullRequests": 1,
-    "additions": 104760,
-    "deletions": 18868,
-    "files": 2134,
-    "ownCommits": 875,
-    "externalCommits": 40,
+    "additions": 165555,
+    "deletions": 19106,
+    "files": 2155,
+    "ownCommits": 877,
+    "externalCommits": 45,
     "languages": [
       {
+        "name": "JSON",
+        "additions": 62291,
+        "deletions": 798,
+        "files": 83,
+        "activity": 63089
+      },
+      {
         "name": "TypeScript",
-        "additions": 9257,
-        "deletions": 1085,
-        "files": 175,
-        "activity": 10342
+        "additions": 9316,
+        "deletions": 1103,
+        "files": 179,
+        "activity": 10419
       },
       {
         "name": "CSS",
@@ -27,10 +34,10 @@
       },
       {
         "name": "JavaScript",
-        "additions": 5612,
-        "deletions": 1189,
-        "files": 138,
-        "activity": 6801
+        "additions": 6097,
+        "deletions": 1321,
+        "files": 141,
+        "activity": 7418
       },
       {
         "name": "Swift",
@@ -47,18 +54,11 @@
         "activity": 3154
       },
       {
-        "name": "JSON",
-        "additions": 2325,
-        "deletions": 796,
-        "files": 74,
-        "activity": 3121
-      },
-      {
         "name": "YAML",
-        "additions": 2795,
-        "deletions": 168,
-        "files": 70,
-        "activity": 2963
+        "additions": 2803,
+        "deletions": 170,
+        "files": 72,
+        "activity": 2973
       },
       {
         "name": "Python",
@@ -252,18 +252,25 @@
       "highlighted": false,
       "private": true,
       "own": false,
-      "commits": 777,
+      "commits": 784,
       "prs": 0,
-      "additions": 85086,
-      "deletions": 9434,
-      "files": 1631,
+      "additions": 145881,
+      "deletions": 9672,
+      "files": 1652,
       "languages": [
         {
+          "name": "JSON",
+          "additions": 61492,
+          "deletions": 424,
+          "files": 52,
+          "activity": 61916
+        },
+        {
           "name": "TypeScript",
-          "additions": 9257,
-          "deletions": 1085,
-          "files": 175,
-          "activity": 10342
+          "additions": 9316,
+          "deletions": 1103,
+          "files": 179,
+          "activity": 10419
         },
         {
           "name": "CSS",
@@ -274,24 +281,17 @@
         },
         {
           "name": "JavaScript",
-          "additions": 2521,
-          "deletions": 292,
-          "files": 27,
-          "activity": 2813
+          "additions": 3006,
+          "deletions": 424,
+          "files": 30,
+          "activity": 3430
         },
         {
           "name": "YAML",
-          "additions": 2208,
-          "deletions": 35,
-          "files": 28,
-          "activity": 2243
-        },
-        {
-          "name": "JSON",
-          "additions": 1526,
-          "deletions": 422,
-          "files": 43,
-          "activity": 1948
+          "additions": 2216,
+          "deletions": 37,
+          "files": 30,
+          "activity": 2253
         },
         {
           "name": "Python",
